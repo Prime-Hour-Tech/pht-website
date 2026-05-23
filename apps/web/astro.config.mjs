@@ -34,5 +34,17 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      // @sanity/astro hints these Studio-only deps to Vite's pre-bundler, but
+      // they aren't installed in the web app (and don't need to be - we only
+      // use the runtime client, not the Studio UI). Excluding silences the
+      // "Failed to resolve dependency" warnings at build time.
+      exclude: [
+        "react-compiler-runtime",
+        "react-is",
+        "styled-components",
+        "lodash/startCase.js",
+      ],
+    },
   },
 });
