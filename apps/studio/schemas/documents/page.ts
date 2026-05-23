@@ -1,0 +1,68 @@
+import { defineType, defineField, defineArrayMember } from "sanity";
+
+export const page = defineType({
+  name: "page",
+  title: "Page",
+  type: "document",
+  fields: [
+    defineField({
+      name: "title",
+      title: "Internal Title",
+      description: "Used in the Studio listing. Not rendered on the site.",
+      type: "string",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "slug",
+      title: "Slug",
+      description: "URL path. Use 'home' for the homepage.",
+      type: "slug",
+      options: { source: "title", maxLength: 96 },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "seoTitle",
+      title: "SEO Title",
+      description: "Used in the <title> tag. Falls back to internal title.",
+      type: "string",
+      validation: (Rule) => Rule.max(60),
+    }),
+    defineField({
+      name: "seoDescription",
+      title: "SEO Description",
+      description: "Meta description. Falls back to site default.",
+      type: "text",
+      rows: 2,
+      validation: (Rule) => Rule.max(160),
+    }),
+    defineField({
+      name: "ogImage",
+      title: "Open Graph Image",
+      description: "Falls back to site default.",
+      type: "image",
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          title: "Alternative Text",
+          type: "string",
+          validation: (Rule) => Rule.required(),
+        }),
+      ],
+    }),
+    defineField({
+      name: "blocks",
+      title: "Page Blocks",
+      description: "Compose the page from blocks.",
+      type: "array",
+      of: [defineArrayMember({ type: "hero" })],
+    }),
+  ],
+  preview: {
+    select: { title: "title", slug: "slug.current" },
+    prepare: ({ title, slug }) => ({
+      title,
+      subtitle: slug ? `/${slug}` : "(no slug)",
+    }),
+  },
+});
