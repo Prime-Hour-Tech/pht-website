@@ -3,6 +3,7 @@ import { defineConfig } from "astro/config";
 import { config as loadDotenv } from "dotenv";
 import tailwindcss from "@tailwindcss/vite";
 import sanity from "@sanity/astro";
+import sitemap from "@astrojs/sitemap";
 
 // Astro's config runs in Node before Vite starts, so process.env is NOT populated
 // from apps/web/.env automatically. dotenv loads it explicitly. (On Vercel, env
@@ -29,6 +30,7 @@ export default defineConfig({
       apiVersion,
       useCdn: true,
     }),
+    sitemap(),
   ],
   vite: {
     plugins: [tailwindcss()],
