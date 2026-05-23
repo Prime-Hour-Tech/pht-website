@@ -1,0 +1,26 @@
+---
+import type { HeroBlock } from "../../lib/sanity/types";
+
+interface Props {
+  block: HeroBlock;
+}
+
+const { block } = Astro.props;
+---
+
+<section class="px-6 py-24 mx-auto max-w-3xl text-center">
+  <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-slate-900">
+    {block.heading}
+  </h1>
+  {block.subheading && (
+    <p class="mt-6 text-lg text-slate-600">{block.subheading}</p>
+  )}
+  {block.ctaLabel && block.ctaHref && (
+    <a
+      href={block.ctaHref}
+      class="inline-block mt-8 px-6 py-3 rounded-md bg-slate-900 text-white font-medium hover:bg-slate-800"
+    >
+      {block.ctaLabel}
+    </a>
+  )}
+</section>
