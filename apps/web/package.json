@@ -21,6 +21,7 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4",
     "dotenv": "^17.4.2",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4",
+    "vitest": "^4.1.7"
   }
 }
