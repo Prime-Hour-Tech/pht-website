@@ -1,2 +1,3 @@
-// Schema types are added in later tasks.
-export const schemaTypes = [];
+import { siteSettings } from "./documents/siteSettings";
+
+export const schemaTypes = [siteSettings];
