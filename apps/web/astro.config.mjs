@@ -13,10 +13,19 @@ loadDotenv();
 const projectId = process.env.SANITY_PROJECT_ID;
 const dataset = process.env.SANITY_DATASET ?? "production";
 const apiVersion = process.env.SANITY_API_VERSION ?? "2026-05-01";
+// Server-side read token. Required when the dataset is private (which it is,
+// to keep plugin config like the Vercel deploy hook URL auth-gated). Astro
+// fetches at build time only — the token is never sent to a browser.
+const token = process.env.SANITY_READ_TOKEN;
 
 if (!projectId) {
   throw new Error(
     "SANITY_PROJECT_ID is required at build time. Set it in apps/web/.env (or in Vercel env vars).",
+  );
+}
+if (!token) {
+  throw new Error(
+    "SANITY_READ_TOKEN is required at build time (dataset is private). Set it in apps/web/.env (or in Vercel env vars).",
   );
 }
 
@@ -29,6 +38,7 @@ export default defineConfig({
       dataset,
       apiVersion,
       useCdn: true,
+      token,
     }),
     sitemap(),
   ],
