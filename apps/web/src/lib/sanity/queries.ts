@@ -104,6 +104,7 @@ export const pageBySlugQuery = /* groq */ `
       _type == "ctaCard" => {
         eyebrow,
         heading,
+        headingAccent,
         deck,
         primaryCtaLabel,
         primaryCtaHref

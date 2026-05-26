@@ -233,6 +233,7 @@ export type CtaCardBlock = {
   _key: string;
   eyebrow: string;
   heading: string;
+  headingAccent?: string;
   deck: string;
   primaryCtaLabel: string;
   primaryCtaHref: string;

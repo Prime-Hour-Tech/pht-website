@@ -14,8 +14,18 @@ export const ctaCard = defineType({
     defineField({
       name: "heading",
       title: "Heading",
+      description:
+        "Main heading. To finish with an italic accent-red fragment (the editorial flourish in the design), put the trailing fragment in \"Heading Accent\" below.",
       type: "string",
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "headingAccent",
+      title: "Heading Accent (optional)",
+      description:
+        "Optional trailing fragment rendered italic + accent red. e.g., for \"Let's talk about what's slowing you down.\" enter heading = \"Let's talk about\" and this field = \"what's slowing you down.\"",
+      type: "string",
+      validation: (Rule) => Rule.max(120),
     }),
     defineField({
       name: "deck",

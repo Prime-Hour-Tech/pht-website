@@ -23,8 +23,11 @@ if (!contactInfo) {
       <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
         {block.eyebrow}
       </div>
-      <h2 class="font-serif font-medium tracking-display leading-display text-ink m-0" style="font-size: 56px;">
+      <h2 class="font-serif font-medium tracking-display leading-display text-ink m-0" style="font-size: 56px; text-wrap: balance;">
         {block.heading}
+        {block.headingAccent && (
+          <em class="italic text-accent font-medium">{block.headingAccent}</em>
+        )}
       </h2>
       <p class="mt-4 text-muted text-body-lg leading-body max-w-[500px]">
         {block.deck}
