@@ -1,9 +1,9 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
-import { vercelDeployTool } from "sanity-plugin-vercel-deploy";
 import { schemaTypes } from "./schemas";
 import { getSanityEnv } from "./lib/env";
+import { DeployTool } from "./lib/deployTool";
 
 const { projectId, dataset } = getSanityEnv();
 
@@ -56,7 +56,13 @@ export default defineConfig({
           ]),
     }),
     visionTool(),
-    vercelDeployTool(),
+  ],
+  tools: [
+    {
+      name: "deploy",
+      title: "Deploy",
+      component: DeployTool,
+    },
   ],
   schema: {
     types: schemaTypes,

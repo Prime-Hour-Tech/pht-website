@@ -8,11 +8,11 @@
     "deploy": "sanity deploy"
   },
   "dependencies": {
+    "@sanity/ui": "^3.2.0",
     "@sanity/vision": "^4.22.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sanity": "^4.22.0",
-    "sanity-plugin-vercel-deploy": "^4.0.0",
     "styled-components": "^6.1.15"
   },
   "devDependencies": {
