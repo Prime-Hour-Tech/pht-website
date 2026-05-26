@@ -1,2 +1,10 @@
 packages:
   - "apps/*"
+
+# sanity-plugin-vercel-deploy@4.0.0 declares peer `sanity: ^3` but Sanity v4
+# ships with API-compatible interfaces (the v3→v4 bump was Node-version-only
+# per the official blog). The plugin runs fine against v4 at runtime; this
+# rule suppresses the otherwise-noisy peer mismatch.
+peerDependencyRules:
+  allowedVersions:
+    sanity-plugin-vercel-deploy>sanity: "^4"
