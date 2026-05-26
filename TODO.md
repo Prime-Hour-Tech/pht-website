@@ -56,7 +56,6 @@ Small architectural / quality items surfaced during Slice 1/2 reviews and parked
 - **Tailwind arbitrary values in `SiteNav.astro`.** `py-[18px]` and `text-[19px]` bypass the token scale. Faithful to the design's JSX but worth normalizing when there's a tokens-vs-arbitrary policy.
 - **GROQ substring tests.** Tests verify the query string contains expected field names. Catches structural drift but not data shape. Future slices may want at least one fixture-based round-trip test (mock Sanity response → typed result) to catch projection gaps.
 - **`headingAccent` pattern.** Added to `ctaCard` in Slice 2 for the italic-red trailing fragment. Same pattern applies to some About headlines (Slice 4) and possibly Service template headings (Slice 3). Add per-block as needed; extract a shared field-set if a third block uses it.
-- **React 19 migration.** Sanity v4 still supports React 18 (we're on 18.3.1) but Sanity now nudges React 19 in build output, and several deps (`@sanity/visual-editing`, `@sanity/insert-menu`, `sanity-plugin-vercel-deploy`) declare React 19 as peer. Currently producing 4 pre-existing peer warnings on every install. Migration is its own task — bump `react`, `react-dom`, `@types/react`, then exercise Studio + Astro for React-19 breaking-change fallout (ref handling, hook signatures, etc).
 
 ---
 
