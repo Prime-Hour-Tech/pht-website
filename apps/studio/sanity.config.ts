@@ -8,7 +8,17 @@ import { getSanityEnv } from "./lib/env";
 const { projectId, dataset } = getSanityEnv();
 
 const SITE_SETTINGS_ID = "siteSettings";
-const SINGLETONS = [SITE_SETTINGS_ID];
+const NAVIGATION_ID = "navigation";
+const FOOTER_ID = "footer";
+const CONTACT_INFO_ID = "contactInfo";
+const SINGLETONS = [SITE_SETTINGS_ID, NAVIGATION_ID, FOOTER_ID, CONTACT_INFO_ID];
+
+// Helper for the sidebar list — keeps each singleton entry compact.
+const singletonItem = (S: any, id: string, title: string) =>
+  S.listItem()
+    .title(title)
+    .id(id)
+    .child(S.editor().id(id).schemaType(id).documentId(id));
 
 export default defineConfig({
   name: "default",
@@ -21,15 +31,10 @@ export default defineConfig({
         S.list()
           .title("Content")
           .items([
-            S.listItem()
-              .title("Site Settings")
-              .id(SITE_SETTINGS_ID)
-              .child(
-                S.editor()
-                  .id(SITE_SETTINGS_ID)
-                  .schemaType(SITE_SETTINGS_ID)
-                  .documentId(SITE_SETTINGS_ID),
-              ),
+            singletonItem(S, SITE_SETTINGS_ID, "Site Settings"),
+            singletonItem(S, NAVIGATION_ID, "Navigation"),
+            singletonItem(S, FOOTER_ID, "Footer"),
+            singletonItem(S, CONTACT_INFO_ID, "Contact Info"),
             S.divider(),
             ...S.documentTypeListItems().filter(
               (item) => !SINGLETONS.includes(item.getId() ?? ""),

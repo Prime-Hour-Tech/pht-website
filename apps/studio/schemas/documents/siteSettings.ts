@@ -21,6 +21,38 @@ export const siteSettings = defineType({
       validation: (Rule) => Rule.required().max(160),
     }),
     defineField({
+      name: "logoDark",
+      title: "Logo (dark)",
+      description:
+        "Dark-colored logo for use on LIGHT backgrounds (the navbar). SVG preferred.",
+      type: "image",
+      options: { hotspot: false },
+      fields: [
+        defineField({
+          name: "alt",
+          title: "Alternative Text",
+          type: "string",
+          validation: (Rule) => Rule.required(),
+        }),
+      ],
+    }),
+    defineField({
+      name: "logoLight",
+      title: "Logo (light)",
+      description:
+        "Light-colored logo for use on DARK backgrounds (the footer). SVG preferred.",
+      type: "image",
+      options: { hotspot: false },
+      fields: [
+        defineField({
+          name: "alt",
+          title: "Alternative Text",
+          type: "string",
+          validation: (Rule) => Rule.required(),
+        }),
+      ],
+    }),
+    defineField({
       name: "defaultOgImage",
       title: "Default Open Graph Image",
       type: "image",

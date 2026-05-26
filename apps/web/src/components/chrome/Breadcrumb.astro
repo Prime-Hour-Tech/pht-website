@@ -1,0 +1,44 @@
+---
+// Breadcrumb — uppercase mono crumb row. Used above hero on service / blog
+// post / legal pages. No consumers yet in slice 1 — comes online in slice 3.
+//
+// Pass `trail` as an array of either:
+//   - { label, href }     — link
+//   - string              — current page (no link, ink color)
+
+export interface Crumb { label: string; href: string }
+export type Trail = Array<Crumb | string>;
+
+interface Props {
+  trail: Trail;
+}
+
+const { trail } = Astro.props;
+---
+
+<section class="px-10 py-5 border-b border-line-soft">
+  <div
+    class="max-w-content mx-auto font-mono text-meta text-muted tracking-mono-meta uppercase flex items-center gap-2.5"
+  >
+    {
+      trail.map((entry, i) => {
+        const isCurrent = i === trail.length - 1;
+        const isLink = typeof entry !== "string";
+        const label = isLink ? entry.label : entry;
+        const href = isLink ? entry.href : undefined;
+        return (
+          <>
+            {i > 0 && <span aria-hidden="true">›</span>}
+            {isCurrent ? (
+              <span class="text-ink">{label}</span>
+            ) : (
+              <a href={href} class="text-muted no-underline hover:text-ink">
+                {label}
+              </a>
+            )}
+          </>
+        );
+      })
+    }
+  </div>
+</section>
