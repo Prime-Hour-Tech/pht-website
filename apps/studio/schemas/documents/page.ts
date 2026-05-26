@@ -55,7 +55,16 @@ export const page = defineType({
       title: "Page Blocks",
       description: "Compose the page from blocks.",
       type: "array",
-      of: [defineArrayMember({ type: "hero" })],
+      of: [
+        defineArrayMember({ type: "darkNumbersHero" }),
+        defineArrayMember({ type: "trustStrip" }),
+        defineArrayMember({ type: "teamGrid" }),
+        defineArrayMember({ type: "headaches" }),
+        defineArrayMember({ type: "savings" }),
+        defineArrayMember({ type: "servicesList" }),
+        defineArrayMember({ type: "beliefs" }),
+        defineArrayMember({ type: "ctaCard" }),
+      ],
     }),
   ],
   preview: {

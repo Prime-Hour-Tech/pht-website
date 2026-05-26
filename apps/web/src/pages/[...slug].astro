@@ -1,12 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Hero from "../components/blocks/Hero.astro";
+import BlockRenderer from "../components/blocks/BlockRenderer.astro";
 import {
   getAllPageSlugs,
   getPageBySlug,
   getSiteSettings,
 } from "../lib/sanity/client";
-import type { PageBlock } from "../lib/sanity/types";
 
 export async function getStaticPaths() {
   const slugs = await getAllPageSlugs();
@@ -21,9 +20,6 @@ interface Props {
 }
 
 const { slug } = Astro.props;
-// Note: getSiteSettings() is called once per page generated. For v1's small
-// page count this is fine — Sanity is fast, builds are infrequent. If page
-// counts grow, hoist this fetch to module scope or memoize at config time.
 const [page, siteSettings] = await Promise.all([
   getPageBySlug(slug),
   getSiteSettings(),
@@ -49,10 +45,5 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).to
   canonical={canonical}
   siteName={siteSettings.siteName}
 >
-  {page.blocks?.map((block: PageBlock) => {
-    if (block._type === "hero") {
-      return <Hero block={block} />;
-    }
-    return null;
-  })}
+  {page.blocks?.map((block) => <BlockRenderer block={block} />)}
 </BaseLayout>

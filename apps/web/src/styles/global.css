@@ -1,1 +1,98 @@
 @import "tailwindcss";
+
+/* PHT design tokens — sourced from design_handoff_docs/tokens.jsx.
+   Tailwind 4 reads --color-*, --font-*, --text-*, --leading-*, --tracking-*,
+   --radius-*, --shadow-*, --container-* from @theme and emits matching
+   utilities (e.g. bg-ink, text-display-xxxl, rounded-md, max-w-content). */
+@theme {
+  /* Light palette */
+  --color-bg:        #ffffff;
+  --color-bg-alt:    #F8F9FA;
+  --color-surface:   #ffffff;
+  --color-ink:       #1A1A1A;
+  --color-ink-body:  #33363c;
+  --color-muted:     #5b6068;
+  --color-line:      rgb(26 26 26 / 0.10);
+  --color-line-soft: rgb(26 26 26 / 0.06);
+  --color-success:   #1f7a3a;
+
+  /* Dark band — footer + numbers-led hero */
+  --color-dark:       #0f1115;
+  --color-dark-text:  #f2f3f5;
+  --color-dark-muted: #9aa0a6;
+  --color-dark-line:  rgb(255 255 255 / 0.10);
+
+  /* Brand accent (red) — hardcoded in slice 1; not Studio-editable */
+  --color-accent: #dc2626;
+
+  /* Type families */
+  --font-sans:  "Geist", system-ui, sans-serif;
+  --font-serif: "Newsreader", Georgia, serif;
+  --font-mono:  "Geist Mono", monospace;
+
+  /* Type scale */
+  --text-display-xxxl: 104px;
+  --text-display-xxl:  88px;
+  --text-display-xl:   72px;
+  --text-display-lg:   64px;
+  --text-display-md:   52px;
+  --text-display-sm:   44px;
+  --text-display-xs:   36px;
+  --text-serif-md:     32px;
+  --text-serif-sm:     26px;
+  --text-serif-xs:     22px;
+  --text-serif-micro:  20px;
+  --text-body-xl:      21px;
+  --text-body-lg:      18px;
+  --text-body-md:      17px;
+  --text-body-base:    16px;
+  --text-body-sm:      14.5px;
+  --text-body-xs:      13px;
+  --text-label:        13px;
+  --text-meta:         11px;
+  --text-micro:        10px;
+
+  /* Line heights */
+  --leading-display: 1;
+  --leading-h2:      1.05;
+  --leading-h3:      1.18;
+  --leading-body:    1.55;
+  --leading-body-lg: 1.65;
+  --leading-prose:   1.7;
+
+  /* Letter spacing (em) */
+  --tracking-display-tight: -0.035em;
+  --tracking-display:       -0.03em;
+  --tracking-h2:            -0.025em;
+  --tracking-h3:            -0.015em;
+  --tracking-mono-eyebrow:  0.14em;
+  --tracking-mono-label:    0.12em;
+  --tracking-mono-meta:     0.05em;
+
+  /* Radii */
+  --radius-sm:   6px;
+  --radius-md:   8px;
+  --radius-lg:   10px;
+  --radius-xl:   12px;
+  --radius-xxl:  14px;
+  --radius-pill: 9999px;
+
+  /* Shadows — accent-toned button shadow is the only signature shadow */
+  --shadow-card:         0 1px 3px rgb(0 0 0 / 0.08), 0 4px 16px rgb(0 0 0 / 0.06);
+  --shadow-button-accent: 0 14px 32px -12px var(--color-accent);
+
+  /* Layout container widths */
+  --container-content: 1240px;
+  --container-narrow:  1080px;
+  --container-prose:   720px;
+}
+
+/* Default body styles — body uses Geist sans by default; pages override
+   per element with font-serif / font-mono utilities. */
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-ink-body);
+    background: var(--color-bg);
+  }
+}

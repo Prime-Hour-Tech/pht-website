@@ -1,0 +1,24 @@
+---
+import type { TrustStripBlock } from "../../lib/sanity/types";
+
+interface Props {
+  block: TrustStripBlock;
+}
+
+const { block } = Astro.props;
+---
+
+<section class="bg-bg py-8 px-10 border-b border-line">
+  <div class="max-w-content mx-auto flex items-center gap-8 flex-wrap justify-between">
+    <div class="font-mono text-meta text-muted tracking-mono-label uppercase">
+      {block.label}
+    </div>
+    <div class="flex gap-9 items-center flex-wrap flex-1 justify-around">
+      {block.items.map((l) => (
+        <span class="font-mono text-[13px] text-muted opacity-60 tracking-mono-meta">
+          {l}
+        </span>
+      ))}
+    </div>
+  </div>
+</section>

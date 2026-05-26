@@ -1,0 +1,66 @@
+---
+import type { TeamGridBlock } from "../../lib/sanity/types";
+
+interface Props {
+  block: TeamGridBlock;
+}
+
+const { block } = Astro.props;
+const members = block.members?.filter(Boolean) ?? [];
+---
+
+<section class="bg-bg-alt py-24 px-10 border-b border-line">
+  <div class="max-w-content mx-auto">
+    <div class="flex items-baseline justify-between flex-wrap gap-4 mb-12">
+      <div class="max-w-[560px]">
+        <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
+          {block.eyebrow}
+        </div>
+        <h2 class="font-serif text-display-md font-medium tracking-display leading-display text-ink m-0">
+          {block.heading}
+        </h2>
+        {block.deck && (
+          <p class="mt-3.5 text-muted text-body-md leading-body max-w-[480px]">
+            {block.deck}
+          </p>
+        )}
+      </div>
+      {block.sideLink?.href && (
+        <a
+          href={block.sideLink.href}
+          class="text-accent no-underline font-semibold text-[15px]"
+        >
+          {block.sideLink.label} →
+        </a>
+      )}
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+      {members.map((m) => (
+        <div>
+          {m.photo?.url ? (
+            <img
+              src={m.photo.url}
+              alt={m.photo.alt}
+              class="block w-full aspect-[4/5] object-cover rounded-lg mb-4"
+            />
+          ) : (
+            <div
+              class="block w-full aspect-[4/5] rounded-lg bg-bg border border-line mb-4"
+              aria-hidden="true"
+            ></div>
+          )}
+          <div class="font-serif text-[20px] font-medium tracking-h3 text-ink leading-tight">
+            {m.name}
+          </div>
+          <div class="font-mono text-meta text-accent uppercase tracking-mono-label mt-1">
+            {m.role}
+          </div>
+          <p class="mt-2.5 text-muted text-[14px] leading-body">
+            {m.bio}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

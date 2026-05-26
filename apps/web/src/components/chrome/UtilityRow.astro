@@ -1,0 +1,50 @@
+---
+import type { ContactInfo } from "../../lib/sanity/types";
+
+interface Props {
+  contactInfo: ContactInfo;
+}
+
+const { contactInfo } = Astro.props;
+const { phone, email, hours, address } = contactInfo;
+---
+
+<div class="border-b border-line bg-bg hidden md:block">
+  <div
+    class="max-w-content mx-auto px-10 py-2.5 flex items-center gap-6 font-mono text-meta text-muted tracking-mono-meta uppercase"
+  >
+    <span
+      data-open-now
+      data-open-minute={hours.openMinute}
+      data-close-minute={hours.closeMinute}
+      data-timezone={hours.timezone}
+      data-weekday-label={hours.weekdayLabel}
+      class="inline-flex items-center gap-2 text-success"
+    >
+      <span data-open-now-dot class="size-1.5 rounded-pill bg-success animate-pulse"></span>
+      <span data-open-now-label>Open now · {hours.weekdayLabel}</span>
+    </span>
+
+    <span class="ml-auto inline-flex items-center gap-[18px]">
+      <span class="inline-flex items-center gap-1.5">
+        {address.city}, {address.state}
+      </span>
+      <a
+        href={`tel:${phone.dial}`}
+        class="inline-flex items-center gap-1.5 text-muted no-underline hover:text-ink"
+      >
+        {phone.display}
+      </a>
+      <a
+        href={`mailto:${email}`}
+        class="inline-flex items-center gap-1.5 text-muted no-underline hover:text-ink"
+      >
+        {email}
+      </a>
+    </span>
+  </div>
+</div>
+
+<script>
+  import "../../scripts/open-now";
+</script>

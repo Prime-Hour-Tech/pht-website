@@ -1,0 +1,26 @@
+---
+import type { PageBlock } from "../../lib/sanity/types";
+import DarkNumbersHero from "./DarkNumbersHero.astro";
+import TrustStrip from "./TrustStrip.astro";
+import TeamGrid from "./TeamGrid.astro";
+import Headaches from "./Headaches.astro";
+import Savings from "./Savings.astro";
+import ServicesList from "./ServicesList.astro";
+import Beliefs from "./Beliefs.astro";
+import CtaCard from "./CtaCard.astro";
+
+interface Props {
+  block: PageBlock;
+}
+
+const { block } = Astro.props;
+---
+
+{block._type === "darkNumbersHero" && <DarkNumbersHero block={block} />}
+{block._type === "trustStrip"      && <TrustStrip      block={block} />}
+{block._type === "teamGrid"        && <TeamGrid        block={block} />}
+{block._type === "headaches"       && <Headaches       block={block} />}
+{block._type === "savings"         && <Savings         block={block} />}
+{block._type === "servicesList"    && <ServicesList    block={block} />}
+{block._type === "beliefs"         && <Beliefs         block={block} />}
+{block._type === "ctaCard"         && <CtaCard         block={block} />}

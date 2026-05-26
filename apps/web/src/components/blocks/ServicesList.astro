@@ -1,0 +1,50 @@
+---
+import type { ServicesListBlock } from "../../lib/sanity/types";
+import Icon from "../Icon.astro";
+
+interface Props {
+  block: ServicesListBlock;
+}
+
+const { block } = Astro.props;
+const services = block.services?.filter(Boolean) ?? [];
+---
+
+<section class="bg-bg py-24 px-10 border-b border-line">
+  <div class="max-w-content mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-[0.7fr_1.3fr] gap-16 items-start">
+      <div class="md:sticky md:top-24">
+        <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
+          {block.eyebrow}
+        </div>
+        <h2 class="font-serif text-display-md font-medium tracking-display leading-display text-ink m-0">
+          {block.heading}
+        </h2>
+      </div>
+
+      <div class="border-t border-line">
+        {services.map((s) => (
+          <a
+            href={`/${s.slug}`}
+            class="grid grid-cols-[auto_1fr_auto] gap-6 py-6 border-b border-line no-underline text-ink items-center"
+          >
+            <span class="size-14 rounded-xl bg-bg-alt border border-line inline-flex items-center justify-center text-accent">
+              <Icon name={s.iconName} size={22} />
+            </span>
+            <span>
+              <span class="block font-serif text-[24px] font-medium tracking-h3 leading-tight">
+                {s.name}
+              </span>
+              <span class="block text-muted text-body-sm leading-body mt-1">
+                {s.shortDescription}
+              </span>
+            </span>
+            <span class="text-accent font-semibold text-[14px] inline-flex items-center gap-1">
+              Read <Icon name="arrowSm" size={14} />
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

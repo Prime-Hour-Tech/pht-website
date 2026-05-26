@@ -1,0 +1,91 @@
+---
+import type {
+  ContactInfo,
+  Footer as FooterData,
+  SiteSettings,
+} from "../../lib/sanity/types";
+
+interface Props {
+  footer: FooterData;
+  siteSettings: SiteSettings;
+  contactInfo: ContactInfo;
+}
+
+const { footer, siteSettings, contactInfo } = Astro.props;
+const year = new Date().getUTCFullYear();
+const copyright = footer.copyright.replace("{{year}}", String(year));
+
+// Design's FooterB uses a 5-column grid: 1.5fr brand block + 4×1fr link
+// columns. Tailwind doesn't have an arbitrary-fraction syntax that works
+// cleanly here, so we use grid-cols-[...] with the literal track string.
+---
+
+<footer class="bg-dark text-dark-muted">
+  <div class="max-w-content mx-auto px-10 pt-[72px] pb-8">
+    <!-- Top: brand block + 4 link columns -->
+    <div
+      class="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1fr_1fr_1fr] gap-8 mb-14"
+    >
+      <!-- Brand block -->
+      <div>
+        <div class="inline-flex items-center gap-3.5 mb-[18px] text-dark-text">
+          {siteSettings.logoLight?.url ? (
+            <img
+              src={siteSettings.logoLight.url}
+              alt={siteSettings.logoLight.alt}
+              width="36"
+              height="36"
+              class="size-9 object-contain"
+            />
+          ) : (
+            <div class="size-9 rounded-md bg-accent" aria-hidden="true"></div>
+          )}
+          <div class="flex flex-col leading-tight">
+            <span class="font-serif font-semibold text-[18px]">
+              {siteSettings.siteName}
+            </span>
+            {footer.tagline && (
+              <span class="font-mono text-micro uppercase tracking-mono-label text-dark-muted">
+                {footer.tagline}
+              </span>
+            )}
+          </div>
+        </div>
+        <p class="m-0 leading-body-lg max-w-[280px] text-dark-muted text-body-sm">
+          {siteSettings.siteDescription}
+        </p>
+      </div>
+
+      <!-- Link columns -->
+      {footer.columns?.map((col) => (
+        <div>
+          <h4 class="font-sans font-semibold text-[13px] text-dark-text m-0 mb-3.5 tracking-[0.3px]">
+            {col.heading}
+          </h4>
+          <ul class="list-none p-0 m-0 flex flex-col gap-[9px]">
+            {col.links.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  target={link.openInNewTab ? "_blank" : undefined}
+                  rel={link.openInNewTab ? "noopener noreferrer" : undefined}
+                  class="text-dark-muted no-underline text-[13px] hover:text-dark-text"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <!-- Bottom: copyright left, service area right -->
+    <div
+      class="border-t border-dark-line pt-6 flex justify-between items-center flex-wrap gap-4 font-mono text-meta uppercase tracking-mono-meta text-dark-muted"
+    >
+      <span>{copyright}</span>
+      <span>{contactInfo.address.city}, {contactInfo.address.state}</span>
+    </div>
+  </div>
+</footer>

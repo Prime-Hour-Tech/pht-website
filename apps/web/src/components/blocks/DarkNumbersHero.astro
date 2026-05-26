@@ -1,0 +1,99 @@
+---
+import type { DarkNumbersHeroBlock } from "../../lib/sanity/types";
+import Icon from "../Icon.astro";
+
+interface Props {
+  block: DarkNumbersHeroBlock;
+}
+
+const { block } = Astro.props;
+---
+
+<section class="bg-dark text-dark-text py-16 md:py-20 relative overflow-hidden">
+  <!-- Accent corner glow -->
+  <div
+    aria-hidden="true"
+    class="absolute pointer-events-none"
+    style="top:-160px; right:-120px; width:480px; height:480px; background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 15%, transparent), transparent 70%);"
+  ></div>
+
+  <div class="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-14 relative items-center">
+    <!-- Left column — padded so the inner content aligns with the
+         site's content well left edge. Must be 100vw (viewport),
+         not 100% (column width) — the grid is full-bleed and the
+         column gets a fractional share, so 100% would compute wrong. -->
+    <div
+      class="px-10"
+      style="padding-left: max(2.5rem, calc((100vw - var(--container-content)) / 2 + 2.5rem));"
+    >
+      <div
+        class="inline-flex items-center gap-2.5 mb-6 font-mono text-meta text-accent tracking-mono-eyebrow uppercase"
+      >
+        <span class="w-[18px] h-px bg-accent"></span>
+        {block.eyebrow}
+      </div>
+
+      <div class="flex items-baseline gap-[18px] mb-2.5 flex-wrap">
+        <span
+          class="font-sans font-semibold leading-none tabular-nums text-dark-text"
+          style="font-size:144px; letter-spacing:-0.045em;"
+        >
+          {block.bigNumber}
+        </span>
+        <span class="font-mono text-[14px] text-dark-muted uppercase tracking-mono-meta">
+          {block.bigNumberCaption}
+        </span>
+      </div>
+
+      <h1 class="text-display-xs font-semibold tracking-h2 leading-snug max-w-[580px] mt-1.5 text-dark-text">
+        {block.subheadline}
+      </h1>
+
+      <p class="mt-4 text-dark-muted text-body-base leading-body max-w-[520px]">
+        {block.deck}
+      </p>
+
+      <div class="mt-7 flex gap-3 items-center flex-wrap">
+        <a
+          href={block.ctaPrimary.href}
+          class="bg-accent text-white font-semibold no-underline rounded-md inline-flex items-center gap-2.5 shadow-button-accent"
+          style="padding: 15px 24px; font-size: 15.5px;"
+        >
+          {block.ctaPrimary.label}
+          <Icon name="arrow" size={16} />
+        </a>
+        {block.ctaSecondary?.href && (
+          <a
+            href={block.ctaSecondary.href}
+            class="border border-dark-line text-dark-text no-underline rounded-md inline-flex items-center font-medium"
+            style="padding: 15px 22px; font-size: 15.5px;"
+          >
+            {block.ctaSecondary.label} →
+          </a>
+        )}
+      </div>
+    </div>
+
+    <!-- Right column — flush to artboard right edge, no right radius -->
+    <div
+      class="self-stretch bg-white/[0.04] border border-dark-line border-r-0 p-6 mt-16 mb-6"
+      style="border-top-left-radius: var(--radius-xxl); border-bottom-left-radius: var(--radius-xxl);"
+    >
+      <div
+        class="font-mono text-meta text-dark-muted tracking-mono-label uppercase mb-4"
+      >
+        ◆ The credentials
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        {block.credentials.map((c) => (
+          <div class="p-3.5 border border-dark-line rounded-md">
+            <div class="text-[14px] font-semibold text-dark-text">{c.title}</div>
+            <div class="mt-1 font-mono text-[10.5px] text-dark-muted uppercase tracking-mono-meta">
+              {c.sub}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
