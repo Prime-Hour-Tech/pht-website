@@ -1,0 +1,43 @@
+---
+import type { SavingsBlock } from "../../lib/sanity/types";
+import SavingsChart from "./SavingsChart.astro";
+import Icon from "../Icon.astro";
+
+interface Props {
+  block: SavingsBlock;
+}
+
+const { block } = Astro.props;
+const bullets = block.bulletList ?? [];
+---
+
+<section class="bg-bg-alt py-24 px-10 border-b border-line">
+  <div class="max-w-content mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-[1fr_1.6fr] gap-16 items-center">
+      <div>
+        <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
+          {block.eyebrow}
+        </div>
+        <h2 class="font-serif text-display-md font-medium tracking-display leading-display text-ink m-0">
+          {block.heading}
+        </h2>
+        <p class="mt-4.5 text-muted text-body-md leading-body-lg max-w-[380px]">
+          {block.deck}
+        </p>
+        {bullets.length > 0 && (
+          <ul class="list-none p-0 mt-7 flex flex-col gap-2.5">
+            {bullets.map((item) => (
+              <li class="flex items-center gap-2.5 text-body-sm text-ink">
+                <span class="text-accent inline-flex">
+                  <Icon name="check" size={14} stroke={2.4} />
+                </span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <SavingsChart chart={block.chart} />
+    </div>
+  </div>
+</section>

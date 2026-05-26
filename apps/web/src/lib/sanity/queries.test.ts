@@ -85,3 +85,50 @@ describe("contactInfoQuery", () => {
     expect(contactInfoQuery).toContain("timezone");
   });
 });
+
+describe("pageBySlugQuery — block projections", () => {
+  it("projects darkNumbersHero fields", () => {
+    expect(pageBySlugQuery).toContain('"darkNumbersHero"');
+    expect(pageBySlugQuery).toContain("bigNumber");
+    expect(pageBySlugQuery).toContain("credentials[]");
+  });
+
+  it("projects trustStrip fields", () => {
+    expect(pageBySlugQuery).toContain('"trustStrip"');
+    expect(pageBySlugQuery).toContain("items");
+  });
+
+  it("dereferences teamGrid members and orders by `order`", () => {
+    expect(pageBySlugQuery).toContain('"teamGrid"');
+    expect(pageBySlugQuery).toContain("members[]->");
+    expect(pageBySlugQuery).toContain("order(order asc)");
+  });
+
+  it("projects headaches items with pain and fix", () => {
+    expect(pageBySlugQuery).toContain('"headaches"');
+    expect(pageBySlugQuery).toContain("pain");
+    expect(pageBySlugQuery).toContain("fix");
+  });
+
+  it("projects savings chart categories", () => {
+    expect(pageBySlugQuery).toContain('"savings"');
+    expect(pageBySlugQuery).toContain("categories[]");
+    expect(pageBySlugQuery).toContain("before");
+    expect(pageBySlugQuery).toContain("after");
+  });
+
+  it("dereferences servicesList services", () => {
+    expect(pageBySlugQuery).toContain('"servicesList"');
+    expect(pageBySlugQuery).toContain("services[]->");
+  });
+
+  it("projects beliefs and ctaCard", () => {
+    expect(pageBySlugQuery).toContain('"beliefs"');
+    expect(pageBySlugQuery).toContain('"ctaCard"');
+    expect(pageBySlugQuery).toContain("primaryCtaLabel");
+  });
+
+  it("no longer references the deleted hero block type", () => {
+    expect(pageBySlugQuery).not.toContain('"hero"');
+  });
+});

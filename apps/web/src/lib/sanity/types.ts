@@ -25,17 +25,6 @@ export type SiteSettings = {
   defaultOgImage?: ImageRef;
 };
 
-export type HeroBlock = {
-  _type: "hero";
-  _key: string;
-  heading: string;
-  subheading?: string;
-  ctaLabel?: string;
-  ctaHref?: string;
-};
-
-export type PageBlock = HeroBlock; // union grows as more block types are added
-
 export type Page = {
   _id: string;
   title: string;
@@ -115,3 +104,146 @@ export type ContactInfo = {
   hours: Hours;
   address: Address;
 };
+
+// ── Documents referenced from page blocks ────────────────────────────────
+
+export type IconName =
+  | "monitor"
+  | "shield"
+  | "cloud"
+  | "server"
+  | "compass"
+  | "globe";
+
+export type TeamMemberResolved = {
+  _id: string;
+  name: string;
+  role: string;
+  bio: string;
+  order: number;
+  photo?: ResolvedImage;
+};
+
+export type ServiceResolved = {
+  _id: string;
+  name: string;
+  slug: string;
+  shortDescription: string;
+  iconName: IconName;
+  order: number;
+};
+
+// ── Page-body block types ────────────────────────────────────────────────
+
+export type Credential = {
+  title: string;
+  sub: string;
+};
+
+export type CtaLink = {
+  label: string;
+  href: string;
+};
+
+export type DarkNumbersHeroBlock = {
+  _type: "darkNumbersHero";
+  _key: string;
+  eyebrow: string;
+  bigNumber: string;
+  bigNumberCaption: string;
+  subheadline: string;
+  deck: string;
+  ctaPrimary: CtaLink;
+  ctaSecondary?: CtaLink;
+  credentials: Credential[];
+};
+
+export type TrustStripBlock = {
+  _type: "trustStrip";
+  _key: string;
+  label: string;
+  items: string[];
+};
+
+export type TeamGridBlock = {
+  _type: "teamGrid";
+  _key: string;
+  eyebrow: string;
+  heading: string;
+  deck?: string;
+  sideLink?: CtaLink;
+  members: TeamMemberResolved[];
+};
+
+export type HeadacheItem = {
+  pain: string;
+  fix: string;
+};
+
+export type HeadachesBlock = {
+  _type: "headaches";
+  _key: string;
+  eyebrow: string;
+  heading: string;
+  deck: string;
+  items: HeadacheItem[];
+};
+
+export type SavingsCategory = {
+  label: string;
+  before: number;
+  after: number;
+};
+
+export type SavingsChartData = {
+  caption: string;
+  categories: SavingsCategory[];
+  footnote?: string;
+};
+
+export type SavingsBlock = {
+  _type: "savings";
+  _key: string;
+  eyebrow: string;
+  heading: string;
+  deck: string;
+  bulletList?: string[];
+  chart: SavingsChartData;
+};
+
+export type ServicesListBlock = {
+  _type: "servicesList";
+  _key: string;
+  eyebrow: string;
+  heading: string;
+  services: ServiceResolved[];
+};
+
+export type BeliefsBlock = {
+  _type: "beliefs";
+  _key: string;
+  eyebrow: string;
+  heading: string;
+  deck?: string;
+  items: string[];
+};
+
+export type CtaCardBlock = {
+  _type: "ctaCard";
+  _key: string;
+  eyebrow: string;
+  heading: string;
+  deck: string;
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+};
+
+export type PageBlock =
+  | DarkNumbersHeroBlock
+  | TrustStripBlock
+  | TeamGridBlock
+  | HeadachesBlock
+  | SavingsBlock
+  | ServicesListBlock
+  | BeliefsBlock
+  | CtaCardBlock;

@@ -1,0 +1,62 @@
+---
+import type { CtaCardBlock } from "../../lib/sanity/types";
+import Icon from "../Icon.astro";
+import { getContactInfo } from "../../lib/sanity/client";
+
+interface Props {
+  block: CtaCardBlock;
+}
+
+const { block } = Astro.props;
+const contactInfo = await getContactInfo();
+
+if (!contactInfo) {
+  throw new Error(
+    "Contact Info singleton not found in Sanity (required by CtaCard block).",
+  );
+}
+---
+
+<section class="bg-bg py-24 px-10 border-b border-line">
+  <div class="max-w-narrow mx-auto grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-14 items-center">
+    <div>
+      <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
+        {block.eyebrow}
+      </div>
+      <h2 class="font-serif font-medium tracking-display leading-display text-ink m-0" style="font-size: 56px;">
+        {block.heading}
+      </h2>
+      <p class="mt-4 text-muted text-body-lg leading-body max-w-[500px]">
+        {block.deck}
+      </p>
+    </div>
+
+    <div class="bg-bg-alt border border-line rounded-xxl p-7">
+      <div class="font-semibold text-body-base text-ink mb-4">Get in touch</div>
+      <a
+        href={`tel:${contactInfo.phone.dial}`}
+        class="flex items-center gap-3 py-3 border-t border-line-soft text-ink no-underline text-[15px]"
+      >
+        <Icon name="phone" size={18} stroke={1.5} />
+        <span class="flex-1">{contactInfo.phone.display}</span>
+        <Icon name="arrowSm" size={14} />
+      </a>
+      <a
+        href={`mailto:${contactInfo.email}`}
+        class="flex items-center gap-3 py-3 border-t border-line-soft text-ink no-underline text-[15px]"
+      >
+        <Icon name="mail" size={18} stroke={1.5} />
+        <span class="flex-1">{contactInfo.email}</span>
+        <Icon name="arrowSm" size={14} />
+      </a>
+      <a
+        href={block.primaryCtaHref}
+        class="bg-accent text-white font-semibold rounded-md mt-4 w-full inline-flex items-center justify-center gap-2.5 no-underline shadow-button-accent"
+        style="padding: 14px 22px; font-size: 15px;"
+      >
+        {block.primaryCtaLabel}
+        <Icon name="arrow" size={16} />
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,103 @@
+---
+import type { SavingsChartData } from "../../lib/sanity/types";
+
+interface Props {
+  chart: SavingsChartData;
+}
+
+const { chart } = Astro.props;
+const { caption, categories, footnote } = chart;
+
+const max = Math.max(...categories.flatMap((c) => [c.before, c.after]), 1);
+const beforeTotal = categories.reduce((s, c) => s + c.before, 0);
+const afterTotal = categories.reduce((s, c) => s + c.after, 0);
+const savings = beforeTotal - afterTotal;
+const savingsPct = beforeTotal > 0 ? Math.round((savings / beforeTotal) * 100) : 0;
+
+const fmt = (n: number) => `$${n.toLocaleString()}`;
+---
+
+<div class="bg-surface border border-line rounded-xxl p-9">
+  <!-- Caption + legend -->
+  <div class="flex items-baseline justify-between flex-wrap gap-3 mb-7">
+    <div>
+      <div class="font-mono text-[10.5px] text-muted tracking-mono-label uppercase mb-1.5">
+        {caption}
+      </div>
+      <div class="text-[22px] font-semibold text-ink tracking-h3">
+        Before vs. with Prime Hour Tech
+      </div>
+    </div>
+    <div class="flex items-center gap-4 text-[12.5px] text-muted font-mono uppercase tracking-mono-meta">
+      <span class="inline-flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-sm bg-muted opacity-40"></span> Before
+      </span>
+      <span class="inline-flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-sm bg-accent"></span> With PHT
+      </span>
+    </div>
+  </div>
+
+  <!-- Bars -->
+  <div class="flex flex-col gap-4">
+    {categories.map((c) => {
+      const beforeW = (c.before / max) * 100;
+      const afterW = (c.after / max) * 100;
+      const afterIsLess = c.after < c.before;
+      return (
+        <div>
+          <div class="flex justify-between mb-2 text-[13.5px] text-ink">
+            <span class="font-medium">{c.label}</span>
+            <span class="text-muted font-mono text-[12px]">
+              {fmt(c.before)} → <span class={afterIsLess ? "text-success" : "text-ink"}>{fmt(c.after)}/mo</span>
+            </span>
+          </div>
+          <div class="relative h-3.5">
+            <div
+              class="absolute left-0 top-0 h-1.5 bg-muted opacity-35 rounded-sm"
+              style={`width: ${beforeW}%`}
+            ></div>
+            <div
+              class="absolute left-0 top-2 h-1.5 bg-accent rounded-sm"
+              style={`width: ${afterW}%`}
+            ></div>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+
+  <!-- Totals -->
+  <div class="mt-7 pt-5 border-t border-line grid grid-cols-3 gap-6">
+    <div>
+      <div class="font-mono text-[10.5px] text-muted tracking-mono-label uppercase">
+        Before total
+      </div>
+      <div class="text-[28px] font-semibold text-ink tracking-h2 mt-1 tabular-nums">
+        {fmt(beforeTotal)}<span class="text-[14px] text-muted font-normal">/mo</span>
+      </div>
+    </div>
+    <div>
+      <div class="font-mono text-[10.5px] text-muted tracking-mono-label uppercase">
+        With PHT
+      </div>
+      <div class="text-[28px] font-semibold text-ink tracking-h2 mt-1 tabular-nums">
+        {fmt(afterTotal)}<span class="text-[14px] text-muted font-normal">/mo</span>
+      </div>
+    </div>
+    <div class="pl-5 border-l border-line">
+      <div class="font-mono text-[10.5px] text-accent tracking-mono-label uppercase">
+        You save
+      </div>
+      <div class="text-[28px] font-bold text-accent tracking-h2 mt-1 tabular-nums">
+        {fmt(savings)}<span class="text-[14px] text-accent/70 font-medium">/mo · {savingsPct}%</span>
+      </div>
+    </div>
+  </div>
+
+  {footnote && (
+    <div class="mt-3 text-[11.5px] text-muted font-mono">
+      {footnote}
+    </div>
+  )}
+</div>

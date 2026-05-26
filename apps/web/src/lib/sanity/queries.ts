@@ -25,11 +25,88 @@ export const pageBySlugQuery = /* groq */ `
     blocks[]{
       _type,
       _key,
-      _type == "hero" => {
+      _type == "darkNumbersHero" => {
+        eyebrow,
+        bigNumber,
+        bigNumberCaption,
+        subheadline,
+        deck,
+        ctaPrimary,
+        ctaSecondary,
+        credentials[]{
+          title,
+          sub
+        }
+      },
+      _type == "trustStrip" => {
+        label,
+        items
+      },
+      _type == "teamGrid" => {
+        eyebrow,
         heading,
-        subheading,
-        ctaLabel,
-        ctaHref
+        deck,
+        sideLink,
+        "members": members[]->{
+          _id,
+          name,
+          role,
+          bio,
+          order,
+          photo {
+            "url": asset->url,
+            alt
+          }
+        } | order(order asc)
+      },
+      _type == "headaches" => {
+        eyebrow,
+        heading,
+        deck,
+        items[]{
+          pain,
+          fix
+        }
+      },
+      _type == "savings" => {
+        eyebrow,
+        heading,
+        deck,
+        bulletList,
+        chart {
+          caption,
+          categories[]{
+            label,
+            before,
+            after
+          },
+          footnote
+        }
+      },
+      _type == "servicesList" => {
+        eyebrow,
+        heading,
+        "services": services[]->{
+          _id,
+          name,
+          "slug": slug.current,
+          shortDescription,
+          iconName,
+          order
+        } | order(order asc)
+      },
+      _type == "beliefs" => {
+        eyebrow,
+        heading,
+        deck,
+        items
+      },
+      _type == "ctaCard" => {
+        eyebrow,
+        heading,
+        deck,
+        primaryCtaLabel,
+        primaryCtaHref
       }
     }
   }

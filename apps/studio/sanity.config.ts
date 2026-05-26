@@ -36,9 +36,23 @@ export default defineConfig({
             singletonItem(S, FOOTER_ID, "Footer"),
             singletonItem(S, CONTACT_INFO_ID, "Contact Info"),
             S.divider(),
-            ...S.documentTypeListItems().filter(
-              (item) => !SINGLETONS.includes(item.getId() ?? ""),
-            ),
+            S.listItem()
+              .title("Team Members")
+              .schemaType("teamMember")
+              .child(S.documentTypeList("teamMember").title("Team Members")),
+            S.listItem()
+              .title("Services")
+              .schemaType("service")
+              .child(S.documentTypeList("service").title("Services")),
+            S.divider(),
+            ...S.documentTypeListItems().filter((item) => {
+              const id = item.getId() ?? "";
+              return (
+                !SINGLETONS.includes(id) &&
+                id !== "teamMember" &&
+                id !== "service"
+              );
+            }),
           ]),
     }),
     visionTool(),
