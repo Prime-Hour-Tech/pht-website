@@ -178,8 +178,23 @@ export const contactInfoQuery = /* groq */ `
   }
 `;
 
+// All three service-list queries share the same completeness filter. A service
+// is "complete enough to display" only when every required field added through
+// the Slice-3 + Slice-3-fix-up schema expansions is defined on the doc.
+// Sanity's `initialValue` only fires on doc creation, so existing docs authored
+// before a required field was added project that field as null until the user
+// re-saves the doc. Filtering at the query level keeps half-authored services
+// out of routes (no /services/<slug> page is generated), lists (no card on the
+// home page or /services), and the sibling row (no broken Other Services tile).
+// Remove fields from the filter when their authoring is universally complete,
+// or add new ones whenever the service schema grows another required field.
+const SERVICE_COMPLETE_FILTER =
+  "defined(headline) && defined(heroStat) && " +
+  "defined(capabilitiesEyebrow) && defined(faqEyebrow) && " +
+  "defined(ctaEyebrow) && defined(ctaDeck)";
+
 export const servicesSlugListQuery = /* groq */ `
-  *[_type == "service" && defined(headline) && defined(heroStat)] {
+  *[_type == "service" && ${SERVICE_COMPLETE_FILTER}] {
     "slug": slug.current
   }
 `;
@@ -215,7 +230,7 @@ export const serviceBySlugQuery = /* groq */ `
 `;
 
 export const servicesListQuery = /* groq */ `
-  *[_type == "service" && defined(headline) && defined(heroStat)] | order(order asc) {
+  *[_type == "service" && ${SERVICE_COMPLETE_FILTER}] | order(order asc) {
     name,
     "slug": slug.current,
     shortDescription,
@@ -224,7 +239,7 @@ export const servicesListQuery = /* groq */ `
 `;
 
 export const otherServicesQuery = /* groq */ `
-  *[_type == "service" && slug.current != $slug && defined(headline) && defined(heroStat)] | order(order asc) {
+  *[_type == "service" && slug.current != $slug && ${SERVICE_COMPLETE_FILTER}] | order(order asc) {
     name,
     "slug": slug.current,
     shortDescription,

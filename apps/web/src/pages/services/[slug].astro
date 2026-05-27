@@ -44,9 +44,12 @@ if (!service) {
 if (!contactInfo) {
   throw new Error("Contact Info singleton not found in Sanity (required by service page).");
 }
-if (!indexPage) {
-  throw new Error("Services Index Page singleton not found in Sanity (required for service detail pages).");
-}
+// indexPage is optional here: service detail pages only consume two short
+// labels from it (Other Services row). When the singleton hasn't been
+// authored yet — e.g., right after the schema lands but before the user
+// fills it in Studio — we fall back to the same defaults the schema's
+// `initialValue` uses. The /services index page genuinely needs the
+// singleton (10 fields incl. HeadlineRichText) and still throws.
 ---
 
 <BaseLayout title={service.name} description={service.shortDescription}>
@@ -78,8 +81,8 @@ if (!indexPage) {
   />
 
   <OtherServices
-    heading={indexPage.otherServicesHeading}
-    viewAllLabel={indexPage.otherServicesViewAllLabel}
+    heading={indexPage?.otherServicesHeading ?? "Other services"}
+    viewAllLabel={indexPage?.otherServicesViewAllLabel ?? "View all →"}
     services={others}
   />
 

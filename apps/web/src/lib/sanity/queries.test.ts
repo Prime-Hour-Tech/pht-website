@@ -95,7 +95,7 @@ describe("contactInfoQuery", () => {
   });
 
   it("projects the cardTitle field shared across CtaCard + service CTA components", () => {
-    expect(contactInfoQuery).toContain("cardTitle");
+    expect(contactInfoQuery).toMatch(/\bcardTitle\b/);
   });
 
   it("projects hours sub-fields needed by the client open-now script", () => {
@@ -158,6 +158,12 @@ describe("service queries", () => {
     expect(servicesSlugListQuery).toContain('_type == "service"');
     expect(servicesSlugListQuery).toContain("defined(headline)");
     expect(servicesSlugListQuery).toContain("defined(heroStat)");
+    // Slice-3 fix-up required fields — services missing these aren't
+    // route-eligible (would render `◆ undefined` etc.).
+    expect(servicesSlugListQuery).toContain("defined(capabilitiesEyebrow)");
+    expect(servicesSlugListQuery).toContain("defined(faqEyebrow)");
+    expect(servicesSlugListQuery).toContain("defined(ctaEyebrow)");
+    expect(servicesSlugListQuery).toContain("defined(ctaDeck)");
     expect(servicesSlugListQuery).toContain('"slug": slug.current');
   });
 
@@ -207,6 +213,10 @@ describe("service queries", () => {
     expect(servicesListQuery).toContain('_type == "service"');
     expect(servicesListQuery).toContain("defined(headline)");
     expect(servicesListQuery).toContain("defined(heroStat)");
+    expect(servicesListQuery).toContain("defined(capabilitiesEyebrow)");
+    expect(servicesListQuery).toContain("defined(faqEyebrow)");
+    expect(servicesListQuery).toContain("defined(ctaEyebrow)");
+    expect(servicesListQuery).toContain("defined(ctaDeck)");
     expect(servicesListQuery).toContain("order(order asc)");
     expect(servicesListQuery).toContain("name");
     expect(servicesListQuery).toContain("shortDescription");
@@ -218,6 +228,10 @@ describe("service queries", () => {
     expect(otherServicesQuery).toContain("slug.current != $slug");
     expect(otherServicesQuery).toContain("defined(headline)");
     expect(otherServicesQuery).toContain("defined(heroStat)");
+    expect(otherServicesQuery).toContain("defined(capabilitiesEyebrow)");
+    expect(otherServicesQuery).toContain("defined(faqEyebrow)");
+    expect(otherServicesQuery).toContain("defined(ctaEyebrow)");
+    expect(otherServicesQuery).toContain("defined(ctaDeck)");
     expect(otherServicesQuery).toContain("order(order asc)");
     expect(otherServicesQuery).toContain("name");
     expect(otherServicesQuery).toContain("shortDescription");
