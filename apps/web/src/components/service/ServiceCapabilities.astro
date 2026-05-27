@@ -1,0 +1,60 @@
+---
+import type { HeadlineRichText as HRT, ServiceCapability, IconName } from "../../lib/sanity/types";
+import Icon from "../Icon.astro";
+import HeadlineRichText from "../HeadlineRichText.astro";
+
+interface Props {
+  heading: HRT;
+  iconName: IconName;
+  capabilities: ServiceCapability[];
+}
+
+const { heading, iconName, capabilities } = Astro.props;
+---
+
+<section class="bg-bg-alt py-24 px-10 border-b border-line">
+  <div class="max-w-content mx-auto">
+    <div class="flex items-baseline justify-between mb-8 flex-wrap gap-4">
+      <div>
+        <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3">
+          ◆ What's included
+        </div>
+        <h2
+          class="font-serif font-medium text-ink m-0"
+          style="font-size: 44px; letter-spacing: -0.025em; line-height: 1.05; text-wrap: balance;"
+        >
+          <HeadlineRichText value={heading} />
+        </h2>
+      </div>
+      <a
+        href="#"
+        aria-disabled="true"
+        title="Spec sheet PDFs not yet available"
+        class="text-accent font-semibold no-underline text-body-sm cursor-not-allowed opacity-60"
+      >
+        Download spec sheet →
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {capabilities.map((cap) => (
+        <div class="bg-bg border border-line rounded-lg p-6">
+          <div class="flex justify-between items-center mb-3.5">
+            <span class="size-9 rounded-md bg-accent/10 text-accent inline-flex items-center justify-center">
+              <Icon name={iconName} size={18} />
+            </span>
+            <span class="font-mono text-micro text-muted uppercase tracking-mono-meta px-2 py-0.5 border border-line rounded">
+              INCLUDED
+            </span>
+          </div>
+          <h3 class="text-body-lg font-semibold text-ink m-0" style="letter-spacing: -0.01em; line-height: 1.2;">
+            {cap.name}
+          </h3>
+          <p class="mt-1.5 text-muted text-body-sm leading-body m-0">
+            {cap.body}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

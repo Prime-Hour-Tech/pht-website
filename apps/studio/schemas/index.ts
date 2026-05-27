@@ -13,6 +13,7 @@ import { headaches } from "./objects/headaches";
 import { savings } from "./objects/savings";
 import { servicesList } from "./objects/servicesList";
 import { beliefs } from "./objects/beliefs";
+import { headline } from "./objects/headline";
 import { ctaCard } from "./objects/ctaCard";
 
 export const schemaTypes = [
@@ -30,5 +31,6 @@ export const schemaTypes = [
   savings,
   servicesList,
   beliefs,
+  headline,
   ctaCard,
 ];

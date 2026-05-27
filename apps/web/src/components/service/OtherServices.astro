@@ -1,0 +1,47 @@
+---
+import type { ServiceCard } from "../../lib/sanity/types";
+import Icon from "../Icon.astro";
+
+interface Props {
+  services: ServiceCard[];
+}
+
+const { services } = Astro.props;
+---
+
+<section class="bg-bg-alt py-16 px-10 border-b border-line">
+  <div class="max-w-content mx-auto">
+    <div class="flex items-baseline justify-between mb-6">
+      <h2 class="font-serif font-medium text-ink m-0" style="font-size: 32px; letter-spacing: -0.02em;">
+        Other services
+      </h2>
+      <a href="/services" class="text-accent font-semibold no-underline text-body-sm">
+        View all →
+      </a>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+      {services.map((s) => (
+        <a
+          href={`/services/${s.slug}`}
+          class="bg-bg border border-line rounded-lg p-5 no-underline text-ink flex flex-col gap-3.5 transition-colors hover:border-accent/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+        >
+          <span class="size-9 rounded-md bg-accent/10 text-accent inline-flex items-center justify-center">
+            <Icon name={s.iconName} size={18} />
+          </span>
+          <div>
+            <div class="font-serif font-medium text-ink leading-tight" style="font-size: 19px; letter-spacing: -0.015em;">
+              {s.name}
+            </div>
+            <div class="mt-1.5 text-muted text-[13px] leading-body">
+              {s.shortDescription.split(".")[0]}.
+            </div>
+          </div>
+          <span class="mt-auto text-accent font-semibold text-[13px] inline-flex items-center gap-1">
+            Read <Icon name="arrowSm" size={12} />
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

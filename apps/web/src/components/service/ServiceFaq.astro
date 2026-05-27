@@ -1,0 +1,63 @@
+---
+import type { HeadlineRichText as HRT, ServiceFaqEntry } from "../../lib/sanity/types";
+import Icon from "../Icon.astro";
+import HeadlineRichText from "../HeadlineRichText.astro";
+
+interface Props {
+  heading: HRT;
+  faqs: ServiceFaqEntry[];
+}
+
+const { heading, faqs } = Astro.props;
+---
+
+<section class="bg-bg py-24 px-10 border-b border-line">
+  <div class="max-w-content mx-auto grid grid-cols-1 md:grid-cols-[0.7fr_1.3fr] gap-16 items-start">
+    <div class="md:sticky md:top-24">
+      <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
+        ◆ Questions we hear
+      </div>
+      <h2
+        class="font-serif font-medium text-ink m-0"
+        style="font-size: 44px; letter-spacing: -0.025em; line-height: 1.05; text-wrap: balance;"
+      >
+        <HeadlineRichText value={heading} />
+      </h2>
+      <p class="mt-4 text-muted text-body-sm leading-body max-w-[320px]">
+        If yours isn't here, ask on the discovery call — we'll give a real answer.
+      </p>
+    </div>
+
+    <div class="border-t border-line">
+      {faqs.map((f, i) => (
+        <details class="border-b border-line py-6 group" open={i === 0}>
+          <summary class="flex justify-between gap-6 items-start cursor-pointer list-none">
+            <h3 class="font-serif font-medium text-ink m-0" style="font-size: 22px; letter-spacing: -0.015em; line-height: 1.25;">
+              {f.question}
+            </h3>
+            <span class="text-muted faq-chevron transition-transform pt-1">
+              <Icon name="chevron" size={18} />
+            </span>
+          </summary>
+          <p class="mt-2 text-muted text-body-sm leading-body m-0">
+            {f.answer}
+          </p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Hide native disclosure markers; chevron icon is the indicator. */
+  details > summary {
+    list-style: none;
+  }
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+  /* Rotate the chevron icon when the details element is open. */
+  details[open] .faq-chevron {
+    transform: rotate(180deg);
+  }
+</style>

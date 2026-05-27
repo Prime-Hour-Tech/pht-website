@@ -1,34 +1,55 @@
 ---
-import type { CtaCardBlock } from "../../lib/sanity/types";
+import type { ContactInfo, HeadlineRichText as HRT } from "../../lib/sanity/types";
 import Icon from "../Icon.astro";
 import HeadlineRichText from "../HeadlineRichText.astro";
-import { getContactInfo } from "../../lib/sanity/client";
 
 interface Props {
-  block: CtaCardBlock;
+  serviceName: string;
+  contactInfo: ContactInfo;
 }
 
-const { block } = Astro.props;
-const contactInfo = await getContactInfo();
+const { serviceName, contactInfo } = Astro.props;
 
-if (!contactInfo) {
-  throw new Error(
-    "Contact Info singleton not found in Sanity (required by CtaCard block).",
-  );
-}
+// Build a synthetic Portable Text headline interpolating the service name.
+// Template: "See if {serviceName} from PHT [accent: fits your business.]"
+const heading: HRT = [
+  {
+    _type: "block",
+    _key: "cta-h",
+    style: "normal",
+    markDefs: [{ _key: "acc", _type: "accent" }],
+    children: [
+      {
+        _type: "span",
+        _key: "s1",
+        text: `See if ${serviceName.toLowerCase()} from PHT `,
+        marks: [],
+      },
+      {
+        _type: "span",
+        _key: "s2",
+        text: "fits your business.",
+        marks: ["acc"],
+      },
+    ],
+  },
+];
 ---
 
-<section class="bg-bg py-24 px-10 border-b border-line">
+<section class="bg-bg py-24 px-10">
   <div class="max-w-narrow mx-auto grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-14 items-center">
     <div>
       <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
-        {block.eyebrow}
+        ◆ Ready when you are
       </div>
-      <h2 class="font-serif font-medium tracking-display leading-display text-ink m-0" style="font-size: 56px; text-wrap: balance;">
-        <HeadlineRichText value={block.heading} />
+      <h2
+        class="font-serif font-medium text-ink m-0"
+        style="font-size: 52px; line-height: 1.02; letter-spacing: -0.03em; text-wrap: balance;"
+      >
+        <HeadlineRichText value={heading} />
       </h2>
-      <p class="mt-4 text-muted text-body-lg leading-body max-w-[500px]">
-        {block.deck}
+      <p class="mt-4 text-muted text-body-lg leading-snug max-w-[500px]">
+        30 minutes with the founder. We'll look at your environment, your support load, and tell you honestly whether this service is the right fit — even if the answer is "not yet."
       </p>
     </div>
 
@@ -51,11 +72,11 @@ if (!contactInfo) {
         <Icon name="arrowSm" size={14} />
       </a>
       <a
-        href={block.primaryCtaHref}
+        href="/contact"
         class="bg-accent text-white font-semibold rounded-md mt-4 w-full inline-flex items-center justify-center gap-2.5 no-underline shadow-button-accent"
         style="padding: 14px 22px; font-size: 15px;"
       >
-        {block.primaryCtaLabel}
+        Schedule a discovery call
         <Icon name="arrow" size={16} />
       </a>
     </div>

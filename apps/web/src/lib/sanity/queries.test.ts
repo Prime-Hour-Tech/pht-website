@@ -6,6 +6,10 @@ import {
   navigationQuery,
   footerQuery,
   contactInfoQuery,
+  servicesSlugListQuery,
+  serviceBySlugQuery,
+  servicesListQuery,
+  otherServicesQuery,
 } from "./queries";
 
 describe("GROQ queries", () => {
@@ -25,6 +29,17 @@ describe("GROQ queries", () => {
   it("allPageSlugsQuery returns slugs only", () => {
     expect(allPageSlugsQuery).toContain('*[_type == "page" && defined(slug.current)]');
     expect(allPageSlugsQuery).toContain('"slug": slug.current');
+  });
+
+  it("pageBySlugQuery ctaCard projection drops headingAccent and projects heading as Portable Text", () => {
+    expect(pageBySlugQuery).toContain('_type == "ctaCard"');
+    // Scope: assert heading is projected INSIDE the ctaCard block.
+    // The ctaCard arrow is `_type == "ctaCard" => { ... }`. Match against
+    // the block body to confirm `heading` is one of its projections.
+    const ctaCardBlock = pageBySlugQuery.match(/_type == "ctaCard"[^}]*\{([^}]*)\}/);
+    expect(ctaCardBlock).not.toBeNull();
+    expect(ctaCardBlock![1]).toMatch(/\bheading\b/);
+    expect(ctaCardBlock![1]).not.toMatch(/\bheadingAccent\b/);
   });
 });
 
@@ -130,5 +145,71 @@ describe("pageBySlugQuery — block projections", () => {
 
   it("no longer references the deleted hero block type", () => {
     expect(pageBySlugQuery).not.toContain('"hero"');
+  });
+});
+
+describe("service queries", () => {
+  it("servicesSlugListQuery selects complete service documents (skips incomplete legacy docs)", () => {
+    expect(servicesSlugListQuery).toContain('_type == "service"');
+    expect(servicesSlugListQuery).toContain("defined(headline)");
+    expect(servicesSlugListQuery).toContain("defined(heroStat)");
+    expect(servicesSlugListQuery).toContain('"slug": slug.current');
+  });
+
+  it("serviceBySlugQuery filters by slug and projects all expanded fields", () => {
+    expect(serviceBySlugQuery).toContain('*[_type == "service" && slug.current == $slug][0]');
+    // Word-boundary matching so substring fields don't satisfy each other
+    // (e.g., "name" must not match against "iconName" or "capabilitiesHeading").
+    const fields = [
+      // Card fields
+      "name",
+      "shortDescription",
+      "iconName",
+      "order",
+      // Hero
+      "eyebrow",
+      "headline",
+      "deck",
+      "heroStat",
+      "heroPillLeft",
+      "heroPillRight",
+      // Approach
+      "sectionEyebrow",
+      "sectionHeading",
+      "sectionBody",
+      "sectionBullets",
+      // Capabilities
+      "capabilitiesHeading",
+      "capabilities",
+      // Stats
+      "statStrip",
+      // FAQ
+      "faqHeading",
+      "faqs",
+    ];
+    for (const field of fields) {
+      expect(serviceBySlugQuery).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("servicesListQuery filters complete services, orders by order asc, projects card fields", () => {
+    expect(servicesListQuery).toContain('_type == "service"');
+    expect(servicesListQuery).toContain("defined(headline)");
+    expect(servicesListQuery).toContain("defined(heroStat)");
+    expect(servicesListQuery).toContain("order(order asc)");
+    expect(servicesListQuery).toContain("name");
+    expect(servicesListQuery).toContain("shortDescription");
+    expect(servicesListQuery).toContain("iconName");
+  });
+
+  it("otherServicesQuery filters complete sibling services, orders by order asc", () => {
+    expect(otherServicesQuery).toContain('_type == "service"');
+    expect(otherServicesQuery).toContain("slug.current != $slug");
+    expect(otherServicesQuery).toContain("defined(headline)");
+    expect(otherServicesQuery).toContain("defined(heroStat)");
+    expect(otherServicesQuery).toContain("order(order asc)");
+    expect(otherServicesQuery).toContain("name");
+    expect(otherServicesQuery).toContain("shortDescription");
+    expect(otherServicesQuery).toContain("iconName");
   });
 });

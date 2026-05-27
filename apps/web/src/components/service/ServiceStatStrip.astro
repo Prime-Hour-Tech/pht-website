@@ -1,0 +1,27 @@
+---
+import type { ServiceStat } from "../../lib/sanity/types";
+
+interface Props {
+  stats: ServiceStat[];
+}
+
+const { stats } = Astro.props;
+---
+
+<section class="bg-bg py-16 px-10 border-b border-line">
+  <div class="max-w-content mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
+    {stats.map((s) => (
+      <div>
+        <div
+          class="font-serif font-medium text-ink leading-none tabular-nums"
+          style="font-size: 52px; letter-spacing: -0.025em;"
+        >
+          {s.k}
+        </div>
+        <div class="mt-2.5 font-mono text-meta text-muted uppercase tracking-mono-meta">
+          {s.v}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

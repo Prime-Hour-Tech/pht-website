@@ -104,7 +104,6 @@ export const pageBySlugQuery = /* groq */ `
       _type == "ctaCard" => {
         eyebrow,
         heading,
-        headingAccent,
         deck,
         primaryCtaLabel,
         primaryCtaHref
@@ -175,5 +174,54 @@ export const contactInfoQuery = /* groq */ `
       street,
       postal
     }
+  }
+`;
+
+export const servicesSlugListQuery = /* groq */ `
+  *[_type == "service" && defined(headline) && defined(heroStat)] {
+    "slug": slug.current
+  }
+`;
+
+export const serviceBySlugQuery = /* groq */ `
+  *[_type == "service" && slug.current == $slug][0] {
+    name,
+    "slug": slug.current,
+    shortDescription,
+    iconName,
+    order,
+    eyebrow,
+    headline,
+    deck,
+    heroStat,
+    heroPillLeft,
+    heroPillRight,
+    sectionEyebrow,
+    sectionHeading,
+    sectionBody,
+    sectionBullets,
+    capabilitiesHeading,
+    capabilities,
+    statStrip,
+    faqHeading,
+    faqs
+  }
+`;
+
+export const servicesListQuery = /* groq */ `
+  *[_type == "service" && defined(headline) && defined(heroStat)] | order(order asc) {
+    name,
+    "slug": slug.current,
+    shortDescription,
+    iconName
+  }
+`;
+
+export const otherServicesQuery = /* groq */ `
+  *[_type == "service" && slug.current != $slug && defined(headline) && defined(heroStat)] | order(order asc) {
+    name,
+    "slug": slug.current,
+    shortDescription,
+    iconName
   }
 `;

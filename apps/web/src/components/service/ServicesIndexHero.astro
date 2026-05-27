@@ -1,0 +1,36 @@
+---
+import type { HeadlineRichText as HRT } from "../../lib/sanity/types";
+import HeadlineRichText from "../HeadlineRichText.astro";
+
+// Hardcoded synthetic headline for the /services index page.
+// "Six services. *One team.*" — accent on "One team."
+const heading: HRT = [
+  {
+    _type: "block",
+    _key: "h",
+    style: "normal",
+    markDefs: [{ _key: "acc", _type: "accent" }],
+    children: [
+      { _type: "span", _key: "s1", text: "Six services. ", marks: [] },
+      { _type: "span", _key: "s2", text: "One team.", marks: ["acc"] },
+    ],
+  },
+];
+---
+
+<section class="bg-dark text-dark-text px-10 py-20 relative overflow-hidden" aria-label="Services index hero">
+  <div class="max-w-content mx-auto relative">
+    <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
+      ◆ Services
+    </div>
+    <h1
+      class="font-serif font-medium text-dark-text m-0 leading-tight"
+      style="font-size: 56px; letter-spacing: -0.03em; text-wrap: balance;"
+    >
+      <HeadlineRichText value={heading} />
+    </h1>
+    <p class="mt-4 text-dark-muted text-body-lg leading-body max-w-[640px]">
+      Managed IT, security, cloud, projects, advisory, and web — run by one Salt Lake City team.
+    </p>
+  </div>
+</section>

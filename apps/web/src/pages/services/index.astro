@@ -1,0 +1,59 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ServicesIndexHero from "../../components/service/ServicesIndexHero.astro";
+import ServicesList from "../../components/blocks/ServicesList.astro";
+import CtaCard from "../../components/blocks/CtaCard.astro";
+import { getServicesList } from "../../lib/sanity/client";
+import type {
+  ServicesListBlock,
+  CtaCardBlock,
+  HeadlineRichText,
+} from "../../lib/sanity/types";
+
+const services = await getServicesList();
+
+// ServicesList block component reads `services[]` — the home-page projection
+// includes _id + order. /services index doesn't need those for rendering, but
+// the type expects ServiceResolved[]. The runtime shape is identical for the
+// fields the component actually reads (name, slug, shortDescription, iconName).
+const servicesBlock: ServicesListBlock = {
+  _type: "servicesList",
+  _key: "idx-services",
+  eyebrow: "◆ Services",
+  heading: "Six capabilities, one Salt Lake City team.",
+  services: services as unknown as ServicesListBlock["services"],
+};
+
+// Hardcoded CtaCard for the /services index. Synthetic Portable Text heading.
+const ctaHeading: HeadlineRichText = [
+  {
+    _type: "block",
+    _key: "cta-h",
+    style: "normal",
+    markDefs: [{ _key: "acc", _type: "accent" }],
+    children: [
+      { _type: "span", _key: "s1", text: "Not sure which one fits? ", marks: [] },
+      { _type: "span", _key: "s2", text: "Let's talk.", marks: ["acc"] },
+    ],
+  },
+];
+
+const ctaBlock: CtaCardBlock = {
+  _type: "ctaCard",
+  _key: "idx-cta",
+  eyebrow: "◆ Choosing a service",
+  heading: ctaHeading,
+  deck: "30 minutes with the founder. We'll walk through your current setup and tell you which of these services — if any — would actually move the needle.",
+  primaryCtaLabel: "Schedule a discovery call",
+  primaryCtaHref: "/contact",
+};
+---
+
+<BaseLayout
+  title="Services"
+  description="Managed IT, cybersecurity, cloud, projects, advisory, and web — six services run by one Salt Lake City team."
+>
+  <ServicesIndexHero />
+  <ServicesList block={servicesBlock} />
+  <CtaCard block={ctaBlock} />
+</BaseLayout>

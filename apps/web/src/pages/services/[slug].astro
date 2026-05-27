@@ -1,0 +1,72 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumb from "../../components/chrome/Breadcrumb.astro";
+import ServiceHero from "../../components/service/ServiceHero.astro";
+import ServiceApproach from "../../components/service/ServiceApproach.astro";
+import ServiceCapabilities from "../../components/service/ServiceCapabilities.astro";
+import ServiceStatStrip from "../../components/service/ServiceStatStrip.astro";
+import ServiceFaq from "../../components/service/ServiceFaq.astro";
+import OtherServices from "../../components/service/OtherServices.astro";
+import ServiceCta from "../../components/service/ServiceCta.astro";
+import {
+  getAllServiceSlugs,
+  getServiceBySlug,
+  getOtherServices,
+  getContactInfo,
+} from "../../lib/sanity/client";
+
+export async function getStaticPaths() {
+  const services = await getAllServiceSlugs();
+  return services
+    .filter((s) => s.slug)
+    .map((s) => ({ params: { slug: s.slug } }));
+}
+
+const { slug } = Astro.params;
+if (!slug) {
+  // Should be unreachable: route param comes from the [slug] filename + getStaticPaths.
+  throw new Error("Service slug missing at build time.");
+}
+
+const [service, others, contactInfo] = await Promise.all([
+  getServiceBySlug(slug),
+  getOtherServices(slug),
+  getContactInfo(),
+]);
+
+if (!service) {
+  // Should be unreachable: slug came from getAllServiceSlugs() which only returns
+  // complete services. If this fires, the two queries have drifted.
+  throw new Error(`Service not found in Sanity for slug: ${slug}`);
+}
+if (!contactInfo) {
+  throw new Error("Contact Info singleton not found in Sanity (required by service page).");
+}
+---
+
+<BaseLayout title={service.name} description={service.shortDescription}>
+  <Breadcrumb trail={[{ label: "Services", href: "/services" }, service.name]} />
+
+  <ServiceHero service={service} />
+
+  <ServiceApproach
+    eyebrow={service.sectionEyebrow}
+    heading={service.sectionHeading}
+    body={service.sectionBody}
+    bullets={service.sectionBullets}
+  />
+
+  <ServiceCapabilities
+    heading={service.capabilitiesHeading}
+    iconName={service.iconName}
+    capabilities={service.capabilities}
+  />
+
+  <ServiceStatStrip stats={service.statStrip} />
+
+  <ServiceFaq heading={service.faqHeading} faqs={service.faqs} />
+
+  <OtherServices services={others} />
+
+  <ServiceCta serviceName={service.name} contactInfo={contactInfo} />
+</BaseLayout>
