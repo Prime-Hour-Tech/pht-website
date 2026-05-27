@@ -4,7 +4,8 @@
 // and the contact card. Paths transcribed from
 // design_handoff_docs/shared.jsx Icon.
 
-export type IconName = "monitor" | "shield" | "cloud" | "server" | "compass" | "globe" | "arrow" | "arrowSm" | "check" | "phone" | "mail";
+import type { IconName } from "../lib/sanity/types";
+export type { IconName };
 
 interface Props {
   name: IconName;
@@ -85,4 +86,5 @@ const { name, size = 16, stroke = 1.6, class: className = "" } = Astro.props;
       <polyline points="3 7 12 13 21 7" />
     </>
   )}
+  {name === "chevron" && <path d="m6 9 6 6 6-6" />}
 </svg>

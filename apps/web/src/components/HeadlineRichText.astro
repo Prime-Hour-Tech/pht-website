@@ -1,0 +1,15 @@
+---
+import { renderHeadlineRichText } from "../lib/portable-text";
+import type { PortableTextBlock } from "@portabletext/types";
+
+interface Props {
+  // Accepts both the canonical Portable Text shape and a legacy plain string
+  // for the duration of the Slice 3 migration window (some Sanity docs may
+  // still hold the pre-migration heading: string shape until re-authored).
+  value: PortableTextBlock[] | string | null | undefined;
+}
+
+const { value } = Astro.props;
+const html = renderHeadlineRichText(value);
+---
+{html && <Fragment set:html={html} />}

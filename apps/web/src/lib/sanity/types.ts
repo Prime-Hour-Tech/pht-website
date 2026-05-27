@@ -1,3 +1,7 @@
+import type { PortableTextBlock } from "@portabletext/types";
+
+export type HeadlineRichText = PortableTextBlock[];
+
 export type ImageRef = {
   asset: { _ref: string; _type: "reference" };
   // Required at the schema level on both siteSettings.defaultOgImage and page.ogImage.
@@ -99,10 +103,31 @@ export type Address = {
 };
 
 export type ContactInfo = {
+  // Optional during the Slice 3 fix-up migration window: the live contactInfo
+  // doc predates the cardTitle field, and Sanity initialValue only fires on
+  // doc creation (not on schema-driven backfill). Consumers fall back to
+  // "Get in touch" via `??`. Tighten to required once the user has re-saved
+  // the contactInfo doc post-deploy.
+  cardTitle?: string;
   phone: { display: string; dial: string };
   email: string;
   hours: Hours;
   address: Address;
+};
+
+export type ServicesIndexPage = {
+  heroEyebrow: string;
+  heroHeading: HeadlineRichText;
+  heroDeck: string;
+  listEyebrow: string;
+  listHeading: string;
+  ctaEyebrow: string;
+  ctaHeading: HeadlineRichText;
+  ctaDeck: string;
+  ctaLabel: string;
+  ctaHref: string;
+  otherServicesHeading: string;
+  otherServicesViewAllLabel: string;
 };
 
 // ── Documents referenced from page blocks ────────────────────────────────
@@ -113,7 +138,13 @@ export type IconName =
   | "cloud"
   | "server"
   | "compass"
-  | "globe";
+  | "globe"
+  | "arrow"
+  | "arrowSm"
+  | "check"
+  | "phone"
+  | "mail"
+  | "chevron";
 
 export type TeamMemberResolved = {
   _id: string;
@@ -124,13 +155,62 @@ export type TeamMemberResolved = {
   photo?: ResolvedImage;
 };
 
-export type ServiceResolved = {
-  _id: string;
+export type ServiceCard = {
   name: string;
   slug: string;
   shortDescription: string;
   iconName: IconName;
+};
+
+// Used for the home-page ServicesList block — projection includes _id + order.
+export type ServiceResolved = ServiceCard & {
+  _id: string;
   order: number;
+};
+
+export type ServiceCapability = {
+  name: string;
+  body: string;
+};
+
+export type ServiceStat = {
+  k: string;
+  v: string;
+};
+
+export type ServiceFaqEntry = {
+  question: string;
+  answer: string;
+};
+
+export type ServiceFull = ServiceCard & {
+  order: number;
+  // Hero
+  eyebrow: string;
+  headline: HeadlineRichText;
+  deck: string;
+  heroStat: ServiceStat;
+  heroPillLeft?: string;
+  heroPillRight?: string;
+  // Approach
+  sectionEyebrow: string;
+  sectionHeading: HeadlineRichText;
+  sectionBody: string;
+  sectionBullets: string[];
+  // Capabilities
+  capabilitiesEyebrow: string;
+  capabilitiesHeading: HeadlineRichText;
+  capabilities: ServiceCapability[];
+  // Stats
+  statStrip: ServiceStat[];
+  // FAQ
+  faqEyebrow: string;
+  faqHelperText?: string;
+  faqHeading: HeadlineRichText;
+  faqs: ServiceFaqEntry[];
+  // CTA
+  ctaEyebrow: string;
+  ctaDeck: string;
 };
 
 // ── Page-body block types ────────────────────────────────────────────────
@@ -232,8 +312,7 @@ export type CtaCardBlock = {
   _type: "ctaCard";
   _key: string;
   eyebrow: string;
-  heading: string;
-  headingAccent?: string;
+  heading: HeadlineRichText;
   deck: string;
   primaryCtaLabel: string;
   primaryCtaHref: string;

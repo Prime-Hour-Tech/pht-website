@@ -1,0 +1,62 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ServicesIndexHero from "../../components/service/ServicesIndexHero.astro";
+import ServicesList from "../../components/blocks/ServicesList.astro";
+import CtaCard from "../../components/blocks/CtaCard.astro";
+import {
+  getServicesList,
+  getServicesIndexPage,
+} from "../../lib/sanity/client";
+import type {
+  ServicesListBlock,
+  CtaCardBlock,
+} from "../../lib/sanity/types";
+
+const [services, indexPage] = await Promise.all([
+  getServicesList(),
+  getServicesIndexPage(),
+]);
+
+if (!indexPage) {
+  throw new Error("Services Index Page singleton not found in Sanity.");
+}
+
+// Construct synthetic blocks for the existing block-rendering components.
+// ServicesListBlock's `services` field is typed as ServiceResolved[] (which
+// includes _id + order) because the home-page servicesList projection pulls
+// those for keying and sorting. The /services index uses getServicesList(),
+// which projects only ServiceCard fields — the runtime shape is compatible
+// (ServicesList.astro reads only name/slug/shortDescription/iconName), so
+// the double-cast is safe. Loosening ServicesListBlock would weaken type
+// safety on the home page path.
+const servicesBlock: ServicesListBlock = {
+  _type: "servicesList",
+  _key: "idx-services",
+  eyebrow: `◆ ${indexPage.listEyebrow}`,
+  heading: indexPage.listHeading,
+  services: services as unknown as ServicesListBlock["services"],
+};
+
+const ctaBlock: CtaCardBlock = {
+  _type: "ctaCard",
+  _key: "idx-cta",
+  eyebrow: `◆ ${indexPage.ctaEyebrow}`,
+  heading: indexPage.ctaHeading,
+  deck: indexPage.ctaDeck,
+  primaryCtaLabel: indexPage.ctaLabel,
+  primaryCtaHref: indexPage.ctaHref,
+};
+---
+
+<BaseLayout
+  title="Services"
+  description="Managed IT, cybersecurity, cloud, projects, advisory, and web — six services run by one Salt Lake City team."
+>
+  <ServicesIndexHero
+    eyebrow={indexPage.heroEyebrow}
+    heading={indexPage.heroHeading}
+    deck={indexPage.heroDeck}
+  />
+  <ServicesList block={servicesBlock} />
+  <CtaCard block={ctaBlock} />
+</BaseLayout>

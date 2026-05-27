@@ -1,9 +1,9 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
-import { vercelDeployTool } from "sanity-plugin-vercel-deploy";
 import { schemaTypes } from "./schemas";
 import { getSanityEnv } from "./lib/env";
+import { DeployTool } from "./lib/deployTool";
 
 const { projectId, dataset } = getSanityEnv();
 
@@ -11,7 +11,14 @@ const SITE_SETTINGS_ID = "siteSettings";
 const NAVIGATION_ID = "navigation";
 const FOOTER_ID = "footer";
 const CONTACT_INFO_ID = "contactInfo";
-const SINGLETONS = [SITE_SETTINGS_ID, NAVIGATION_ID, FOOTER_ID, CONTACT_INFO_ID];
+const SERVICES_INDEX_PAGE_ID = "servicesIndexPage";
+const SINGLETONS = [
+  SITE_SETTINGS_ID,
+  NAVIGATION_ID,
+  FOOTER_ID,
+  CONTACT_INFO_ID,
+  SERVICES_INDEX_PAGE_ID,
+];
 
 // Helper for the sidebar list — keeps each singleton entry compact.
 const singletonItem = (S: any, id: string, title: string) =>
@@ -35,6 +42,7 @@ export default defineConfig({
             singletonItem(S, NAVIGATION_ID, "Navigation"),
             singletonItem(S, FOOTER_ID, "Footer"),
             singletonItem(S, CONTACT_INFO_ID, "Contact Info"),
+            singletonItem(S, SERVICES_INDEX_PAGE_ID, "Services Index Page"),
             S.divider(),
             S.listItem()
               .title("Team Members")
@@ -56,7 +64,13 @@ export default defineConfig({
           ]),
     }),
     visionTool(),
-    vercelDeployTool(),
+  ],
+  tools: [
+    {
+      name: "deploy",
+      title: "Deploy",
+      component: DeployTool,
+    },
   ],
   schema: {
     types: schemaTypes,

@@ -15,17 +15,9 @@ export const ctaCard = defineType({
       name: "heading",
       title: "Heading",
       description:
-        "Main heading. To finish with an italic accent-red fragment (the editorial flourish in the design), put the trailing fragment in \"Heading Accent\" below.",
-      type: "string",
+        "Main heading. Select a span and click \"Italic accent\" in the toolbar to apply the editorial italic + red styling to a fragment.",
+      type: "headline",
       validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: "headingAccent",
-      title: "Heading Accent (optional)",
-      description:
-        "Optional trailing fragment rendered italic + accent red. e.g., for \"Let's talk about what's slowing you down.\" enter heading = \"Let's talk about\" and this field = \"what's slowing you down.\"",
-      type: "string",
-      validation: (Rule) => Rule.max(120),
     }),
     defineField({
       name: "deck",
@@ -50,10 +42,18 @@ export const ctaCard = defineType({
     }),
   ],
   preview: {
-    select: { title: "heading" },
-    prepare: ({ title }) => ({
-      title: title ? `${title} (CTA)` : "CTA Card",
-      subtitle: "Block",
-    }),
+    select: { heading: "heading" },
+    prepare: ({ heading }) => {
+      // heading is now a Portable Text array; extract first block's text.
+      const firstBlock = Array.isArray(heading) ? heading[0] : null;
+      const text =
+        firstBlock && Array.isArray(firstBlock.children)
+          ? firstBlock.children.map((c: { text?: string }) => c.text ?? "").join("")
+          : "";
+      return {
+        title: text ? `${text} (CTA)` : "CTA Card",
+        subtitle: "Block",
+      };
+    },
   },
 });

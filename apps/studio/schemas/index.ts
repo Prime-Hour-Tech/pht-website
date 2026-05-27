@@ -4,6 +4,7 @@ import { footer } from "./documents/footer";
 import { contactInfo } from "./documents/contactInfo";
 import { teamMember } from "./documents/teamMember";
 import { service } from "./documents/service";
+import { servicesIndexPage } from "./documents/servicesIndexPage";
 import { page } from "./documents/page";
 
 import { darkNumbersHero } from "./objects/darkNumbersHero";
@@ -13,6 +14,7 @@ import { headaches } from "./objects/headaches";
 import { savings } from "./objects/savings";
 import { servicesList } from "./objects/servicesList";
 import { beliefs } from "./objects/beliefs";
+import { headline } from "./objects/headline";
 import { ctaCard } from "./objects/ctaCard";
 
 export const schemaTypes = [
@@ -22,6 +24,7 @@ export const schemaTypes = [
   contactInfo,
   teamMember,
   service,
+  servicesIndexPage,
   page,
   darkNumbersHero,
   trustStrip,
@@ -30,5 +33,6 @@ export const schemaTypes = [
   savings,
   servicesList,
   beliefs,
+  headline,
   ctaCard,
 ];

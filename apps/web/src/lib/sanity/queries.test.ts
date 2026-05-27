@@ -6,6 +6,11 @@ import {
   navigationQuery,
   footerQuery,
   contactInfoQuery,
+  servicesSlugListQuery,
+  serviceBySlugQuery,
+  servicesListQuery,
+  otherServicesQuery,
+  servicesIndexPageQuery,
 } from "./queries";
 
 describe("GROQ queries", () => {
@@ -25,6 +30,17 @@ describe("GROQ queries", () => {
   it("allPageSlugsQuery returns slugs only", () => {
     expect(allPageSlugsQuery).toContain('*[_type == "page" && defined(slug.current)]');
     expect(allPageSlugsQuery).toContain('"slug": slug.current');
+  });
+
+  it("pageBySlugQuery ctaCard projection drops headingAccent and projects heading as Portable Text", () => {
+    expect(pageBySlugQuery).toContain('_type == "ctaCard"');
+    // Scope: assert heading is projected INSIDE the ctaCard block.
+    // The ctaCard arrow is `_type == "ctaCard" => { ... }`. Match against
+    // the block body to confirm `heading` is one of its projections.
+    const ctaCardBlock = pageBySlugQuery.match(/_type == "ctaCard"[^}]*\{([^}]*)\}/);
+    expect(ctaCardBlock).not.toBeNull();
+    expect(ctaCardBlock![1]).toMatch(/\bheading\b/);
+    expect(ctaCardBlock![1]).not.toMatch(/\bheadingAccent\b/);
   });
 });
 
@@ -76,6 +92,10 @@ describe("contactInfoQuery", () => {
     expect(contactInfoQuery).toContain("email");
     expect(contactInfoQuery).toContain("hours");
     expect(contactInfoQuery).toContain("address");
+  });
+
+  it("projects the cardTitle field shared across CtaCard + service CTA components", () => {
+    expect(contactInfoQuery).toMatch(/\bcardTitle\b/);
   });
 
   it("projects hours sub-fields needed by the client open-now script", () => {
@@ -130,5 +150,112 @@ describe("pageBySlugQuery — block projections", () => {
 
   it("no longer references the deleted hero block type", () => {
     expect(pageBySlugQuery).not.toContain('"hero"');
+  });
+});
+
+describe("service queries", () => {
+  it("servicesSlugListQuery selects complete service documents (skips incomplete legacy docs)", () => {
+    expect(servicesSlugListQuery).toContain('_type == "service"');
+    expect(servicesSlugListQuery).toContain("defined(headline)");
+    expect(servicesSlugListQuery).toContain("defined(heroStat)");
+    // Slice-3 fix-up required fields — services missing these aren't
+    // route-eligible (would render `◆ undefined` etc.).
+    expect(servicesSlugListQuery).toContain("defined(capabilitiesEyebrow)");
+    expect(servicesSlugListQuery).toContain("defined(faqEyebrow)");
+    expect(servicesSlugListQuery).toContain("defined(ctaEyebrow)");
+    expect(servicesSlugListQuery).toContain("defined(ctaDeck)");
+    expect(servicesSlugListQuery).toContain('"slug": slug.current');
+  });
+
+  it("serviceBySlugQuery filters by slug and projects all expanded fields", () => {
+    expect(serviceBySlugQuery).toContain('*[_type == "service" && slug.current == $slug][0]');
+    // Word-boundary matching so substring fields don't satisfy each other
+    // (e.g., "name" must not match against "iconName" or "capabilitiesHeading").
+    const fields = [
+      // Card fields
+      "name",
+      "shortDescription",
+      "iconName",
+      "order",
+      // Hero
+      "eyebrow",
+      "headline",
+      "deck",
+      "heroStat",
+      "heroPillLeft",
+      "heroPillRight",
+      // Approach
+      "sectionEyebrow",
+      "sectionHeading",
+      "sectionBody",
+      "sectionBullets",
+      // Capabilities
+      "capabilitiesEyebrow",
+      "capabilitiesHeading",
+      "capabilities",
+      // Stats
+      "statStrip",
+      // FAQ
+      "faqEyebrow",
+      "faqHelperText",
+      "faqHeading",
+      "faqs",
+      // CTA
+      "ctaEyebrow",
+      "ctaDeck",
+    ];
+    for (const field of fields) {
+      expect(serviceBySlugQuery).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("servicesListQuery filters complete services, orders by order asc, projects card fields", () => {
+    expect(servicesListQuery).toContain('_type == "service"');
+    expect(servicesListQuery).toContain("defined(headline)");
+    expect(servicesListQuery).toContain("defined(heroStat)");
+    expect(servicesListQuery).toContain("defined(capabilitiesEyebrow)");
+    expect(servicesListQuery).toContain("defined(faqEyebrow)");
+    expect(servicesListQuery).toContain("defined(ctaEyebrow)");
+    expect(servicesListQuery).toContain("defined(ctaDeck)");
+    expect(servicesListQuery).toContain("order(order asc)");
+    expect(servicesListQuery).toContain("name");
+    expect(servicesListQuery).toContain("shortDescription");
+    expect(servicesListQuery).toContain("iconName");
+  });
+
+  it("otherServicesQuery filters complete sibling services, orders by order asc", () => {
+    expect(otherServicesQuery).toContain('_type == "service"');
+    expect(otherServicesQuery).toContain("slug.current != $slug");
+    expect(otherServicesQuery).toContain("defined(headline)");
+    expect(otherServicesQuery).toContain("defined(heroStat)");
+    expect(otherServicesQuery).toContain("defined(capabilitiesEyebrow)");
+    expect(otherServicesQuery).toContain("defined(faqEyebrow)");
+    expect(otherServicesQuery).toContain("defined(ctaEyebrow)");
+    expect(otherServicesQuery).toContain("defined(ctaDeck)");
+    expect(otherServicesQuery).toContain("order(order asc)");
+    expect(otherServicesQuery).toContain("name");
+    expect(otherServicesQuery).toContain("shortDescription");
+    expect(otherServicesQuery).toContain("iconName");
+  });
+
+  it("servicesIndexPageQuery selects the singleton with hero/list/CTA/otherServices fields", () => {
+    expect(servicesIndexPageQuery).toContain('*[_type == "servicesIndexPage"][0]');
+    const fields = [
+      "heroEyebrow",
+      "heroHeading",
+      "heroDeck",
+      "listEyebrow",
+      "listHeading",
+      "ctaEyebrow",
+      "ctaHeading",
+      "ctaDeck",
+      "ctaLabel",
+      "ctaHref",
+      "otherServicesHeading",
+      "otherServicesViewAllLabel",
+    ];
+    for (const field of fields) {
+      expect(servicesIndexPageQuery).toMatch(new RegExp(`\\b${field}\\b`));
+    }
   });
 });

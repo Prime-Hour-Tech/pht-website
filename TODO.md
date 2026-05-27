@@ -10,14 +10,6 @@ Remaining work for the PHT marketing site. Slices 1 (Foundation) and 2 (Home) ar
 
 The work was decomposed into 6 slices during initial brainstorming. Each is its own spec → plan → execution cycle.
 
-### Slice 3 — Service template + 6 service routes
-
-- One Astro route `/[serviceSlug].astro` driven by the existing `service` document type.
-- Expand the `service` schema with the fields the template needs: hero stat / at-a-glance, how-it-works, capabilities grid (3-col, 6 cards), FAQ accordion (3–4 questions), other-services row.
-- New page-coupled hero variant: the `DarkNumbersHero` right column needs an "at a glance" stat card instead of the credentials panel. Decide whether to parameterize the existing block or add a sibling `serviceHero` block.
-- Reuses `ctaCard`, `Breadcrumb` (built unused in Slice 1), and `servicesList` (for the "other services" row).
-- Reference: `design_handoff_docs/service-page.jsx` (`ServicePage` + `SERVICE_CONTENT` map).
-
 ### Slice 4 — About + Industries + Contact
 
 - Three single-instance pages.
@@ -50,14 +42,14 @@ Small architectural / quality items surfaced during Slice 1/2 reviews and parked
 
 - **Image URL builder.** Wire `@sanity/image-url` (or the equivalent) so we get responsive sizes and crops from Sanity image fields. Slice 5 (blog covers) will force this; do it then.
 - **`getSiteSettings()` double-fetch.** `[...slug].astro` and `BaseLayout.astro` both call it on every static page build. Harmless at build time but inconsistent. Fix: derive `siteName` / `description` inside `BaseLayout` from its own fetch and drop those props.
-- **Dual `IconName` types.** `apps/web/src/lib/sanity/types.ts` exports a narrow 6-glyph union for `ServiceResolved.iconName`; `apps/web/src/components/Icon.astro` exports a wider 11-glyph union for the component prop. The narrow → wide assignment works today but is brittle. Pick one canonical location and import from it.
 - **`open-now.ts` interval refresh.** Currently runs once on `DOMContentLoaded`. If a visitor loads the page at 5:59pm, the indicator stays "Open" until refresh. A 60s `setInterval` (or computing time to the next transition and scheduling a single update) fixes it.
 - **`CtaCard.astro` singleton fetch.** Re-fetches `contactInfo` internally. Fine for Slice 2. If more blocks need live singleton data, pre-fetch at the layout level and pass through props rather than each block re-fetching.
 - **Tailwind arbitrary values in `SiteNav.astro`.** `py-[18px]` and `text-[19px]` bypass the token scale. Faithful to the design's JSX but worth normalizing when there's a tokens-vs-arbitrary policy.
-- **GROQ substring tests.** Tests verify the query string contains expected field names. Catches structural drift but not data shape. Future slices may want at least one fixture-based round-trip test (mock Sanity response → typed result) to catch projection gaps.
 - **`headingAccent` pattern.** Added to `ctaCard` in Slice 2 for the italic-red trailing fragment. Same pattern applies to some About headlines (Slice 4) and possibly Service template headings (Slice 3). Add per-block as needed; extract a shared field-set if a third block uses it.
-- **Replace `sanity-plugin-vercel-deploy`.** The npm package is officially **UNMAINTAINED** ("This plugin is no longer supported. See README for details and alternatives."). Still works at runtime against Sanity v4 — a peer-rule override in `pnpm-workspace.yaml` suppresses the noise — but it won't get fixes. Options: (a) inline a small custom Studio tool that POSTs to the Vercel deploy hook (~50 lines, we own it); (b) find a maintained replacement plugin. Should land before Sanity v5 or whenever the plugin stops functioning, whichever comes first.
-- **React 19 migration.** Sanity v4 still supports React 18 (we're on 18.3.1) but Sanity now nudges React 19 in build output, and several deps (`@sanity/visual-editing`, `@sanity/insert-menu`, `sanity-plugin-vercel-deploy`) declare React 19 as peer. Currently producing 4 pre-existing peer warnings on every install. Migration is its own task — bump `react`, `react-dom`, `@types/react`, then exercise Studio + Astro for React-19 breaking-change fallout (ref handling, hook signatures, etc).
+- **Replace spec-sheet placeholder hrefs.** Service page hero and capabilities-header each render an `aria-disabled="true"` `href="#"` link ("Read the spec sheet" / "Download spec sheet") — 2 per service × 6 services = 12 placeholder buttons. Must resolve before public launch: either build real spec-sheet PDFs and link to them, add an optional `specSheetUrl` field to the `service` doc and hide both CTAs when empty, or remove the CTAs entirely.
+- **ServiceCta heading lowercases the service name.** `apps/web/src/components/service/ServiceCta.astro` builds the headline `"See if {service.name.toLowerCase()} from PHT *fits your business.*"`. For services with acronyms (e.g., "Managed IT" → "managed it", "vCIO Advisory" → "vcio advisory") this reads awkwardly. The behavior is faithful to the design's source JSX, but worth a copywriting pass before public launch — either remove `.toLowerCase()` (preserves acronyms), use a per-service `displayName` field, or hand-author each service's CTA copy.
+- **Remove legacy-string defense in `renderHeadlineRichText`.** `apps/web/src/lib/portable-text.ts` has a `typeof value === "string"` branch added during Slice 3 to gracefully render legacy CtaCard string-shaped headings until the user re-authors them in the new Portable Text shape. Remove the branch (and the corresponding test in `portable-text.test.ts`) once all `ctaCard` blocks in production have been re-authored to Portable Text. To verify: GROQ query `*[_type == "page"].blocks[_type == "ctaCard" && !defined(heading[].children)]` should return zero results.
+- **Tighten `ContactInfo.cardTitle` type to required + drop the fallback.** `apps/web/src/lib/sanity/types.ts` types this field as optional (`cardTitle?: string`) and `CtaCard.astro` + `ServiceCta.astro` fall back to `?? "Get in touch"`. This is a migration-window defense: the schema added `cardTitle` with an `initialValue`, but Sanity's `initialValue` only fires on doc creation — it doesn't backfill existing docs. Once the user has opened + re-saved the `contactInfo` singleton in Studio (which populates the field), make the type required and remove both fallbacks.
 
 ---
 
