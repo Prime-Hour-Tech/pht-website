@@ -157,6 +157,7 @@ export const footerQuery = /* groq */ `
 
 export const contactInfoQuery = /* groq */ `
   *[_type == "contactInfo"][0] {
+    cardTitle,
     phone {
       display,
       dial
@@ -200,11 +201,16 @@ export const serviceBySlugQuery = /* groq */ `
     sectionHeading,
     sectionBody,
     sectionBullets,
+    capabilitiesEyebrow,
     capabilitiesHeading,
     capabilities,
     statStrip,
+    faqEyebrow,
+    faqHelperText,
     faqHeading,
-    faqs
+    faqs,
+    ctaEyebrow,
+    ctaDeck
   }
 `;
 
@@ -223,5 +229,22 @@ export const otherServicesQuery = /* groq */ `
     "slug": slug.current,
     shortDescription,
     iconName
+  }
+`;
+
+export const servicesIndexPageQuery = /* groq */ `
+  *[_type == "servicesIndexPage"][0] {
+    heroEyebrow,
+    heroHeading,
+    heroDeck,
+    listEyebrow,
+    listHeading,
+    ctaEyebrow,
+    ctaHeading,
+    ctaDeck,
+    ctaLabel,
+    ctaHref,
+    otherServicesHeading,
+    otherServicesViewAllLabel
   }
 `;

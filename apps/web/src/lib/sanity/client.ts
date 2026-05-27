@@ -6,6 +6,7 @@ import type {
   Page,
   ServiceCard,
   ServiceFull,
+  ServicesIndexPage,
   SiteSettings,
 } from "./types";
 import {
@@ -16,6 +17,7 @@ import {
   otherServicesQuery,
   pageBySlugQuery,
   serviceBySlugQuery,
+  servicesIndexPageQuery,
   servicesListQuery,
   servicesSlugListQuery,
   siteSettingsQuery,
@@ -66,4 +68,8 @@ export async function getServicesList(): Promise<ServiceCard[]> {
 
 export async function getOtherServices(slug: string): Promise<ServiceCard[]> {
   return await sanityClient.fetch<ServiceCard[]>(otherServicesQuery, { slug });
+}
+
+export async function getServicesIndexPage(): Promise<ServicesIndexPage | null> {
+  return await sanityClient.fetch<ServicesIndexPage | null>(servicesIndexPageQuery);
 }

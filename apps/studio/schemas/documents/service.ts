@@ -10,6 +10,7 @@ export const service = defineType({
     { name: "capabilities", title: "Capabilities" },
     { name: "stats", title: "Stats" },
     { name: "faq", title: "FAQ" },
+    { name: "cta", title: "CTA" },
   ],
   fields: [
     // ── Default (uncategorized) fields — appear first in the editor ──
@@ -164,6 +165,15 @@ export const service = defineType({
 
     // ── Capabilities group ──
     defineField({
+      name: "capabilitiesEyebrow",
+      title: "Capabilities Eyebrow",
+      description: "Small uppercase eyebrow above the capabilities heading. The diamond ◆ is added by the layout.",
+      type: "string",
+      group: "capabilities",
+      initialValue: "What's included",
+      validation: (Rule) => Rule.required().max(40),
+    }),
+    defineField({
       name: "capabilitiesHeading",
       title: "Capabilities Heading",
       description: "e.g., \"6 capabilities. *One SLA.*\" (with accent on \"One SLA.\")",
@@ -231,12 +241,31 @@ export const service = defineType({
 
     // ── FAQ group ──
     defineField({
+      name: "faqEyebrow",
+      title: "FAQ Eyebrow",
+      description: "Small uppercase eyebrow above the FAQ heading. The diamond ◆ is added by the layout.",
+      type: "string",
+      group: "faq",
+      initialValue: "Questions we hear",
+      validation: (Rule) => Rule.required().max(40),
+    }),
+    defineField({
       name: "faqHeading",
       title: "FAQ Heading",
       description: "Use the Italic accent toolbar button to apply italic + red styling to fragments.",
       type: "headline",
       group: "faq",
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "faqHelperText",
+      title: "FAQ Helper Text",
+      description: "Optional short paragraph below the FAQ heading. e.g., \"If yours isn't here, ask on the discovery call — we'll give a real answer.\"",
+      type: "text",
+      rows: 2,
+      group: "faq",
+      initialValue: "If yours isn't here, ask on the discovery call — we'll give a real answer.",
+      validation: (Rule) => Rule.max(200),
     }),
     defineField({
       name: "faqs",
@@ -266,6 +295,28 @@ export const service = defineType({
         },
       ],
       validation: (Rule) => Rule.required().min(1).max(8),
+    }),
+
+    // ── CTA group ──
+    defineField({
+      name: "ctaEyebrow",
+      title: "CTA Eyebrow",
+      description: "Small uppercase eyebrow above the final CTA heading. The diamond ◆ is added by the layout.",
+      type: "string",
+      group: "cta",
+      initialValue: "Ready when you are",
+      validation: (Rule) => Rule.required().max(40),
+    }),
+    defineField({
+      name: "ctaDeck",
+      title: "CTA Deck",
+      description: "Subhead paragraph next to the final CTA. Pitches the discovery call.",
+      type: "text",
+      rows: 4,
+      group: "cta",
+      initialValue:
+        "30 minutes with the founder. We'll look at your environment, your support load, and tell you honestly whether this service is the right fit — even if the answer is \"not yet.\"",
+      validation: (Rule) => Rule.required().max(400),
     }),
   ],
   preview: {

@@ -13,6 +13,7 @@ import {
   getServiceBySlug,
   getOtherServices,
   getContactInfo,
+  getServicesIndexPage,
 } from "../../lib/sanity/client";
 
 export async function getStaticPaths() {
@@ -28,10 +29,11 @@ if (!slug) {
   throw new Error("Service slug missing at build time.");
 }
 
-const [service, others, contactInfo] = await Promise.all([
+const [service, others, contactInfo, indexPage] = await Promise.all([
   getServiceBySlug(slug),
   getOtherServices(slug),
   getContactInfo(),
+  getServicesIndexPage(),
 ]);
 
 if (!service) {
@@ -41,6 +43,9 @@ if (!service) {
 }
 if (!contactInfo) {
   throw new Error("Contact Info singleton not found in Sanity (required by service page).");
+}
+if (!indexPage) {
+  throw new Error("Services Index Page singleton not found in Sanity (required for service detail pages).");
 }
 ---
 
@@ -57,6 +62,7 @@ if (!contactInfo) {
   />
 
   <ServiceCapabilities
+    eyebrow={service.capabilitiesEyebrow}
     heading={service.capabilitiesHeading}
     iconName={service.iconName}
     capabilities={service.capabilities}
@@ -64,9 +70,23 @@ if (!contactInfo) {
 
   <ServiceStatStrip stats={service.statStrip} />
 
-  <ServiceFaq heading={service.faqHeading} faqs={service.faqs} />
+  <ServiceFaq
+    eyebrow={service.faqEyebrow}
+    helperText={service.faqHelperText}
+    heading={service.faqHeading}
+    faqs={service.faqs}
+  />
 
-  <OtherServices services={others} />
+  <OtherServices
+    heading={indexPage.otherServicesHeading}
+    viewAllLabel={indexPage.otherServicesViewAllLabel}
+    services={others}
+  />
 
-  <ServiceCta serviceName={service.name} contactInfo={contactInfo} />
+  <ServiceCta
+    serviceName={service.name}
+    eyebrow={service.ctaEyebrow}
+    deck={service.ctaDeck}
+    contactInfo={contactInfo}
+  />
 </BaseLayout>

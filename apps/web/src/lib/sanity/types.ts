@@ -103,10 +103,31 @@ export type Address = {
 };
 
 export type ContactInfo = {
+  // Optional during the Slice 3 fix-up migration window: the live contactInfo
+  // doc predates the cardTitle field, and Sanity initialValue only fires on
+  // doc creation (not on schema-driven backfill). Consumers fall back to
+  // "Get in touch" via `??`. Tighten to required once the user has re-saved
+  // the contactInfo doc post-deploy.
+  cardTitle?: string;
   phone: { display: string; dial: string };
   email: string;
   hours: Hours;
   address: Address;
+};
+
+export type ServicesIndexPage = {
+  heroEyebrow: string;
+  heroHeading: HeadlineRichText;
+  heroDeck: string;
+  listEyebrow: string;
+  listHeading: string;
+  ctaEyebrow: string;
+  ctaHeading: HeadlineRichText;
+  ctaDeck: string;
+  ctaLabel: string;
+  ctaHref: string;
+  otherServicesHeading: string;
+  otherServicesViewAllLabel: string;
 };
 
 // ── Documents referenced from page blocks ────────────────────────────────
@@ -177,13 +198,19 @@ export type ServiceFull = ServiceCard & {
   sectionBody: string;
   sectionBullets: string[];
   // Capabilities
+  capabilitiesEyebrow: string;
   capabilitiesHeading: HeadlineRichText;
   capabilities: ServiceCapability[];
   // Stats
   statStrip: ServiceStat[];
   // FAQ
+  faqEyebrow: string;
+  faqHelperText?: string;
   faqHeading: HeadlineRichText;
   faqs: ServiceFaqEntry[];
+  // CTA
+  ctaEyebrow: string;
+  ctaDeck: string;
 };
 
 // ── Page-body block types ────────────────────────────────────────────────

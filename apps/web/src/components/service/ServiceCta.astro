@@ -5,10 +5,12 @@ import HeadlineRichText from "../HeadlineRichText.astro";
 
 interface Props {
   serviceName: string;
+  eyebrow: string;
+  deck: string;
   contactInfo: ContactInfo;
 }
 
-const { serviceName, contactInfo } = Astro.props;
+const { serviceName, eyebrow, deck, contactInfo } = Astro.props;
 
 // Build a synthetic Portable Text headline interpolating the service name.
 // Template: "See if {serviceName} from PHT [accent: fits your business.]"
@@ -40,7 +42,7 @@ const heading: HRT = [
   <div class="max-w-narrow mx-auto grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-14 items-center">
     <div>
       <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
-        ◆ Ready when you are
+        ◆ {eyebrow}
       </div>
       <h2
         class="font-serif font-medium text-ink m-0"
@@ -49,12 +51,12 @@ const heading: HRT = [
         <HeadlineRichText value={heading} />
       </h2>
       <p class="mt-4 text-muted text-body-lg leading-snug max-w-[500px]">
-        30 minutes with the founder. We'll look at your environment, your support load, and tell you honestly whether this service is the right fit — even if the answer is "not yet."
+        {deck}
       </p>
     </div>
 
     <div class="bg-bg-alt border border-line rounded-xxl p-7">
-      <div class="font-semibold text-body-base text-ink mb-4">Get in touch</div>
+      <div class="font-semibold text-body-base text-ink mb-4">{contactInfo.cardTitle ?? "Get in touch"}</div>
       <a
         href={`tel:${contactInfo.phone.dial}`}
         class="flex items-center gap-3 py-3 border-t border-line-soft text-ink no-underline text-[15px]"

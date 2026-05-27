@@ -7,6 +7,14 @@ export const contactInfo = defineType({
   // Singleton — registered in apps/studio/sanity.config.ts SINGLETONS array.
   fields: [
     defineField({
+      name: "cardTitle",
+      title: "Contact Card Title",
+      description: "Title shown above the phone/email/CTA links on every contact card across the site (CtaCard block + service-page CTAs).",
+      type: "string",
+      initialValue: "Get in touch",
+      validation: (Rule) => Rule.required().max(40),
+    }),
+    defineField({
       name: "phone",
       title: "Phone",
       type: "object",

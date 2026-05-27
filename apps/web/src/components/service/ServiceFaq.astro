@@ -4,18 +4,20 @@ import Icon from "../Icon.astro";
 import HeadlineRichText from "../HeadlineRichText.astro";
 
 interface Props {
+  eyebrow: string;
+  helperText?: string;
   heading: HRT;
   faqs: ServiceFaqEntry[];
 }
 
-const { heading, faqs } = Astro.props;
+const { eyebrow, helperText, heading, faqs } = Astro.props;
 ---
 
 <section class="bg-bg py-24 px-10 border-b border-line">
   <div class="max-w-content mx-auto grid grid-cols-1 md:grid-cols-[0.7fr_1.3fr] gap-16 items-start">
     <div class="md:sticky md:top-24">
       <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
-        ◆ Questions we hear
+        ◆ {eyebrow}
       </div>
       <h2
         class="font-serif font-medium text-ink m-0"
@@ -23,9 +25,11 @@ const { heading, faqs } = Astro.props;
       >
         <HeadlineRichText value={heading} />
       </h2>
-      <p class="mt-4 text-muted text-body-sm leading-body max-w-[320px]">
-        If yours isn't here, ask on the discovery call — we'll give a real answer.
-      </p>
+      {helperText && (
+        <p class="mt-4 text-muted text-body-sm leading-body max-w-[320px]">
+          {helperText}
+        </p>
+      )}
     </div>
 
     <div class="border-t border-line">

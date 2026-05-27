@@ -4,12 +4,13 @@ import Icon from "../Icon.astro";
 import HeadlineRichText from "../HeadlineRichText.astro";
 
 interface Props {
+  eyebrow: string;
   heading: HRT;
   iconName: IconName;
   capabilities: ServiceCapability[];
 }
 
-const { heading, iconName, capabilities } = Astro.props;
+const { eyebrow, heading, iconName, capabilities } = Astro.props;
 ---
 
 <section class="bg-bg-alt py-24 px-10 border-b border-line">
@@ -17,7 +18,7 @@ const { heading, iconName, capabilities } = Astro.props;
     <div class="flex items-baseline justify-between mb-8 flex-wrap gap-4">
       <div>
         <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3">
-          ◆ What's included
+          ◆ {eyebrow}
         </div>
         <h2
           class="font-serif font-medium text-ink m-0"

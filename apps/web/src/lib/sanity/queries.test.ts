@@ -10,6 +10,7 @@ import {
   serviceBySlugQuery,
   servicesListQuery,
   otherServicesQuery,
+  servicesIndexPageQuery,
 } from "./queries";
 
 describe("GROQ queries", () => {
@@ -91,6 +92,10 @@ describe("contactInfoQuery", () => {
     expect(contactInfoQuery).toContain("email");
     expect(contactInfoQuery).toContain("hours");
     expect(contactInfoQuery).toContain("address");
+  });
+
+  it("projects the cardTitle field shared across CtaCard + service CTA components", () => {
+    expect(contactInfoQuery).toContain("cardTitle");
   });
 
   it("projects hours sub-fields needed by the client open-now script", () => {
@@ -179,13 +184,19 @@ describe("service queries", () => {
       "sectionBody",
       "sectionBullets",
       // Capabilities
+      "capabilitiesEyebrow",
       "capabilitiesHeading",
       "capabilities",
       // Stats
       "statStrip",
       // FAQ
+      "faqEyebrow",
+      "faqHelperText",
       "faqHeading",
       "faqs",
+      // CTA
+      "ctaEyebrow",
+      "ctaDeck",
     ];
     for (const field of fields) {
       expect(serviceBySlugQuery).toMatch(new RegExp(`\\b${field}\\b`));
@@ -211,5 +222,26 @@ describe("service queries", () => {
     expect(otherServicesQuery).toContain("name");
     expect(otherServicesQuery).toContain("shortDescription");
     expect(otherServicesQuery).toContain("iconName");
+  });
+
+  it("servicesIndexPageQuery selects the singleton with hero/list/CTA/otherServices fields", () => {
+    expect(servicesIndexPageQuery).toContain('*[_type == "servicesIndexPage"][0]');
+    const fields = [
+      "heroEyebrow",
+      "heroHeading",
+      "heroDeck",
+      "listEyebrow",
+      "listHeading",
+      "ctaEyebrow",
+      "ctaHeading",
+      "ctaDeck",
+      "ctaLabel",
+      "ctaHref",
+      "otherServicesHeading",
+      "otherServicesViewAllLabel",
+    ];
+    for (const field of fields) {
+      expect(servicesIndexPageQuery).toMatch(new RegExp(`\\b${field}\\b`));
+    }
   });
 });
