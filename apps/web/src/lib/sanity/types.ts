@@ -103,12 +103,7 @@ export type Address = {
 };
 
 export type ContactInfo = {
-  // Optional during the Slice 3 fix-up migration window: the live contactInfo
-  // doc predates the cardTitle field, and Sanity initialValue only fires on
-  // doc creation (not on schema-driven backfill). Consumers fall back to
-  // "Get in touch" via `??`. Tighten to required once the user has re-saved
-  // the contactInfo doc post-deploy.
-  cardTitle?: string;
+  cardTitle: string;
   phone: { display: string; dial: string };
   email: string;
   hours: Hours;

@@ -132,10 +132,4 @@ describe("renderHeadlineRichText", () => {
     expect(matches!.length).toBe(2);
   });
 
-  it("renders a legacy plain-string heading as HTML-escaped plain text (migration window)", () => {
-    expect(renderHeadlineRichText("Let's talk.")).toBe("Let&#39;s talk.");
-    expect(renderHeadlineRichText("AT&T <ops> stuff")).toBe(
-      "AT&amp;T &lt;ops&gt; stuff",
-    );
-  });
 });
