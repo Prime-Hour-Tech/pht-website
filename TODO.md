@@ -10,28 +10,6 @@ Remaining work for the PHT marketing site. Slices 1 (Foundation) and 2 (Home) ar
 
 Three new page templates landed in `design_handoff_pht_redesign/` (despite the folder name, this is additive — not a redesign of what's already shipped). Each is its own slice when prioritized; none are blocking. References live in the top-level `pht-website/project/` of the design canvas tarball: `services-page.jsx`, `switching-page.jsx`, `landing-page.jsx` (note: not in the `design_handoff_pht_redesign/` subdirectory of the canvas — that subdirectory mirrors the original handoff).
 
-### `/services` redesign — replaces current 6-card singleton list
-
-**Component:** `ServicesIndexPage` in `services-page.jsx`. Much richer than the current `servicesIndexPage` singleton.
-
-**Layout (top → bottom):**
-1. Hero — editorial split (eyebrow + headline + 2-paragraph deck)
-2. Sticky jump-chip row — all 6 services + "Same engineer, same number" live-dot
-3. Featured service (Managed IT) — full-width dark editorial card with iconed eyebrow, large headline, "At a glance" stat (96px serif), 4-capability preview, dual CTA
-4. **Pricing — 3-tier block** ($125 Essentials / $165 Standard ★ most popular / $215 Premier). Per-seat per-month. Per-tier bullets list "What's in it" / "Everything in X, plus…"
-5. Service grid — 5 remaining services as substantial cards (icon, name, deck, 3-capability preview, hero stat) + 6th tile = "Bundle them" companion card (4-line summary of typical bundle)
-6. "How every engagement runs" — 4-step process strip (Discovery / Written SOW / Named engineer / QBR + runbook)
-7. Industry crosslink — "See it by industry instead" with 4 industry tiles (Professional Services / SMB / Regulated / Nonprofits)
-8. Final CTA (reuses existing `CtaCard`/`ctaCard` block pattern)
-
-**New content shapes:**
-- **Pricing tiers** — 3 inline objects per page (name / price / tag / tagline / "includes head" / bullets array / cta label / featured flag). Either an array on a refactored `servicesIndexPage` singleton, or a new `pricingTiers` field. Includes the `flag: "★ Most clients land here"` on the middle tier.
-- **Featured service callout** — schema needs to know which service to feature (likely a reference to a `service` doc, defaulting to managed-it).
-- **Process strip** — 4 inline items {step / title / body}. Reusable; consider a new `processStrip` block.
-- **Industry crosslink** — 4 inline {icon / label / sub / href} items. Could reuse the `industriesContent` schema if those tiles can be auto-derived from the existing /industries page.
-
-**Scope estimate:** ~15–20 files. Migration concern — the existing `servicesIndexPage` singleton has Slice-3 + Slice-3-fix-up fields (heroEyebrow, heroHeading, heroDeck, listEyebrow, listHeading, ctaEyebrow, ctaHeading, ctaDeck, ctaLabel, ctaHref, otherServicesHeading, otherServicesViewAllLabel). The redesign would likely keep most of those + add pricing + process strip + industry crosslink fields. Existing `/services` route file `apps/web/src/pages/services/index.astro` gets a full rewrite.
-
 ### `/switching` — new route, "Switching from your current MSP"
 
 **Component:** `SwitchingPage` in `switching-page.jsx`. Targets prospects already with another MSP.
@@ -94,6 +72,9 @@ Three new page templates landed in `design_handoff_pht_redesign/` (despite the f
 
 Small architectural / quality items surfaced during Slice 1/2 reviews and parked. None block shipping; address opportunistically when adjacent code is being touched.
 
+- **Re-save the `servicesIndexPage` singleton in Studio (Slice 7 HANDOFF).** Pick a `featuredService` (managed-it is the expected default). Save the doc once; `initialValue` defaults will populate the new pricing tiers, bundle rows, process steps, and industry crosslink tiles. Until this re-save happens, `/services` hard-throws at build because the dereferenced featuredService and the new required fields project as `null`.
+- **Replace `gridHeading.secondaryLinkHref` once a services-overview PDF exists.** Today the label "Download the services overview →" defaults to no href. Set it via Studio when a real PDF is available, or clear the label to hide the link.
+- **Wire `bundleTile.footerLinkHref` to a real "How pricing works" anchor.** Currently `/contact`; could point to a section anchor on the page or a future help article.
 - **Author the `termsPage` + `privacyPage` singletons in Studio.** `/terms` and `/privacy` routes hard-throw at build until both singletons exist. `initialValue` defaults pre-fill labels and CTA copy; you author the `summaryBody` (Portable Text), the `sections[]` array, and the `lastUpdated` date. Build will then succeed.
 - **Finalize cookie banner copy + tracking choices with legal.** Slice 6 ships the banner with hardcoded placeholder copy and feature-flagged off (`PUBLIC_COOKIE_BANNER_ENABLED=false`). When legal returns approved copy: swap the placeholders in `apps/web/src/components/CookieBanner.astro`, set `PUBLIC_COOKIE_BANNER_ENABLED=true` in the Vercel project env vars, redeploy.
 - **Wire analytics / tracking that honors cookie consent.** The banner records the user's choice in `localStorage.getItem("pht-cookie-consent")` but doesn't actually load any tracking scripts. When you add an analytics provider, gate the script tags on that value.

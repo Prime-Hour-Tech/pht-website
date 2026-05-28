@@ -329,14 +329,25 @@ describe("service queries", () => {
     expect(otherServicesQuery).toContain("iconName");
   });
 
-  it("servicesIndexPageQuery selects the singleton with hero/list/CTA/otherServices fields", () => {
+  it("servicesIndexPageQuery selects the singleton with all new fields + dereferenced featuredService", () => {
     expect(servicesIndexPageQuery).toContain('*[_type == "servicesIndexPage"][0]');
+    // Dereferenced featured service projection
+    expect(servicesIndexPageQuery).toContain("featuredService->");
+    // Top-level fields (use word-boundary regex so substring matches don't pass)
     const fields = [
       "heroEyebrow",
       "heroHeading",
       "heroDeck",
-      "listEyebrow",
-      "listHeading",
+      "featuredService",
+      "pricingHeading",
+      "pricingTiers",
+      "pricingFooterNote",
+      "pricingFooterLinkLabel",
+      "pricingFooterLinkHref",
+      "gridHeading",
+      "bundleTile",
+      "processStrip",
+      "industryCrosslink",
       "ctaEyebrow",
       "ctaHeading",
       "ctaDeck",
@@ -348,6 +359,13 @@ describe("service queries", () => {
     for (const field of fields) {
       expect(servicesIndexPageQuery).toMatch(new RegExp(`\\b${field}\\b`));
     }
+    // Pricing tier sub-objects
+    for (const tier of ["essentials", "standard", "premier"]) {
+      expect(servicesIndexPageQuery).toMatch(new RegExp(`\\b${tier}\\b`));
+    }
+    // Removed fields stay removed
+    expect(servicesIndexPageQuery).not.toMatch(/\blistEyebrow\b/);
+    expect(servicesIndexPageQuery).not.toMatch(/\blistHeading\b/);
   });
 });
 

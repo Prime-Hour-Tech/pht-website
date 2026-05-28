@@ -328,8 +328,50 @@ export const servicesIndexPageQuery = /* groq */ `
     heroEyebrow,
     heroHeading,
     heroDeck,
-    listEyebrow,
-    listHeading,
+    featuredService->{
+      _id,
+      name,
+      "slug": slug.current,
+      iconName,
+      eyebrow,
+      headline,
+      deck,
+      heroStat,
+      capabilities
+    },
+    pricingHeading { eyebrow, heading, deck },
+    pricingTiers {
+      essentials { tag, tagline, price, includesHead, bullets, ctaLabel, ctaHref, flagLabel },
+      standard   { tag, tagline, price, includesHead, bullets, ctaLabel, ctaHref, flagLabel },
+      premier    { tag, tagline, price, includesHead, bullets, ctaLabel, ctaHref, flagLabel }
+    },
+    pricingFooterNote,
+    pricingFooterLinkLabel,
+    pricingFooterLinkHref,
+    gridHeading { eyebrow, heading, secondaryLinkLabel, secondaryLinkHref },
+    bundleTile {
+      eyebrow,
+      heading,
+      body,
+      rows[]{ serviceLabel, descriptor },
+      footerHeadline,
+      footerLinkLabel,
+      footerLinkHref
+    },
+    processStrip {
+      eyebrow,
+      heading,
+      deck,
+      steps[]{ title, body }
+    },
+    industryCrosslink {
+      eyebrow,
+      heading,
+      deck,
+      ctaLinkLabel,
+      ctaLinkHref,
+      tiles[]{ iconName, label, sub, href }
+    },
     ctaEyebrow,
     ctaHeading,
     ctaDeck,

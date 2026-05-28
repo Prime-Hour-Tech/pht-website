@@ -111,17 +111,101 @@ export type ContactInfo = {
   address: Address;
 };
 
+export type PricingTier = {
+  tag: string;
+  tagline: string;
+  price: number;
+  includesHead: string;
+  bullets: string[];
+  ctaLabel: string;
+  ctaHref: string;
+  flagLabel?: string;
+};
+
+export type BundleRow = {
+  serviceLabel: string;
+  descriptor: string;
+};
+
+export type ProcessStep = {
+  title: string;
+  body: string;
+};
+
+export type IndustryCrosslinkTile = {
+  iconName: IconName;
+  label: string;
+  sub: string;
+  href: string;
+};
+
+export type FeaturedService = {
+  _id: string;
+  name: string;
+  slug: string;
+  iconName: IconName;
+  eyebrow: string;
+  headline: HeadlineRichText;
+  deck: string;
+  heroStat: ServiceStat;
+  capabilities: ServiceCapability[];
+};
+
 export type ServicesIndexPage = {
   heroEyebrow: string;
   heroHeading: HeadlineRichText;
   heroDeck: string;
-  listEyebrow: string;
-  listHeading: string;
+
+  featuredService: FeaturedService;
+
+  pricingHeading: { eyebrow: string; heading: HeadlineRichText; deck: string };
+  pricingTiers: {
+    essentials: PricingTier;
+    standard: PricingTier;
+    premier: PricingTier;
+  };
+  pricingFooterNote: string;
+  pricingFooterLinkLabel: string;
+  pricingFooterLinkHref: string;
+
+  gridHeading: {
+    eyebrow: string;
+    heading: HeadlineRichText;
+    secondaryLinkLabel?: string;
+    secondaryLinkHref?: string;
+  };
+  bundleTile: {
+    eyebrow: string;
+    heading: string;
+    body: string;
+    rows: BundleRow[];
+    footerHeadline: HeadlineRichText;
+    footerLinkLabel: string;
+    footerLinkHref: string;
+  };
+
+  processStrip: {
+    eyebrow: string;
+    heading: HeadlineRichText;
+    deck: string;
+    steps: ProcessStep[]; // length 4
+  };
+
+  industryCrosslink: {
+    eyebrow: string;
+    heading: HeadlineRichText;
+    deck: string;
+    ctaLinkLabel: string;
+    ctaLinkHref: string;
+    tiles: IndustryCrosslinkTile[]; // length 4
+  };
+
   ctaEyebrow: string;
   ctaHeading: HeadlineRichText;
   ctaDeck: string;
   ctaLabel: string;
   ctaHref: string;
+
   otherServicesHeading: string;
   otherServicesViewAllLabel: string;
 };

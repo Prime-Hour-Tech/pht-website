@@ -1,0 +1,57 @@
+---
+import type { ServicesIndexPage } from "../../lib/sanity/types";
+import HeadlineRichText from "../HeadlineRichText.astro";
+import Icon from "../Icon.astro";
+
+interface Props {
+  bundle: ServicesIndexPage["bundleTile"];
+}
+
+const { bundle } = Astro.props;
+---
+
+<div
+  class="bg-bg-alt border border-dashed border-line rounded-xl p-7 flex flex-col min-h-[380px]"
+>
+  <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-5">
+    ◇ {bundle.eyebrow}
+  </div>
+  <h3
+    class="font-serif font-medium text-ink m-0"
+    style="font-size: 30px; letter-spacing: -0.02em; line-height: 1.05;"
+  >
+    {bundle.heading}
+  </h3>
+  <p class="mt-4 text-muted text-[14.5px] leading-body">{bundle.body}</p>
+
+  <ul class="mt-5 p-0 list-none flex flex-col gap-0">
+    {bundle.rows.map((row, i) => (
+      <li
+        class={`flex items-center justify-between py-2.5 text-[13px] text-ink ${
+          i === 0 ? "" : "border-t border-line-soft"
+        }`}
+      >
+        <span>{row.serviceLabel}</span>
+        <span class="font-mono text-[10.5px] text-muted tracking-mono-eyebrow uppercase">
+          {row.descriptor}
+        </span>
+      </li>
+    ))}
+  </ul>
+
+  <div class="mt-auto pt-6 flex items-end justify-between gap-3">
+    <div
+      class="font-serif font-medium text-ink max-w-[200px]"
+      style="font-size: 26px; letter-spacing: -0.015em; line-height: 1.1;"
+    >
+      <HeadlineRichText value={bundle.footerHeadline} />
+    </div>
+    <a
+      href={bundle.footerLinkHref}
+      class="text-accent no-underline font-semibold text-[13px] inline-flex items-center gap-1.5 shrink-0"
+    >
+      {bundle.footerLinkLabel}
+      <Icon name="arrow" size={14} />
+    </a>
+  </div>
+</div>

@@ -1,16 +1,20 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ServicesIndexHero from "../../components/service/ServicesIndexHero.astro";
-import ServicesList from "../../components/blocks/ServicesList.astro";
+import HeadlineRichText from "../../components/HeadlineRichText.astro";
 import CtaCard from "../../components/blocks/CtaCard.astro";
+import FeaturedServiceCard from "../../components/services-index/FeaturedServiceCard.astro";
+import PricingTiers from "../../components/services-index/PricingTiers.astro";
+import ServiceGridCard from "../../components/services-index/ServiceGridCard.astro";
+import BundleTile from "../../components/services-index/BundleTile.astro";
+import ProcessStrip from "../../components/services-index/ProcessStrip.astro";
+import IndustryCrosslink from "../../components/services-index/IndustryCrosslink.astro";
+import Icon from "../../components/Icon.astro";
 import {
   getServicesList,
   getServicesIndexPage,
 } from "../../lib/sanity/client";
-import type {
-  ServicesListBlock,
-  CtaCardBlock,
-} from "../../lib/sanity/types";
+import type { CtaCardBlock } from "../../lib/sanity/types";
 
 const [services, indexPage] = await Promise.all([
   getServicesList(),
@@ -21,25 +25,13 @@ if (!indexPage) {
   throw new Error("Services Index Page singleton not found in Sanity.");
 }
 
-// Construct synthetic blocks for the existing block-rendering components.
-// ServicesListBlock's `services` field is typed as ServiceResolved[] (which
-// includes _id + order) because the home-page servicesList projection pulls
-// those for keying and sorting. The /services index uses getServicesList(),
-// which projects only ServiceCard fields — the runtime shape is compatible
-// (ServicesList.astro reads only name/slug/shortDescription/iconName), so
-// the double-cast is safe. Loosening ServicesListBlock would weaken type
-// safety on the home page path.
-const servicesBlock: ServicesListBlock = {
-  _type: "servicesList",
-  _key: "idx-services",
-  eyebrow: `◆ ${indexPage.listEyebrow}`,
-  heading: indexPage.listHeading,
-  services: services as unknown as ServicesListBlock["services"],
-};
+const featuredSlug = indexPage.featuredService.slug;
+const restServices = services.filter((s) => s.slug !== featuredSlug);
+const totalLabel = String(services.length).padStart(2, "0");
 
 const ctaBlock: CtaCardBlock = {
   _type: "ctaCard",
-  _key: "idx-cta",
+  _key: "services-cta",
   eyebrow: `◆ ${indexPage.ctaEyebrow}`,
   heading: indexPage.ctaHeading,
   deck: indexPage.ctaDeck,
@@ -57,6 +49,82 @@ const ctaBlock: CtaCardBlock = {
     heading={indexPage.heroHeading}
     deck={indexPage.heroDeck}
   />
-  <ServicesList block={servicesBlock} />
+
+  <!-- Sticky jump-chip row -->
+  <section class="bg-bg-alt border-y border-line sticky top-0 z-10 px-10 py-5">
+    <div class="max-w-content mx-auto flex items-center gap-2.5 flex-wrap">
+      <span class="font-mono text-meta text-muted tracking-mono-eyebrow uppercase">
+        Jump to:
+      </span>
+      {services.map((s) => (
+        <a
+          href={`#${s.slug}`}
+          class="inline-flex items-center gap-2 px-3.5 py-2 rounded-full border border-line bg-bg text-ink no-underline text-[13.5px] font-medium hover:border-accent/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+        >
+          <Icon name={s.iconName} size={13} />
+          {s.name}
+        </a>
+      ))}
+      <span class="ml-auto inline-flex items-center gap-2 font-mono text-meta text-muted tracking-mono-eyebrow uppercase">
+        <span class="w-2 h-2 rounded-full bg-[#22c55e] inline-block"></span>
+        Same engineer, same number
+      </span>
+    </div>
+  </section>
+
+  <FeaturedServiceCard
+    service={indexPage.featuredService}
+    indexLabel={`01 / ${totalLabel}`}
+  />
+
+  <PricingTiers
+    heading={indexPage.pricingHeading}
+    tiers={indexPage.pricingTiers}
+    footerNote={indexPage.pricingFooterNote}
+    footerLinkLabel={indexPage.pricingFooterLinkLabel}
+    footerLinkHref={indexPage.pricingFooterLinkHref}
+  />
+
+  <!-- Service grid + bundle tile -->
+  <section class="bg-bg px-10 py-22 pt-8">
+    <div class="max-w-content mx-auto">
+      <div class="flex items-baseline justify-between gap-4 flex-wrap mb-7">
+        <div>
+          <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3">
+            ◆ {indexPage.gridHeading.eyebrow}
+          </div>
+          <h2
+            class="font-serif font-medium text-ink m-0 tracking-display-tight"
+            style="font-size: 44px; line-height: 1.05;"
+          >
+            <HeadlineRichText value={indexPage.gridHeading.heading} />
+          </h2>
+        </div>
+        {indexPage.gridHeading.secondaryLinkLabel && indexPage.gridHeading.secondaryLinkHref && (
+          <a
+            href={indexPage.gridHeading.secondaryLinkHref}
+            class="text-accent no-underline font-semibold text-[14px]"
+          >
+            {indexPage.gridHeading.secondaryLinkLabel}
+          </a>
+        )}
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {restServices.map((s, i) => (
+          <ServiceGridCard
+            service={s}
+            positionLabel={`0${i + 2} of ${totalLabel}`}
+          />
+        ))}
+        <BundleTile bundle={indexPage.bundleTile} />
+      </div>
+    </div>
+  </section>
+
+  <ProcessStrip process={indexPage.processStrip} />
+
+  <IndustryCrosslink crosslink={indexPage.industryCrosslink} />
+
   <CtaCard block={ctaBlock} />
 </BaseLayout>
