@@ -4,6 +4,7 @@ import SEO from "../components/SEO.astro";
 import UtilityRow from "../components/chrome/UtilityRow.astro";
 import SiteNav from "../components/chrome/SiteNav.astro";
 import Footer from "../components/chrome/Footer.astro";
+import CookieBanner from "../components/CookieBanner.astro";
 import {
   getContactInfo,
   getFooter,
@@ -87,5 +88,6 @@ if (!contactInfo) {
       siteSettings={siteSettings}
       contactInfo={contactInfo}
     />
+    <CookieBanner />
   </body>
 </html>

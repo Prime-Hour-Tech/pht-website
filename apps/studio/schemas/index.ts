@@ -7,6 +7,8 @@ import { service } from "./documents/service";
 import { post } from "./documents/post";
 import { servicesIndexPage } from "./documents/servicesIndexPage";
 import { blogIndexPage } from "./documents/blogIndexPage";
+import { termsPage } from "./documents/termsPage";
+import { privacyPage } from "./documents/privacyPage";
 import { page } from "./documents/page";
 
 import { darkNumbersHero } from "./objects/darkNumbersHero";
@@ -38,6 +40,8 @@ export const schemaTypes = [
   post,
   servicesIndexPage,
   blogIndexPage,
+  termsPage,
+  privacyPage,
   page,
   darkNumbersHero,
   trustStrip,

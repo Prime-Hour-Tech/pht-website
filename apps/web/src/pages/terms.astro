@@ -1,0 +1,17 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import LegalPage from "../components/legal/LegalPage.astro";
+import { getTermsPage } from "../lib/sanity/client";
+
+const page = await getTermsPage();
+if (!page) {
+  throw new Error("Terms Page singleton not found in Sanity.");
+}
+---
+
+<BaseLayout
+  title={page.title}
+  description={page.summaryHeading}
+>
+  <LegalPage page={page} />
+</BaseLayout>

@@ -170,6 +170,27 @@ export type BlogIndexPage = {
   ctaHref: string;
 };
 
+export type LegalSection = {
+  title: string;
+  body: PortableTextBlock[];
+};
+
+type LegalPageBase = {
+  eyebrow: string;
+  title: string;
+  lastUpdated: string;
+  summaryHeading: string;
+  summaryBody: PortableTextBlock[];
+  sections: LegalSection[];
+  contactCardLabel: string;
+  contactCardCopy: string;
+  contactCardCtaLabel: string;
+  contactCardCtaHref: string;
+};
+
+export type TermsPage = LegalPageBase;
+export type PrivacyPage = LegalPageBase;
+
 // ── Documents referenced from page blocks ────────────────────────────────
 
 export type IconName =

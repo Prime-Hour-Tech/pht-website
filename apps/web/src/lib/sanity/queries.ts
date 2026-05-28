@@ -435,3 +435,39 @@ export const blogIndexPageQuery = /* groq */ `
     ctaHref
   }
 `;
+
+export const termsPageQuery = /* groq */ `
+  *[_type == "termsPage"][0] {
+    eyebrow,
+    title,
+    lastUpdated,
+    summaryHeading,
+    summaryBody,
+    sections[]{
+      title,
+      body
+    },
+    contactCardLabel,
+    contactCardCopy,
+    contactCardCtaLabel,
+    contactCardCtaHref
+  }
+`;
+
+export const privacyPageQuery = /* groq */ `
+  *[_type == "privacyPage"][0] {
+    eyebrow,
+    title,
+    lastUpdated,
+    summaryHeading,
+    summaryBody,
+    sections[]{
+      title,
+      body
+    },
+    contactCardLabel,
+    contactCardCopy,
+    contactCardCtaLabel,
+    contactCardCtaHref
+  }
+`;

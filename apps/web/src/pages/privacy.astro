@@ -1,0 +1,17 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import LegalPage from "../components/legal/LegalPage.astro";
+import { getPrivacyPage } from "../lib/sanity/client";
+
+const page = await getPrivacyPage();
+if (!page) {
+  throw new Error("Privacy Page singleton not found in Sanity.");
+}
+---
+
+<BaseLayout
+  title={page.title}
+  description={page.summaryHeading}
+>
+  <LegalPage page={page} />
+</BaseLayout>

@@ -16,6 +16,8 @@ import {
   allPostsQuery,
   relatedPostsQuery,
   blogIndexPageQuery,
+  termsPageQuery,
+  privacyPageQuery,
 } from "./queries";
 
 describe("GROQ queries", () => {
@@ -412,6 +414,46 @@ describe("blog queries", () => {
     ];
     for (const field of fields) {
       expect(blogIndexPageQuery).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+});
+
+describe("legal queries", () => {
+  it("termsPageQuery selects the singleton with all fields", () => {
+    expect(termsPageQuery).toContain('*[_type == "termsPage"][0]');
+    const fields = [
+      "eyebrow",
+      "title",
+      "lastUpdated",
+      "summaryHeading",
+      "summaryBody",
+      "sections",
+      "contactCardLabel",
+      "contactCardCopy",
+      "contactCardCtaLabel",
+      "contactCardCtaHref",
+    ];
+    for (const field of fields) {
+      expect(termsPageQuery).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("privacyPageQuery selects the singleton with all fields", () => {
+    expect(privacyPageQuery).toContain('*[_type == "privacyPage"][0]');
+    const fields = [
+      "eyebrow",
+      "title",
+      "lastUpdated",
+      "summaryHeading",
+      "summaryBody",
+      "sections",
+      "contactCardLabel",
+      "contactCardCopy",
+      "contactCardCtaLabel",
+      "contactCardCtaHref",
+    ];
+    for (const field of fields) {
+      expect(privacyPageQuery).toMatch(new RegExp(`\\b${field}\\b`));
     }
   });
 });

@@ -7,10 +7,12 @@ import type {
   Page,
   PostCard,
   PostFull,
+  PrivacyPage,
   ServiceCard,
   ServiceFull,
   ServicesIndexPage,
   SiteSettings,
+  TermsPage,
 } from "./types";
 import {
   allPageSlugsQuery,
@@ -23,12 +25,14 @@ import {
   pageBySlugQuery,
   postBySlugQuery,
   postSlugListQuery,
+  privacyPageQuery,
   relatedPostsQuery,
   serviceBySlugQuery,
   servicesIndexPageQuery,
   servicesListQuery,
   servicesSlugListQuery,
   siteSettingsQuery,
+  termsPageQuery,
 } from "./queries";
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
@@ -100,4 +104,12 @@ export async function getRelatedPosts(category: string, slug: string): Promise<P
 
 export async function getBlogIndexPage(): Promise<BlogIndexPage | null> {
   return await sanityClient.fetch<BlogIndexPage | null>(blogIndexPageQuery);
+}
+
+export async function getTermsPage(): Promise<TermsPage | null> {
+  return await sanityClient.fetch<TermsPage | null>(termsPageQuery);
+}
+
+export async function getPrivacyPage(): Promise<PrivacyPage | null> {
+  return await sanityClient.fetch<PrivacyPage | null>(privacyPageQuery);
 }

@@ -6,24 +6,14 @@ Remaining work for the PHT marketing site. Slices 1 (Foundation) and 2 (Home) ar
 
 ---
 
-## Remaining slices
-
-The work was decomposed into 6 slices during initial brainstorming. Each is its own spec → plan → execution cycle.
-
-### Slice 6 — Legal (Terms + Privacy) + cookie banner + polish
-
-- New schema: `legalPage` document type (or two singletons).
-- Two routes: `/terms`, `/privacy`.
-- Layout: header, plain-language summary callout (accent-tinted card), sticky TOC sidebar (260px) + sectioned body (numbered `§ 01` through `§ 14`, prose under each), end-of-doc card with contact link.
-- Cookie banner (`CookieBanner` from `design_handoff_docs/shared-blocks.jsx`) — deferred since Slice 1; needs legal sign-off on copy + tracking choices before wiring.
-- References: `design_handoff_docs/terms-page.jsx`, `privacy-page.jsx`.
-
----
-
 ## Deferred from prior code reviews
 
 Small architectural / quality items surfaced during Slice 1/2 reviews and parked. None block shipping; address opportunistically when adjacent code is being touched.
 
+- **Author the `termsPage` + `privacyPage` singletons in Studio.** `/terms` and `/privacy` routes hard-throw at build until both singletons exist. `initialValue` defaults pre-fill labels and CTA copy; you author the `summaryBody` (Portable Text), the `sections[]` array, and the `lastUpdated` date. Build will then succeed.
+- **Finalize cookie banner copy + tracking choices with legal.** Slice 6 ships the banner with hardcoded placeholder copy and feature-flagged off (`PUBLIC_COOKIE_BANNER_ENABLED=false`). When legal returns approved copy: swap the placeholders in `apps/web/src/components/CookieBanner.astro`, set `PUBLIC_COOKIE_BANNER_ENABLED=true` in the Vercel project env vars, redeploy.
+- **Wire analytics / tracking that honors cookie consent.** The banner records the user's choice in `localStorage.getItem("pht-cookie-consent")` but doesn't actually load any tracking scripts. When you add an analytics provider, gate the script tags on that value.
+- **(Optional, follow-up) Per-category consent modal.** Current banner is binary (accept-all / reject-all). If legal requires per-category granularity, add a Settings modal that lets the user toggle categories individually and persist their choices.
 - **Author the `blogIndexPage` singleton + 1–3 starter posts.** Slice 5 ships /blog routes that don't render until content exists. In Studio: create the singleton (initialValue defaults cover most fields; you author the two Portable Text headings + save). Then create 1–3 `post` docs with cover, body, category, publishDate, author. Build will then succeed.
 - **Replace LinkedIn / X icons on `ShareButtons.astro`.** Slice 5 uses `arrowSm` as a placeholder for both share-target icons. Add proper `linkedin` and `x` glyphs to `Icon.astro` + the `IconName` union, then swap the icons in `apps/web/src/components/blog/ShareButtons.astro`.
 - **Retrofit existing image fields to use `urlFor`.** `logoDark`, `logoLight`, and `teamMember.photo` still project raw `asset->url` from Slice 2. Switch to the new `apps/web/src/lib/sanity/imageUrl.ts` builder for responsive sizes the next time those files are touched.
