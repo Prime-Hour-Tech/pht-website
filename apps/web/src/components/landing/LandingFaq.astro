@@ -1,0 +1,49 @@
+---
+import type { LandingPage } from "../../lib/sanity/types";
+import HeadlineRichText from "../HeadlineRichText.astro";
+import Icon from "../Icon.astro";
+
+interface Props {
+  faq: LandingPage["faq"];
+}
+
+const { faq } = Astro.props;
+---
+
+<section class="bg-bg-alt px-10 py-24 border-b border-line">
+  <div class="max-w-content mx-auto grid grid-cols-1 md:grid-cols-[0.7fr_1.3fr] gap-16 items-start">
+    <div class="md:sticky md:top-22">
+      <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
+        ◆ {faq.eyebrow}
+      </div>
+      <h2
+        class="font-serif font-medium text-ink m-0 tracking-display-tight"
+        style="font-size: 44px; line-height: 1.05; text-wrap: balance;"
+      >
+        <HeadlineRichText value={faq.title} />
+      </h2>
+      <p class="mt-3.5 text-muted text-body-md leading-body max-w-[360px]">
+        {faq.deck}
+      </p>
+    </div>
+
+    <div class="border-t border-line">
+      {faq.items.map((qa) => (
+        <div class="py-6 border-b border-line grid grid-cols-[1fr_auto] gap-6 items-start">
+          <div>
+            <h3
+              class="font-serif font-medium text-ink m-0"
+              style="font-size: 22px; letter-spacing: -0.015em; line-height: 1.25;"
+            >
+              {qa.question}
+            </h3>
+            <p class="mt-2 m-0 text-muted text-[15.5px] leading-body">
+              {qa.answer}
+            </p>
+          </div>
+          <span class="text-muted pt-1"><Icon name="chevron" size={18} /></span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

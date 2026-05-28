@@ -10,6 +10,7 @@ import { blogIndexPage } from "./documents/blogIndexPage";
 import { termsPage } from "./documents/termsPage";
 import { privacyPage } from "./documents/privacyPage";
 import { switchingPage } from "./documents/switchingPage";
+import { landingPage } from "./documents/landingPage";
 import { page } from "./documents/page";
 
 import { darkNumbersHero } from "./objects/darkNumbersHero";
@@ -44,6 +45,7 @@ export const schemaTypes = [
   termsPage,
   privacyPage,
   switchingPage,
+  landingPage,
   page,
   darkNumbersHero,
   trustStrip,

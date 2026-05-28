@@ -3,6 +3,7 @@ import type {
   BlogIndexPage,
   ContactInfo,
   Footer,
+  LandingPage,
   Navigation,
   Page,
   PostCard,
@@ -16,11 +17,13 @@ import type {
   TermsPage,
 } from "./types";
 import {
+  allLandingSlugsQuery,
   allPageSlugsQuery,
   allPostsQuery,
   blogIndexPageQuery,
   contactInfoQuery,
   footerQuery,
+  landingBySlugQuery,
   navigationQuery,
   otherServicesQuery,
   pageBySlugQuery,
@@ -118,4 +121,12 @@ export async function getPrivacyPage(): Promise<PrivacyPage | null> {
 
 export async function getSwitchingPage(): Promise<SwitchingPage | null> {
   return await sanityClient.fetch<SwitchingPage | null>(switchingPageQuery);
+}
+
+export async function getAllLandingSlugs(): Promise<{ slug: string }[]> {
+  return await sanityClient.fetch<{ slug: string }[]>(allLandingSlugsQuery);
+}
+
+export async function getLandingBySlug(slug: string): Promise<LandingPage | null> {
+  return await sanityClient.fetch<LandingPage | null>(landingBySlugQuery, { slug });
 }

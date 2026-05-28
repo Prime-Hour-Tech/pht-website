@@ -19,6 +19,8 @@ import {
   termsPageQuery,
   privacyPageQuery,
   switchingPageQuery,
+  allLandingSlugsQuery,
+  landingBySlugQuery,
 } from "./queries";
 
 describe("GROQ queries", () => {
@@ -491,6 +493,34 @@ describe("switchingPageQuery", () => {
     ];
     for (const field of fields) {
       expect(switchingPageQuery).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+});
+
+describe("landing queries", () => {
+  it("allLandingSlugsQuery filters by completeness and projects slug only", () => {
+    expect(allLandingSlugsQuery).toContain('_type == "landingPage"');
+    expect(allLandingSlugsQuery).toContain("defined(slug.current)");
+    expect(allLandingSlugsQuery).toContain("defined(hero)");
+    expect(allLandingSlugsQuery).toContain("defined(form)");
+    expect(allLandingSlugsQuery).toContain("defined(cta)");
+    expect(allLandingSlugsQuery).toContain('"slug": slug.current');
+  });
+
+  it("landingBySlugQuery selects by slug and projects all section fields", () => {
+    expect(landingBySlugQuery).toContain('*[_type == "landingPage" && slug.current == $slug][0]');
+    const fields = [
+      "title", "seoTitle", "seoDescription", "ogImage",
+      "hero", "form", "trustBar", "problem", "included",
+      "howItWorks", "faq", "cta",
+      "metaEyebrow", "ctaPrimaryLabel", "ctaPrimaryHref", "heroStats",
+      "cardEyebrow", "situationPlaceholder", "submitLabel", "replyNote",
+      "successHeading", "successBody",
+      "prefixLabel",
+      "bullets", "steps", "question", "answer",
+    ];
+    for (const field of fields) {
+      expect(landingBySlugQuery).toMatch(new RegExp(`\\b${field}\\b`));
     }
   });
 });

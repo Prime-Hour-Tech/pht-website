@@ -514,6 +514,80 @@ export const privacyPageQuery = /* groq */ `
   }
 `;
 
+// Landing pages: dynamic /landing/{slug} routes from a multi-instance doc type.
+// Filter on minimum-required structural fields so half-authored drafts don't
+// generate broken routes. Same pattern as the services queries.
+const LANDING_COMPLETE_FILTER =
+  "defined(slug.current) && defined(hero) && defined(form) && defined(cta)";
+
+export const allLandingSlugsQuery = /* groq */ `
+  *[_type == "landingPage" && ${LANDING_COMPLETE_FILTER}] {
+    "slug": slug.current
+  }
+`;
+
+export const landingBySlugQuery = /* groq */ `
+  *[_type == "landingPage" && slug.current == $slug][0] {
+    title,
+    "slug": slug.current,
+    seoTitle,
+    seoDescription,
+    ogImage,
+    hero {
+      metaEyebrow,
+      title,
+      deck,
+      ctaPrimaryLabel,
+      ctaPrimaryHref,
+      heroStats[]{ k, v }
+    },
+    form {
+      cardEyebrow,
+      heading,
+      deck,
+      situationPlaceholder,
+      submitLabel,
+      replyNote,
+      successHeading,
+      successBody
+    },
+    trustBar {
+      prefixLabel,
+      items
+    },
+    problem {
+      eyebrow,
+      title,
+      deck,
+      items[]{ head, body }
+    },
+    included {
+      eyebrow,
+      title,
+      deck,
+      bullets[]{ head, body }
+    },
+    howItWorks {
+      eyebrow,
+      title,
+      steps[]{ k, head, body }
+    },
+    faq {
+      eyebrow,
+      title,
+      deck,
+      items[]{ question, answer }
+    },
+    cta {
+      eyebrow,
+      heading,
+      deck,
+      label,
+      href
+    }
+  }
+`;
+
 export const switchingPageQuery = /* groq */ `
   *[_type == "switchingPage"][0] {
     hero {

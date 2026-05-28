@@ -6,49 +6,13 @@ Remaining work for the PHT marketing site. Slices 1 (Foundation) and 2 (Home) ar
 
 ---
 
-## Future pages (design refresh round 2)
-
-Three new page templates landed in `design_handoff_pht_redesign/` (despite the folder name, this is additive — not a redesign of what's already shipped). Each is its own slice when prioritized; none are blocking. References live in the top-level `pht-website/project/` of the design canvas tarball: `services-page.jsx`, `switching-page.jsx`, `landing-page.jsx` (note: not in the `design_handoff_pht_redesign/` subdirectory of the canvas — that subdirectory mirrors the original handoff).
-
-### `/landing/[slug]` — paid-ad lander template
-
-**Component:** `LandingV1Editorial` + `LandingV2StickyForm` + `LandingMobile` in `landing-page.jsx`. Two desktop variants of the same content for A/B-style testing of paid-ad campaigns.
-
-**Variants:**
-- **V1 Editorial:** Dark hero with discovery form on the right, full site chrome (utility row + nav). Includes 4-stat fact sheet under the hero on the dark band.
-- **V2 Sticky-form:** Minimal chrome (just brand + open-now pill + phone + book button — no main nav). Sticky discovery form column. Dark final CTA band.
-
-**Shared sections** (used by both variants):
-1. Hero (variant-specific layout)
-2. Trust bar — 1-line strip with 5 trust items
-3. Problem section — 3-col "Pain · 01/02/03" cards
-4. "What flat-rate covers" — 8-bullet 2-col with check icons
-5. "How it works" — 3-step cards (Week 1 / Week 2 / Week 3+)
-6. FAQ — 6 Q&A in 0.7fr/1.3fr layout
-7. Final CTA — variant-specific (V1 reuses CtaCard, V2 has its own dark band + secondary form)
-
-**Content model:**
-- Content lives in a `LANDING` constant in the JSX — single source of truth shared by both variants. In production: a new `landingPage` doc type (NOT a singleton — multiple landing-page instances for different campaigns/cities/services) with all of: city, service, metaEyebrow, heroTitleA, heroTitleB, heroDeck, heroStats[], problem object, included object, howItWorks object, faqs[], trustBar[].
-- Each instance is a separate route: `/landing/managed-it-salt-lake-city`, `/landing/cybersecurity-utah`, etc. Slug-driven via `getStaticPaths`.
-- **Variant selector field:** schema field `layoutVariant: "editorial" | "stickyForm"` picks which template renders.
-
-**Form:** Discovery-call form (name / work email / company / situation textarea + Schedule button). Provider-agnostic POST to `CONTACT_FORM_URL` like the contact form — same field-name conventions + redirect hidden inputs.
-
-**Scope estimate:** ~20–25 files (largest of the three because both variants need their own page render path, even though they share section components).
-
-### Open decisions for these three slices
-
-- Whether to refactor existing `servicesIndexPage` singleton or replace it with a richer schema (pricing tiers are the new piece).
-- Where `/switching` sits in the nav — under Services dropdown? Standalone? Currently rendered with `active="Services"` in the design.
-- Whether to ship ONE landing-page variant first (recommend V1 Editorial — more content, broader applicability) and add V2 later.
-- Landing-page form: same provider URL as `/contact`, or a separate `LANDING_FORM_URL` for tracking source separately?
-
----
-
 ## Deferred from prior code reviews
 
 Small architectural / quality items surfaced during Slice 1/2 reviews and parked. None block shipping; address opportunistically when adjacent code is being touched.
 
+- **Create your first `landingPage` doc in Studio (Slice 9 HANDOFF).** Pick a slug (e.g., `managed-it-salt-lake-city`); customize hero copy + CTA per campaign. `initialValue` defaults seed the rest. Save → `/landing/{slug}` builds. Until at least one doc exists, no `/landing/*` routes are generated (this is by design, not a build failure).
+- **Wire downstream attribution on the `source: landing-{slug}` field** at your form provider (filtering, CRM tagging, etc.). The discovery form posts to `CONTACT_FORM_URL` with the slug-derived `source` hidden field for paid-ad attribution.
+- **(Future) V2 StickyForm template + `LANDING_FORM_URL` env var.** Slice 9 ships only the V1 Editorial layout. When you want V2 StickyForm, add a `layoutVariant` schema field + template-switching logic. If you want lander submissions routed to a separate provider account, add a `LANDING_FORM_URL` env var.
 - **Create the `switchingPage` singleton in Studio (Slice 8 HANDOFF).** All required fields have `initialValue` defaults seeded from the design. Open the doc in Studio, hit Save once — `/switching` will build cleanly after. The `lock` icon (added to `Icon.astro`) is selected by default on the third promise card.
 - **(Optional) Add `/switching` to the navigation singleton** when you want the link in the main nav. Today `/switching` is only reachable by direct URL or future deep links from `/services`.
 - **(Optional) Replace the seeded testimonial with a real one** when a real customer migration story is available. Today the testimonial uses the design's placeholder quote ("Operations Director · Professional services firm · 42 seats").

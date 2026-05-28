@@ -375,6 +375,71 @@ export type SwitchingPage = {
   };
 };
 
+export type LandingPainItem = { head: string; body: string };
+export type LandingIncludedBullet = { head: string; body: string };
+export type LandingHowItWorksStep = { k: string; head: string; body: string };
+export type LandingFaqEntry = { question: string; answer: string };
+
+export type LandingPage = {
+  title: string;
+  slug: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  ogImage?: ImageRef;
+  hero: {
+    metaEyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    ctaPrimaryLabel: string;
+    ctaPrimaryHref: string;
+    heroStats: ServiceStat[]; // length 4
+  };
+  form: {
+    cardEyebrow: string;
+    heading: string;
+    deck: string;
+    situationPlaceholder: string;
+    submitLabel: string;
+    replyNote: string;
+    successHeading: string;
+    successBody: string;
+  };
+  trustBar: {
+    prefixLabel: string;
+    items: string[]; // 3-8 items
+  };
+  problem: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    items: LandingPainItem[]; // length 3
+  };
+  included: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    bullets: LandingIncludedBullet[]; // 6-10
+  };
+  howItWorks: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    steps: LandingHowItWorksStep[]; // length 3
+  };
+  faq: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    items: LandingFaqEntry[];
+  };
+  cta: {
+    eyebrow: string;
+    heading: HeadlineRichText;
+    deck: string;
+    label: string;
+    href: string;
+  };
+};
+
 // ── Documents referenced from page blocks ────────────────────────────────
 
 export type IconName =

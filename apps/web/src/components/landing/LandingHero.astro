@@ -1,0 +1,93 @@
+---
+import type { LandingPage, ContactInfo } from "../../lib/sanity/types";
+import HeadlineRichText from "../HeadlineRichText.astro";
+import Icon from "../Icon.astro";
+import DiscoveryForm from "./DiscoveryForm.astro";
+
+interface Props {
+  hero: LandingPage["hero"];
+  form: LandingPage["form"];
+  slug: string;
+  contactInfo: ContactInfo;
+}
+
+const { hero, form, slug, contactInfo } = Astro.props;
+---
+
+<section class="bg-dark text-dark-text px-10 pt-18 pb-0 relative overflow-hidden">
+  <!-- radial glow -->
+  <div
+    class="absolute pointer-events-none"
+    style="top: -160px; right: -120px; width: 520px; height: 520px; background: radial-gradient(circle, rgb(220 38 38 / 0.16), transparent 70%);"
+  ></div>
+
+  <div class="max-w-content mx-auto relative">
+    <div class="grid grid-cols-1 md:grid-cols-[1.25fr_1fr] gap-14 items-start">
+      <!-- left: copy + CTAs -->
+      <div>
+        <div class="inline-flex items-center gap-2.5 font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-5.5">
+          <span class="inline-block bg-accent" style="width: 18px; height: 1px;"></span>
+          ◆ {hero.metaEyebrow}
+        </div>
+        <h1
+          class="font-serif font-medium text-dark-text m-0 tracking-display-tight"
+          style="font-size: 80px; line-height: 0.98; text-wrap: balance;"
+        >
+          <HeadlineRichText value={hero.title} />
+        </h1>
+        <p class="mt-5.5 text-dark-muted text-[18px] leading-snug max-w-[560px]">
+          {hero.deck}
+        </p>
+        <div class="mt-7 flex gap-3 items-center flex-wrap">
+          <a
+            href={hero.ctaPrimaryHref}
+            class="bg-accent text-white font-semibold rounded-md inline-flex items-center justify-center gap-2.5 no-underline shadow-button-accent"
+            style="padding: 16px 26px; font-size: 16px;"
+          >
+            {hero.ctaPrimaryLabel}
+            <Icon name="arrow" size={16} />
+          </a>
+          <a
+            href={`tel:${contactInfo.phone.dial}`}
+            class="text-dark-text no-underline font-medium rounded-md border border-dark-line inline-flex items-center gap-2"
+            style="padding: 16px 22px; font-size: 15.5px;"
+          >
+            <Icon name="phone" size={15} stroke={1.8} />
+            Call {contactInfo.phone.display}
+          </a>
+        </div>
+      </div>
+
+      <!-- right: form -->
+      <DiscoveryForm form={form} slug={slug} contactInfo={contactInfo} />
+    </div>
+
+    <!-- fact sheet stat strip (still on dark band) -->
+    <div class="mt-18 pt-9 pb-18 border-t border-dark-line">
+      <div class="flex items-baseline justify-between mb-7 flex-wrap gap-3">
+        <div class="font-mono text-meta text-dark-muted tracking-mono-eyebrow uppercase">
+          ◇ Fact sheet · at a glance
+        </div>
+        <div class="inline-flex items-center gap-2 font-mono text-meta text-dark-muted tracking-mono-eyebrow uppercase">
+          <span class="w-2 h-2 rounded-full bg-[#22c55e] inline-block"></span>
+          Open now · SLC · M–F 8–6
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        {hero.heroStats.map((s, i) => (
+          <div class={i === 0 ? "" : "md:pl-7 md:border-l md:border-dark-line"}>
+            <div
+              class="font-serif font-medium text-dark-text"
+              style="font-size: 60px; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums;"
+            >
+              {s.k}
+            </div>
+            <div class="mt-3 font-mono text-[11px] text-dark-muted tracking-[1px] uppercase">
+              {s.v}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

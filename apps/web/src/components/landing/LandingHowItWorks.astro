@@ -1,0 +1,52 @@
+---
+import type { LandingPage } from "../../lib/sanity/types";
+import HeadlineRichText from "../HeadlineRichText.astro";
+
+interface Props {
+  howItWorks: LandingPage["howItWorks"];
+}
+
+const { howItWorks } = Astro.props;
+---
+
+<section class="bg-bg px-10 py-24 border-b border-line">
+  <div class="max-w-content mx-auto">
+    <div class="mb-10">
+      <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-4">
+        ◆ {howItWorks.eyebrow}
+      </div>
+      <h2
+        class="font-serif font-medium text-ink m-0 tracking-display-tight max-w-[720px]"
+        style="font-size: 52px; line-height: 1.02; text-wrap: balance;"
+      >
+        <HeadlineRichText value={howItWorks.title} />
+      </h2>
+    </div>
+
+    <ol class="m-0 p-0 list-none grid grid-cols-1 md:grid-cols-3 gap-4">
+      {howItWorks.steps.map((step, i) => {
+        const num = String(i + 1).padStart(2, "0");
+        return (
+          <li class="bg-bg border border-line rounded-lg p-7 flex flex-col gap-3.5">
+            <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase">
+              {step.k}
+            </div>
+            <div
+              class="font-serif font-medium text-ink"
+              style="font-size: 40px; letter-spacing: -0.02em; line-height: 1; font-variant-numeric: tabular-nums;"
+            >
+              {num}
+            </div>
+            <h3
+              class="font-serif font-medium text-ink m-0"
+              style="font-size: 26px; letter-spacing: -0.015em; line-height: 1.1;"
+            >
+              {step.head}
+            </h3>
+            <p class="m-0 text-muted text-[14.5px] leading-body">{step.body}</p>
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</section>

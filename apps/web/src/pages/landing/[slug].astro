@@ -1,0 +1,85 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CtaCard from "../../components/blocks/CtaCard.astro";
+import Icon from "../../components/Icon.astro";
+import LandingHero from "../../components/landing/LandingHero.astro";
+import LandingProblem from "../../components/landing/LandingProblem.astro";
+import LandingIncluded from "../../components/landing/LandingIncluded.astro";
+import LandingHowItWorks from "../../components/landing/LandingHowItWorks.astro";
+import LandingFaq from "../../components/landing/LandingFaq.astro";
+import {
+  getAllLandingSlugs,
+  getLandingBySlug,
+  getContactInfo,
+} from "../../lib/sanity/client";
+import type { CtaCardBlock } from "../../lib/sanity/types";
+
+export async function getStaticPaths() {
+  const slugs = await getAllLandingSlugs();
+  return slugs
+    .filter((s) => s.slug)
+    .map(({ slug }) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+if (!slug) {
+  throw new Error("Landing slug missing at build time.");
+}
+
+const [page, contactInfo] = await Promise.all([
+  getLandingBySlug(slug),
+  getContactInfo(),
+]);
+
+if (!page) {
+  throw new Error(`Landing page not found in Sanity for slug: ${slug}`);
+}
+if (!contactInfo) {
+  throw new Error("Contact Info singleton not found in Sanity (required by landing hero).");
+}
+
+const ctaBlock: CtaCardBlock = {
+  _type: "ctaCard",
+  _key: `landing-${slug}-cta`,
+  eyebrow: `◆ ${page.cta.eyebrow}`,
+  heading: page.cta.heading,
+  deck: page.cta.deck,
+  primaryCtaLabel: page.cta.label,
+  primaryCtaHref: page.cta.href,
+};
+---
+
+<BaseLayout
+  title={page.seoTitle ?? page.title}
+  description={page.seoDescription ?? page.hero.deck}
+>
+  <LandingHero
+    hero={page.hero}
+    form={page.form}
+    slug={page.slug}
+    contactInfo={contactInfo}
+  />
+
+  <!-- Trust bar — small thin strip; inline rather than a separate component -->
+  <section class="bg-bg-alt border-y border-line py-5 px-10">
+    <div class="max-w-content mx-auto flex items-center gap-7 flex-wrap font-mono text-meta text-muted tracking-mono-label uppercase">
+      <span class="inline-flex items-center gap-2 text-accent">
+        <Icon name="compass" size={12} />
+        {page.trustBar.prefixLabel}
+      </span>
+      {page.trustBar.items.map((item, i) => (
+        <>
+          {i > 0 && <span class="text-line">•</span>}
+          <span>{item}</span>
+        </>
+      ))}
+    </div>
+  </section>
+
+  <LandingProblem problem={page.problem} />
+  <LandingIncluded included={page.included} />
+  <LandingHowItWorks howItWorks={page.howItWorks} />
+  <LandingFaq faq={page.faq} />
+
+  <CtaCard block={ctaBlock} />
+</BaseLayout>
