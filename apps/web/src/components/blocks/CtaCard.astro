@@ -1,21 +1,14 @@
 ---
-import type { CtaCardBlock } from "../../lib/sanity/types";
+import type { CtaCardBlock, ContactInfo } from "../../lib/sanity/types";
 import Icon from "../Icon.astro";
 import HeadlineRichText from "../HeadlineRichText.astro";
-import { getContactInfo } from "../../lib/sanity/client";
 
 interface Props {
   block: CtaCardBlock;
+  contactInfo: ContactInfo;
 }
 
-const { block } = Astro.props;
-const contactInfo = await getContactInfo();
-
-if (!contactInfo) {
-  throw new Error(
-    "Contact Info singleton not found in Sanity (required by CtaCard block).",
-  );
-}
+const { block, contactInfo } = Astro.props;
 ---
 
 <section class="bg-bg py-24 px-10 border-b border-line">

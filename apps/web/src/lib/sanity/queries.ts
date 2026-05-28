@@ -282,6 +282,7 @@ export const serviceBySlugQuery = /* groq */ `
     shortDescription,
     iconName,
     order,
+    specSheetUrl,
     eyebrow,
     headline,
     deck,

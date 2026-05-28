@@ -1,5 +1,5 @@
 ---
-import type { PageBlock } from "../../lib/sanity/types";
+import type { PageBlock, ContactInfo } from "../../lib/sanity/types";
 import DarkNumbersHero from "./DarkNumbersHero.astro";
 import TrustStrip from "./TrustStrip.astro";
 import TeamGrid from "./TeamGrid.astro";
@@ -20,9 +20,10 @@ import ContactBody from "./ContactBody.astro";
 
 interface Props {
   block: PageBlock;
+  contactInfo: ContactInfo;
 }
 
-const { block } = Astro.props;
+const { block, contactInfo } = Astro.props;
 ---
 
 {block._type === "darkNumbersHero" && <DarkNumbersHero block={block} />}
@@ -32,7 +33,7 @@ const { block } = Astro.props;
 {block._type === "savings"         && <Savings         block={block} />}
 {block._type === "servicesList"    && <ServicesList    block={block} />}
 {block._type === "beliefs"         && <Beliefs         block={block} />}
-{block._type === "ctaCard"         && <CtaCard         block={block} />}
+{block._type === "ctaCard"         && <CtaCard         block={block} contactInfo={contactInfo} />}
 {block._type === "pageHero"        && <PageHero        block={block} />}
 {block._type === "originPhoto"     && <OriginPhoto     block={block} />}
 {block._type === "storyThreeCol"   && <StoryThreeCol   block={block} />}

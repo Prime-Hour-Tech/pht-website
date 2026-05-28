@@ -58,3 +58,7 @@ if (document.readyState === "loading") {
 } else {
   applyOpenState();
 }
+
+// Re-run every 60 s so the Open/Closed pill flips at the transition boundary
+// without requiring a page reload.
+setInterval(applyOpenState, 60_000);

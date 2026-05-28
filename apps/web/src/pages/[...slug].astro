@@ -1,11 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BlockRenderer from "../components/blocks/BlockRenderer.astro";
-import {
-  getAllPageSlugs,
-  getPageBySlug,
-  getSiteSettings,
-} from "../lib/sanity/client";
+import { getAllPageSlugs, getPageBySlug, getContactInfo } from "../lib/sanity/client";
 
 export async function getStaticPaths() {
   const slugs = await getAllPageSlugs();
@@ -20,22 +16,21 @@ interface Props {
 }
 
 const { slug } = Astro.props;
-const [page, siteSettings] = await Promise.all([
+const [page, contactInfo] = await Promise.all([
   getPageBySlug(slug),
-  getSiteSettings(),
+  getContactInfo(),
 ]);
 
 if (!page) {
   throw new Error(`Page not found in Sanity for slug: ${slug}`);
 }
-if (!siteSettings) {
-  throw new Error(
-    "Site Settings document is missing in Sanity. Create and publish it in the Studio first.",
-  );
+if (!contactInfo) {
+  throw new Error("Contact Info singleton not found in Sanity.");
 }
 
 const title = page.seoTitle ?? page.title;
-const description = page.seoDescription ?? siteSettings.siteDescription;
+// description falls back to siteSettings.siteDescription inside BaseLayout
+const description = page.seoDescription ?? undefined;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).toString();
 ---
 
@@ -43,7 +38,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).to
   title={title}
   description={description}
   canonical={canonical}
-  siteName={siteSettings.siteName}
 >
-  {page.blocks?.map((block) => <BlockRenderer block={block} />)}
+  {page.blocks?.map((block) => <BlockRenderer block={block} contactInfo={contactInfo} />)}
 </BaseLayout>

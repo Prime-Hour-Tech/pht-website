@@ -297,6 +297,8 @@ describe("service queries", () => {
       // CTA
       "ctaEyebrow",
       "ctaDeck",
+      // Spec sheet
+      "specSheetUrl",
     ];
     for (const field of fields) {
       expect(serviceBySlugQuery).toMatch(new RegExp(`\\b${field}\\b`));

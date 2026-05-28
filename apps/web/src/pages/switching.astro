@@ -10,12 +10,18 @@ import SwitchingComparisonTable from "../components/switching/SwitchingCompariso
 import SwitchingPromises from "../components/switching/SwitchingPromises.astro";
 import SwitchingTestimonial from "../components/switching/SwitchingTestimonial.astro";
 import SwitchingFaq from "../components/switching/SwitchingFaq.astro";
-import { getSwitchingPage } from "../lib/sanity/client";
+import { getSwitchingPage, getContactInfo } from "../lib/sanity/client";
 import type { CtaCardBlock } from "../lib/sanity/types";
 
-const page = await getSwitchingPage();
+const [page, contactInfo] = await Promise.all([
+  getSwitchingPage(),
+  getContactInfo(),
+]);
 if (!page) {
   throw new Error("Switching Page singleton not found in Sanity.");
+}
+if (!contactInfo) {
+  throw new Error("Contact Info singleton not found in Sanity.");
 }
 
 const ctaBlock: CtaCardBlock = {
@@ -44,5 +50,5 @@ const ctaBlock: CtaCardBlock = {
   <SwitchingTestimonial testimonial={page.testimonial} />
   <SwitchingFaq faq={page.faq} />
 
-  <CtaCard block={ctaBlock} />
+  <CtaCard block={ctaBlock} contactInfo={contactInfo} />
 </BaseLayout>

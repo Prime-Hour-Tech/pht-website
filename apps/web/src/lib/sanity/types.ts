@@ -458,7 +458,9 @@ export type IconName =
   | "file"
   | "users"
   | "spark"
-  | "lock";
+  | "lock"
+  | "linkedin"
+  | "x";
 
 export type TeamMemberResolved = {
   _id: string;
@@ -499,6 +501,7 @@ export type ServiceFaqEntry = {
 
 export type ServiceFull = ServiceCard & {
   order: number;
+  specSheetUrl?: string;
   // Hero
   eyebrow: string;
   headline: HeadlineRichText;

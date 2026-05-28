@@ -13,16 +13,21 @@ import Icon from "../../components/Icon.astro";
 import {
   getServicesList,
   getServicesIndexPage,
+  getContactInfo,
 } from "../../lib/sanity/client";
 import type { CtaCardBlock } from "../../lib/sanity/types";
 
-const [services, indexPage] = await Promise.all([
+const [services, indexPage, contactInfo] = await Promise.all([
   getServicesList(),
   getServicesIndexPage(),
+  getContactInfo(),
 ]);
 
 if (!indexPage) {
   throw new Error("Services Index Page singleton not found in Sanity.");
+}
+if (!contactInfo) {
+  throw new Error("Contact Info singleton not found in Sanity.");
 }
 
 const featuredSlug = indexPage.featuredService.slug;
@@ -126,5 +131,5 @@ const ctaBlock: CtaCardBlock = {
 
   <IndustryCrosslink crosslink={indexPage.industryCrosslink} />
 
-  <CtaCard block={ctaBlock} />
+  <CtaCard block={ctaBlock} contactInfo={contactInfo} />
 </BaseLayout>
