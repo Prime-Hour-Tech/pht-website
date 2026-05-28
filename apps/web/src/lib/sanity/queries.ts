@@ -414,6 +414,7 @@ export const postBySlugQuery = /* groq */ `
     seoTitle,
     seoDescription,
     ogImage,
+    "updatedAt": _updatedAt,
     author->{
       _id,
       name,
@@ -443,6 +444,20 @@ export const allPostsQuery = /* groq */ `
       name,
       role
     }
+  }
+`;
+
+// Latest 20 published posts, projected to the minimum fields needed for RSS items.
+// Matches PostRssItem in types.ts. Sorted by publishDate desc; empty array if zero posts.
+export const allPostsForRssQuery = /* groq */ `
+  *[_type == "post" && defined(slug.current) && defined(publishDate)]
+  | order(publishDate desc)
+  [0...20] {
+    title,
+    "slug": slug.current,
+    excerpt,
+    category,
+    publishDate
   }
 `;
 

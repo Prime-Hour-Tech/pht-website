@@ -14,6 +14,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
     "@portabletext/to-html": "^5.0.2",
     "@portabletext/types": "^4.0.2",

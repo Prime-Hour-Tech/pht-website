@@ -229,6 +229,14 @@ export type PostCard = {
   author: { name: string; role: string };
 };
 
+export type PostRssItem = {
+  title: string;
+  slug: string;
+  excerpt: string;
+  category: PostCategory;
+  publishDate: string;
+};
+
 export type PostFull = Omit<PostCard, "author"> & {
   body: PortableTextBlock[];
   author: {
@@ -241,6 +249,8 @@ export type PostFull = Omit<PostCard, "author"> & {
   seoTitle?: string;
   seoDescription?: string;
   ogImage?: ImageRef;
+  // Projected from Sanity's _updatedAt; used for Article JSON-LD dateModified.
+  updatedAt?: string;
 };
 
 export type BlogIndexPage = {

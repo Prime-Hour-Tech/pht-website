@@ -13,6 +13,7 @@ import {
   servicesIndexPageQuery,
   postSlugListQuery,
   postBySlugQuery,
+  allPostsForRssQuery,
   allPostsQuery,
   relatedPostsQuery,
   blogIndexPageQuery,
@@ -398,11 +399,13 @@ describe("blog queries", () => {
       "seoTitle",
       "seoDescription",
       "ogImage",
+      "updatedAt",
     ];
     for (const field of fields) {
       expect(postBySlugQuery).toMatch(new RegExp(`\\b${field}\\b`));
     }
     expect(postBySlugQuery).toContain("author->");
+    expect(postBySlugQuery).toContain('"updatedAt": _updatedAt');
   });
 
   it("allPostsQuery orders by publishDate desc and projects card-shape fields", () => {
@@ -413,6 +416,18 @@ describe("blog queries", () => {
     expect(allPostsQuery).toContain("category");
     expect(allPostsQuery).toContain("coverImage");
     expect(allPostsQuery).toContain("author->");
+  });
+
+  it("allPostsForRssQuery filters published posts, orders desc, slices to 20, projects RSS fields", () => {
+    expect(allPostsForRssQuery).toContain('_type == "post"');
+    expect(allPostsForRssQuery).toContain("defined(slug.current)");
+    expect(allPostsForRssQuery).toContain("defined(publishDate)");
+    expect(allPostsForRssQuery).toContain("order(publishDate desc)");
+    expect(allPostsForRssQuery).toContain("[0...20]");
+    for (const field of ["title", "excerpt", "category", "publishDate"]) {
+      expect(allPostsForRssQuery).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+    expect(allPostsForRssQuery).toContain('"slug": slug.current');
   });
 
   it("relatedPostsQuery filters by category, excludes current slug, orders by publishDate desc", () => {

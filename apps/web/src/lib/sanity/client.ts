@@ -8,6 +8,7 @@ import type {
   Page,
   PostCard,
   PostFull,
+  PostRssItem,
   PrivacyPage,
   ServiceCard,
   ServiceFull,
@@ -19,6 +20,7 @@ import type {
 import {
   allLandingSlugsQuery,
   allPageSlugsQuery,
+  allPostsForRssQuery,
   allPostsQuery,
   blogIndexPageQuery,
   contactInfoQuery,
@@ -101,6 +103,10 @@ export async function getPostBySlug(slug: string): Promise<PostFull | null> {
 
 export async function getAllPosts(): Promise<PostCard[]> {
   return await sanityClient.fetch<PostCard[]>(allPostsQuery);
+}
+
+export async function getAllPostsForRss(): Promise<PostRssItem[]> {
+  return await sanityClient.fetch<PostRssItem[]>(allPostsForRssQuery);
 }
 
 export async function getRelatedPosts(category: string, slug: string): Promise<PostCard[]> {

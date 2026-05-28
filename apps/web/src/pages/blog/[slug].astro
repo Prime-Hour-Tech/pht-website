@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumb from "../../components/chrome/Breadcrumb.astro";
+import JsonLd from "../../components/JsonLd.astro";
 import BlogPostHeader from "../../components/blog/BlogPostHeader.astro";
 import BlogPostCover from "../../components/blog/BlogPostCover.astro";
 import BlogPostBody from "../../components/blog/BlogPostBody.astro";
@@ -10,7 +11,9 @@ import {
   getAllPostSlugs,
   getPostBySlug,
   getRelatedPosts,
+  getSiteSettings,
 } from "../../lib/sanity/client";
+import { buildArticleJsonLd } from "../../lib/structuredData";
 
 export async function getStaticPaths() {
   const slugs = await getAllPostSlugs();
@@ -31,12 +34,25 @@ if (!post) {
 
 const related = await getRelatedPosts(post.category, slug);
 const url = new URL(`/blog/${slug}`, Astro.site ?? Astro.url.origin).toString();
+
+const siteSettings = await getSiteSettings();
+if (!siteSettings) {
+  throw new Error("Site Settings singleton not found in Sanity.");
+}
+const siteUrl = (Astro.site ?? new URL("/", Astro.url.origin)).toString().replace(/\/$/, "");
+const articleLd = buildArticleJsonLd({
+  post,
+  siteSettings,
+  canonicalUrl: url,
+  siteUrl,
+});
 ---
 
 <BaseLayout
   title={post.seoTitle ?? post.title}
   description={post.seoDescription ?? post.excerpt}
 >
+  <JsonLd data={articleLd} />
   <Breadcrumb trail={[{ label: "Blog", href: "/blog" }, post.title]} />
 
   <BlogPostHeader post={post} url={url} />
