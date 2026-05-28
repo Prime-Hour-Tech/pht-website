@@ -10,14 +10,6 @@ Remaining work for the PHT marketing site. Slices 1 (Foundation) and 2 (Home) ar
 
 The work was decomposed into 6 slices during initial brainstorming. Each is its own spec → plan → execution cycle.
 
-### Slice 4 — About + Industries + Contact
-
-- Three single-instance pages.
-- About reuses `teamGrid`, `beliefs`, `ctaCard`. New patterns: founder hero / portrait, milestones timeline (5 entries Q1 2024 → Q2 2026), 3-col story (where we came from / why we started / how we run today), 4-stat strip, office/culture photo + check-bullet list.
-- Industries: hero, sticky horizontal-scroll jump nav (pill chips with icons), 4 vertical sections (Professional Services / SMB / Regulated / Nonprofits).
-- Contact: form (name / company / email / phone / size / message). Wire to an endpoint (TBD — likely a third-party form provider or a Vercel serverless function).
-- References: `design_handoff_docs/about-page.jsx`, `industries-page.jsx`, `contact-page.jsx`.
-
 ### Slice 5 — Blog (index + post)
 
 - New document types: `post`, `author`.
@@ -40,6 +32,10 @@ The work was decomposed into 6 slices during initial brainstorming. Each is its 
 
 Small architectural / quality items surfaced during Slice 1/2 reviews and parked. None block shipping; address opportunistically when adjacent code is being touched.
 
+- **Pick a contact form provider + wire `CONTACT_FORM_URL`.** Slice 4 ships the form as provider-agnostic (POSTs to whatever URL is set in `CONTACT_FORM_URL` env var on the web app). Pick a provider — Web3Forms free tier (250 submissions/mo) is the recommended start. Create the form in their UI, copy the action URL into Vercel project env vars, redeploy. Until this is done, the form's `action` falls back to `"#"` and submissions don't work.
+- **Author About / Industries / Contact `page` docs in Studio.** Three new `page` documents with slugs `about`, `industries`, `contact`. Schema defaults pre-fill obvious copy via `initialValue`. Required fields (image alts, headline accents, vertical anchor ids, milestone dates) need authoring. Routes won't generate until the docs exist.
+- **Re-save `contactInfo` singleton in Studio to populate `serviceAreaSub`.** Slice 4 adds this required field with an `initialValue`, but `initialValue` only fires on doc creation — not on backfill. Open the singleton in Studio and re-save once. Until then `ContactBody.astro` would render with the field empty; also `pnpm build:web` may surface this as a type-narrowing build error depending on how strict TS is configured.
+- **Watch contact form spam volume after launch.** If volume warrants, add a Cloudflare Turnstile widget on the form. Otherwise no action.
 - **Image URL builder.** Wire `@sanity/image-url` (or the equivalent) so we get responsive sizes and crops from Sanity image fields. Slice 5 (blog covers) will force this; do it then.
 - **`getSiteSettings()` double-fetch.** `[...slug].astro` and `BaseLayout.astro` both call it on every static page build. Harmless at build time but inconsistent. Fix: derive `siteName` / `description` inside `BaseLayout` from its own fetch and drop those props.
 - **`open-now.ts` interval refresh.** Currently runs once on `DOMContentLoaded`. If a visitor loads the page at 5:59pm, the indicator stays "Open" until refresh. A 60s `setInterval` (or computing time to the next transition and scheduling a single update) fixes it.

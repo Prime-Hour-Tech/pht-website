@@ -107,6 +107,81 @@ export const pageBySlugQuery = /* groq */ `
         deck,
         primaryCtaLabel,
         primaryCtaHref
+      },
+      _type == "pageHero" => {
+        eyebrow,
+        headline,
+        deck
+      },
+      _type == "originPhoto" => {
+        image {
+          "url": asset->url,
+          alt
+        },
+        aspectRatio,
+        caption {
+          eyebrowLabel,
+          quote,
+          attribution
+        }
+      },
+      _type == "storyThreeCol" => {
+        eyebrow,
+        heading,
+        columns[]{
+          eyebrow,
+          heading,
+          body
+        }
+      },
+      _type == "numbersStrip" => {
+        stats[]{ k, v }
+      },
+      _type == "milestonesTimeline" => {
+        eyebrow,
+        heading,
+        deck,
+        items[]{ date, title, body }
+      },
+      _type == "officeCulture" => {
+        image {
+          "url": asset->url,
+          alt
+        },
+        aspectRatio,
+        eyebrow,
+        heading,
+        body,
+        bullets
+      },
+      _type == "industriesContent" => {
+        jumpLabel,
+        verticals[]{
+          "id": id.current,
+          iconName,
+          name,
+          sub,
+          intro,
+          bullets,
+          examples
+        }
+      },
+      _type == "industriesDontSeeYours" => {
+        eyebrow,
+        heading,
+        deck,
+        primaryCta { label, href },
+        secondaryCta { label, href }
+      },
+      _type == "contactBody" => {
+        formHeading,
+        formDeck,
+        promptingOptions,
+        submitLabel,
+        submitNote,
+        successHeading,
+        successBody,
+        existingClientPanel { label, primary, sub, href }
       }
     }
   }
@@ -158,6 +233,7 @@ export const footerQuery = /* groq */ `
 export const contactInfoQuery = /* groq */ `
   *[_type == "contactInfo"][0] {
     cardTitle,
+    serviceAreaSub,
     phone {
       display,
       dial

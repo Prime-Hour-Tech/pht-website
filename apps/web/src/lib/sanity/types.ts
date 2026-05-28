@@ -104,6 +104,7 @@ export type Address = {
 
 export type ContactInfo = {
   cardTitle: string;
+  serviceAreaSub: string;
   phone: { display: string; dial: string };
   email: string;
   hours: Hours;
@@ -139,7 +140,10 @@ export type IconName =
   | "check"
   | "phone"
   | "mail"
-  | "chevron";
+  | "chevron"
+  | "file"
+  | "users"
+  | "spark";
 
 export type TeamMemberResolved = {
   _id: string;
@@ -313,6 +317,117 @@ export type CtaCardBlock = {
   primaryCtaHref: string;
 };
 
+export type PageHeroBlock = {
+  _type: "pageHero";
+  _key: string;
+  eyebrow: string;
+  headline: HeadlineRichText;
+  deck: string[];
+};
+
+export type OriginPhotoBlock = {
+  _type: "originPhoto";
+  _key: string;
+  image: ResolvedImage;
+  aspectRatio: "21/9" | "16/9" | "4/3";
+  caption: {
+    eyebrowLabel: string;
+    quote: string;
+    attribution: string;
+  };
+};
+
+export type StoryColumn = {
+  eyebrow: string;
+  heading: string;
+  body: string;
+};
+
+export type StoryThreeColBlock = {
+  _type: "storyThreeCol";
+  _key: string;
+  eyebrow: string;
+  heading: HeadlineRichText;
+  columns: StoryColumn[];
+};
+
+export type NumbersStripBlock = {
+  _type: "numbersStrip";
+  _key: string;
+  stats: { k: string; v: string }[];
+};
+
+export type Milestone = {
+  date: string;
+  title: string;
+  body: string;
+};
+
+export type MilestonesTimelineBlock = {
+  _type: "milestonesTimeline";
+  _key: string;
+  eyebrow: string;
+  heading: HeadlineRichText;
+  deck?: string;
+  items: Milestone[];
+};
+
+export type OfficeCultureBlock = {
+  _type: "officeCulture";
+  _key: string;
+  image: ResolvedImage;
+  aspectRatio: "4/3" | "1/1" | "3/4";
+  eyebrow: string;
+  heading: HeadlineRichText;
+  body: string;
+  bullets: string[];
+};
+
+export type IndustryVertical = {
+  id: string;
+  iconName: IconName;
+  name: string;
+  sub: string;
+  intro: string;
+  bullets: string[];
+  examples: string[];
+};
+
+export type IndustriesContentBlock = {
+  _type: "industriesContent";
+  _key: string;
+  jumpLabel: string;
+  verticals: IndustryVertical[];
+};
+
+export type IndustriesDontSeeYoursBlock = {
+  _type: "industriesDontSeeYours";
+  _key: string;
+  eyebrow: string;
+  heading: HeadlineRichText;
+  deck: string;
+  primaryCta: CtaLink;
+  secondaryCta: CtaLink;
+};
+
+export type ContactBodyBlock = {
+  _type: "contactBody";
+  _key: string;
+  formHeading: string;
+  formDeck: string;
+  promptingOptions: string[];
+  submitLabel: string;
+  submitNote?: string;
+  successHeading: string;
+  successBody: string;
+  existingClientPanel?: {
+    label: string;
+    primary: string;
+    sub: string;
+    href: string;
+  };
+};
+
 export type PageBlock =
   | DarkNumbersHeroBlock
   | TrustStripBlock
@@ -321,4 +436,13 @@ export type PageBlock =
   | SavingsBlock
   | ServicesListBlock
   | BeliefsBlock
-  | CtaCardBlock;
+  | CtaCardBlock
+  | PageHeroBlock
+  | OriginPhotoBlock
+  | StoryThreeColBlock
+  | NumbersStripBlock
+  | MilestonesTimelineBlock
+  | OfficeCultureBlock
+  | IndustriesContentBlock
+  | IndustriesDontSeeYoursBlock
+  | ContactBodyBlock;

@@ -8,6 +8,15 @@ import Savings from "./Savings.astro";
 import ServicesList from "./ServicesList.astro";
 import Beliefs from "./Beliefs.astro";
 import CtaCard from "./CtaCard.astro";
+import PageHero from "./PageHero.astro";
+import OriginPhoto from "./OriginPhoto.astro";
+import StoryThreeCol from "./StoryThreeCol.astro";
+import NumbersStrip from "./NumbersStrip.astro";
+import MilestonesTimeline from "./MilestonesTimeline.astro";
+import OfficeCulture from "./OfficeCulture.astro";
+import IndustriesContent from "./IndustriesContent.astro";
+import IndustriesDontSeeYours from "./IndustriesDontSeeYours.astro";
+import ContactBody from "./ContactBody.astro";
 
 interface Props {
   block: PageBlock;
@@ -24,3 +33,12 @@ const { block } = Astro.props;
 {block._type === "servicesList"    && <ServicesList    block={block} />}
 {block._type === "beliefs"         && <Beliefs         block={block} />}
 {block._type === "ctaCard"         && <CtaCard         block={block} />}
+{block._type === "pageHero"        && <PageHero        block={block} />}
+{block._type === "originPhoto"     && <OriginPhoto     block={block} />}
+{block._type === "storyThreeCol"   && <StoryThreeCol   block={block} />}
+{block._type === "numbersStrip"    && <NumbersStrip    block={block} />}
+{block._type === "milestonesTimeline" && <MilestonesTimeline block={block} />}
+{block._type === "officeCulture"      && <OfficeCulture      block={block} />}
+{block._type === "industriesContent" && <IndustriesContent block={block} />}
+{block._type === "industriesDontSeeYours" && <IndustriesDontSeeYours block={block} />}
+{block._type === "contactBody"     && <ContactBody     block={block} />}

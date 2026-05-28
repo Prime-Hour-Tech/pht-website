@@ -1,0 +1,49 @@
+---
+import type { MilestonesTimelineBlock } from "../../lib/sanity/types";
+import HeadlineRichText from "../HeadlineRichText.astro";
+
+interface Props {
+  block: MilestonesTimelineBlock;
+}
+
+const { block } = Astro.props;
+---
+
+<section class="bg-bg py-24 px-10">
+  <div class="max-w-content mx-auto grid grid-cols-1 md:grid-cols-[0.7fr_1.3fr] gap-16 items-start">
+    <div class="md:sticky md:top-22">
+      <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
+        ◆ {block.eyebrow}
+      </div>
+      <h2
+        class="font-serif font-medium text-ink m-0 tracking-display-tight"
+        style="font-size: 52px; line-height: 1; text-wrap: balance;"
+      >
+        <HeadlineRichText value={block.heading} />
+      </h2>
+      {block.deck && (
+        <p class="mt-4.5 text-muted text-[15.5px] leading-body max-w-[320px]">{block.deck}</p>
+      )}
+    </div>
+    <ol class="list-none m-0 p-0 border-t border-line">
+      {block.items.map((m, i) => (
+        <li
+          class={`py-7 grid grid-cols-1 md:grid-cols-[160px_1fr] gap-8 ${i < block.items.length - 1 ? "border-b border-line" : ""}`}
+        >
+          <div class="font-mono text-[12px] text-accent tracking-[0.6px] uppercase pt-1">
+            {m.date}
+          </div>
+          <div>
+            <div
+              class="font-serif font-medium text-ink"
+              style="font-size: 24px; line-height: 1.2; letter-spacing: -0.015em;"
+            >
+              {m.title}
+            </div>
+            <p class="mt-2 text-muted text-[15.5px] leading-body">{m.body}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

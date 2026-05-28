@@ -98,6 +98,10 @@ describe("contactInfoQuery", () => {
     expect(contactInfoQuery).toMatch(/\bcardTitle\b/);
   });
 
+  it("projects serviceAreaSub for the Contact page Service Area panel", () => {
+    expect(contactInfoQuery).toMatch(/\bserviceAreaSub\b/);
+  });
+
   it("projects hours sub-fields needed by the client open-now script", () => {
     expect(contactInfoQuery).toContain("weekdayLabel");
     expect(contactInfoQuery).toContain("openMinute");
@@ -150,6 +154,86 @@ describe("pageBySlugQuery — block projections", () => {
 
   it("no longer references the deleted hero block type", () => {
     expect(pageBySlugQuery).not.toContain('"hero"');
+  });
+
+  it("projects pageHero fields", () => {
+    expect(pageBySlugQuery).toContain('"pageHero"');
+    const block = pageBySlugQuery.match(/_type == "pageHero"[^}]*\{([^}]*)\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "headline", "deck"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects originPhoto fields", () => {
+    expect(pageBySlugQuery).toContain('"originPhoto"');
+    const block = pageBySlugQuery.match(/_type == "originPhoto"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["image", "aspectRatio", "caption", "eyebrowLabel", "quote", "attribution"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects storyThreeCol fields", () => {
+    expect(pageBySlugQuery).toContain('"storyThreeCol"');
+    const block = pageBySlugQuery.match(/_type == "storyThreeCol"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "heading", "columns"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects numbersStrip fields", () => {
+    expect(pageBySlugQuery).toContain('"numbersStrip"');
+    const block = pageBySlugQuery.match(/_type == "numbersStrip"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    expect(block![1]).toMatch(/\bstats\b/);
+  });
+
+  it("projects milestonesTimeline fields", () => {
+    expect(pageBySlugQuery).toContain('"milestonesTimeline"');
+    const block = pageBySlugQuery.match(/_type == "milestonesTimeline"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "heading", "deck", "items"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects officeCulture fields", () => {
+    expect(pageBySlugQuery).toContain('"officeCulture"');
+    const block = pageBySlugQuery.match(/_type == "officeCulture"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["image", "aspectRatio", "eyebrow", "heading", "body", "bullets"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects industriesContent fields", () => {
+    expect(pageBySlugQuery).toContain('"industriesContent"');
+    const block = pageBySlugQuery.match(/_type == "industriesContent"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["jumpLabel", "verticals", "id", "iconName", "name", "sub", "intro", "bullets", "examples"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+    expect(block![1]).toContain('"id": id.current');
+  });
+
+  it("projects industriesDontSeeYours fields", () => {
+    expect(pageBySlugQuery).toContain('"industriesDontSeeYours"');
+    const block = pageBySlugQuery.match(/_type == "industriesDontSeeYours"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "heading", "deck", "primaryCta", "secondaryCta"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects contactBody fields", () => {
+    expect(pageBySlugQuery).toContain('"contactBody"');
+    const block = pageBySlugQuery.match(/_type == "contactBody"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["formHeading", "formDeck", "promptingOptions", "submitLabel", "submitNote", "successHeading", "successBody", "existingClientPanel"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
   });
 });
 

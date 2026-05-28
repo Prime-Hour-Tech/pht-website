@@ -16,6 +16,15 @@ import { servicesList } from "./objects/servicesList";
 import { beliefs } from "./objects/beliefs";
 import { headline } from "./objects/headline";
 import { ctaCard } from "./objects/ctaCard";
+import { pageHero } from "./objects/pageHero";
+import { originPhoto } from "./objects/originPhoto";
+import { storyThreeCol } from "./objects/storyThreeCol";
+import { numbersStrip } from "./objects/numbersStrip";
+import { milestonesTimeline } from "./objects/milestonesTimeline";
+import { officeCulture } from "./objects/officeCulture";
+import { industriesContent } from "./objects/industriesContent";
+import { industriesDontSeeYours } from "./objects/industriesDontSeeYours";
+import { contactBody } from "./objects/contactBody";
 
 export const schemaTypes = [
   siteSettings,
@@ -35,4 +44,13 @@ export const schemaTypes = [
   beliefs,
   headline,
   ctaCard,
+  pageHero,
+  originPhoto,
+  storyThreeCol,
+  numbersStrip,
+  milestonesTimeline,
+  officeCulture,
+  industriesContent,
+  industriesDontSeeYours,
+  contactBody,
 ];
