@@ -10,29 +10,6 @@ Remaining work for the PHT marketing site. Slices 1 (Foundation) and 2 (Home) ar
 
 Three new page templates landed in `design_handoff_pht_redesign/` (despite the folder name, this is additive — not a redesign of what's already shipped). Each is its own slice when prioritized; none are blocking. References live in the top-level `pht-website/project/` of the design canvas tarball: `services-page.jsx`, `switching-page.jsx`, `landing-page.jsx` (note: not in the `design_handoff_pht_redesign/` subdirectory of the canvas — that subdirectory mirrors the original handoff).
 
-### `/switching` — new route, "Switching from your current MSP"
-
-**Component:** `SwitchingPage` in `switching-page.jsx`. Targets prospects already with another MSP.
-
-**Layout:**
-1. Breadcrumb (Services › Switching MSPs)
-2. Hero — dark band, 2-col (headline + 2-paragraph deck on left, "The deal in one card" 5-row panel on right) + 4-stat strip beneath ("30 days" / "0 coverage gap" / "You own" / "M-to-M")
-3. Reasons people switch — 3-col cards (3 reasons, one tagged "Most common")
-4. **Migration timeline** — the centerpiece. Vertical 4-week rail with numbered week markers (01-04). Each week: serif title + 2-col body ("What you get this week" check-bullets + "On our side" chip pills). Weeks: Discovery → Documentation/side-by-side → Baseline deployed → Old MSP off
-5. "The awkward part" punchlist — 8 items in 2-col grid (notice letter, credential handover, documentation request, side-by-side, tool removal, vendor re-pointing, backup verification, off-board confirmation)
-6. Comparison table — 8 rows (first-touch / pricing / engineer continuity / after-hours / docs / contract / QBR / location) × 3 cols (aspect, current MSP, PHT). Logomark in the PHT column header.
-7. 4-promise grid — iconed cards (shield, file, lock, users glyphs). NOTE: `lock` icon not in current set.
-8. Testimonial — pull quote + metric card ("14 days · Old MSP fully off-boarded")
-9. FAQ — 6 Q&A in 0.7fr/1.3fr sticky-heading layout
-10. Final CTA + footer
-
-**New content shapes:**
-- New singleton `switchingPage` (recommended over fitting onto an existing doc) — hero, reasons array, timeline weeks array, handle items array, comparison rows array, promises array, testimonial object, faqs array, CTA fields.
-- All arrays are inline; no new doc types needed.
-- New `lock` icon glyph needed in `Icon.astro`.
-
-**Scope estimate:** ~14–18 files. Comparable to Slice 4 About page in complexity (timeline section parallels the milestones timeline; comparison table is novel but mechanical).
-
 ### `/landing/[slug]` — paid-ad lander template
 
 **Component:** `LandingV1Editorial` + `LandingV2StickyForm` + `LandingMobile` in `landing-page.jsx`. Two desktop variants of the same content for A/B-style testing of paid-ad campaigns.
@@ -72,6 +49,9 @@ Three new page templates landed in `design_handoff_pht_redesign/` (despite the f
 
 Small architectural / quality items surfaced during Slice 1/2 reviews and parked. None block shipping; address opportunistically when adjacent code is being touched.
 
+- **Create the `switchingPage` singleton in Studio (Slice 8 HANDOFF).** All required fields have `initialValue` defaults seeded from the design. Open the doc in Studio, hit Save once — `/switching` will build cleanly after. The `lock` icon (added to `Icon.astro`) is selected by default on the third promise card.
+- **(Optional) Add `/switching` to the navigation singleton** when you want the link in the main nav. Today `/switching` is only reachable by direct URL or future deep links from `/services`.
+- **(Optional) Replace the seeded testimonial with a real one** when a real customer migration story is available. Today the testimonial uses the design's placeholder quote ("Operations Director · Professional services firm · 42 seats").
 - **Re-save the `servicesIndexPage` singleton in Studio (Slice 7 HANDOFF).** Pick a `featuredService` (managed-it is the expected default). Save the doc once; `initialValue` defaults will populate the new pricing tiers, bundle rows, process steps, and industry crosslink tiles. Until this re-save happens, `/services` hard-throws at build because the dereferenced featuredService and the new required fields project as `null`.
 - **Replace `gridHeading.secondaryLinkHref` once a services-overview PDF exists.** Today the label "Download the services overview →" defaults to no href. Set it via Studio when a real PDF is available, or clear the label to hide the link.
 - **Wire `bundleTile.footerLinkHref` to a real "How pricing works" anchor.** Currently `/contact`; could point to a section anchor on the page or a future help article.

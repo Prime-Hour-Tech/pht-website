@@ -513,3 +513,82 @@ export const privacyPageQuery = /* groq */ `
     contactCardCtaHref
   }
 `;
+
+export const switchingPageQuery = /* groq */ `
+  *[_type == "switchingPage"][0] {
+    hero {
+      eyebrow,
+      title,
+      deck,
+      ctaPrimaryLabel,
+      ctaPrimaryHref,
+      ctaSecondaryLabel,
+      ctaSecondaryHref,
+      dealCard {
+        eyebrow,
+        rows[]{ label, value }
+      },
+      factSheetLabel,
+      liveDotLabel,
+      stats[]{ k, v }
+    },
+    reasons {
+      eyebrow,
+      title,
+      deck,
+      items[]{ head, body, flagLabel }
+    },
+    timeline {
+      eyebrow,
+      title,
+      deck,
+      weeks[]{
+        k,
+        sub,
+        head,
+        body,
+        deliverables,
+        ours
+      }
+    },
+    handle {
+      eyebrow,
+      title,
+      deck,
+      items[]{ head, body }
+    },
+    compare {
+      eyebrow,
+      title,
+      rows[]{ aspect, currentMsp, pht }
+    },
+    promises {
+      eyebrow,
+      title,
+      items[]{ iconName, head, body }
+    },
+    testimonial {
+      eyebrow,
+      quote,
+      name,
+      role,
+      cardEyebrow,
+      metricK,
+      metricV,
+      locationLabel
+    },
+    faq {
+      eyebrow,
+      title,
+      deck,
+      items[]{ question, answer }
+    },
+    cta {
+      eyebrow,
+      heading,
+      deck,
+      label,
+      href
+    }
+  }
+`;

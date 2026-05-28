@@ -18,6 +18,7 @@ import {
   blogIndexPageQuery,
   termsPageQuery,
   privacyPageQuery,
+  switchingPageQuery,
 } from "./queries";
 
 describe("GROQ queries", () => {
@@ -472,6 +473,24 @@ describe("legal queries", () => {
     ];
     for (const field of fields) {
       expect(privacyPageQuery).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+});
+
+describe("switchingPageQuery", () => {
+  it("selects the singleton with all section fields", () => {
+    expect(switchingPageQuery).toContain('*[_type == "switchingPage"][0]');
+    const fields = [
+      "hero", "reasons", "timeline", "handle", "compare",
+      "promises", "testimonial", "faq", "cta",
+      "ctaPrimaryLabel", "ctaSecondaryLabel", "dealCard",
+      "factSheetLabel", "liveDotLabel", "stats",
+      "deliverables", "ours",
+      "currentMsp", "pht",
+      "cardEyebrow", "metricK", "metricV", "locationLabel",
+    ];
+    for (const field of fields) {
+      expect(switchingPageQuery).toMatch(new RegExp(`\\b${field}\\b`));
     }
   });
 });

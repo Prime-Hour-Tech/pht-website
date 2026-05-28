@@ -12,6 +12,7 @@ import type {
   ServiceFull,
   ServicesIndexPage,
   SiteSettings,
+  SwitchingPage,
   TermsPage,
 } from "./types";
 import {
@@ -32,6 +33,7 @@ import {
   servicesListQuery,
   servicesSlugListQuery,
   siteSettingsQuery,
+  switchingPageQuery,
   termsPageQuery,
 } from "./queries";
 
@@ -112,4 +114,8 @@ export async function getTermsPage(): Promise<TermsPage | null> {
 
 export async function getPrivacyPage(): Promise<PrivacyPage | null> {
   return await sanityClient.fetch<PrivacyPage | null>(privacyPageQuery);
+}
+
+export async function getSwitchingPage(): Promise<SwitchingPage | null> {
+  return await sanityClient.fetch<SwitchingPage | null>(switchingPageQuery);
 }

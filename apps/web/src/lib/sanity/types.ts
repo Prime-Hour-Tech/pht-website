@@ -275,6 +275,106 @@ type LegalPageBase = {
 export type TermsPage = LegalPageBase;
 export type PrivacyPage = LegalPageBase;
 
+export type DealCardRow = { label: string; value: string };
+
+export type SwitchingReason = {
+  head: string;
+  body: string;
+  flagLabel?: string;
+};
+
+export type SwitchingWeek = {
+  k: string;
+  sub: string;
+  head: string;
+  body: string;
+  deliverables: string[];
+  ours: string[];
+};
+
+export type SwitchingHandleItem = { head: string; body: string };
+
+export type SwitchingCompareRow = {
+  aspect: string;
+  currentMsp: string;
+  pht: string;
+};
+
+export type SwitchingPromise = {
+  iconName: IconName;
+  head: string;
+  body: string;
+};
+
+export type SwitchingFaqEntry = { question: string; answer: string };
+
+export type SwitchingPage = {
+  hero: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    ctaPrimaryLabel: string;
+    ctaPrimaryHref: string;
+    ctaSecondaryLabel: string;
+    ctaSecondaryHref: string;
+    dealCard: { eyebrow: string; rows: DealCardRow[] };
+    factSheetLabel: string;
+    liveDotLabel: string;
+    stats: ServiceStat[];
+  };
+  reasons: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    items: SwitchingReason[];
+  };
+  timeline: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    weeks: SwitchingWeek[];
+  };
+  handle: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    items: SwitchingHandleItem[];
+  };
+  compare: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    rows: SwitchingCompareRow[];
+  };
+  promises: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    items: SwitchingPromise[];
+  };
+  testimonial: {
+    eyebrow: string;
+    quote: string;
+    name: string;
+    role: string;
+    cardEyebrow: string;
+    metricK: string;
+    metricV: string;
+    locationLabel: string;
+  };
+  faq: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    items: SwitchingFaqEntry[];
+  };
+  cta: {
+    eyebrow: string;
+    heading: HeadlineRichText;
+    deck: string;
+    label: string;
+    href: string;
+  };
+};
+
 // ── Documents referenced from page blocks ────────────────────────────────
 
 export type IconName =
@@ -292,7 +392,8 @@ export type IconName =
   | "chevron"
   | "file"
   | "users"
-  | "spark";
+  | "spark"
+  | "lock";
 
 export type TeamMemberResolved = {
   _id: string;

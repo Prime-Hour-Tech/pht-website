@@ -1,0 +1,46 @@
+---
+import type { SwitchingPage } from "../../lib/sanity/types";
+import HeadlineRichText from "../HeadlineRichText.astro";
+import Icon from "../Icon.astro";
+
+interface Props {
+  promises: SwitchingPage["promises"];
+}
+
+const { promises } = Astro.props;
+---
+
+<section class="bg-bg px-10 py-22 border-b border-line">
+  <div class="max-w-content mx-auto">
+    <div class="mb-8 text-center">
+      <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
+        ◆ {promises.eyebrow}
+      </div>
+      <h2
+        class="font-serif font-medium text-ink m-0 mx-auto max-w-[760px] tracking-display-tight"
+        style="font-size: 44px; line-height: 1.05; text-wrap: balance;"
+      >
+        <HeadlineRichText value={promises.title} />
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+      {promises.items.map((p) => (
+        <div class="border border-line rounded-xl p-6 flex flex-col gap-3.5">
+          <span
+            class="w-11 h-11 rounded-lg bg-accent/10 text-accent border border-accent/20 inline-flex items-center justify-center"
+          >
+            <Icon name={p.iconName} size={20} />
+          </span>
+          <h3
+            class="font-serif font-medium text-ink m-0"
+            style="font-size: 22px; letter-spacing: -0.015em; line-height: 1.15;"
+          >
+            {p.head}
+          </h3>
+          <p class="m-0 text-muted text-[14px] leading-body">{p.body}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
