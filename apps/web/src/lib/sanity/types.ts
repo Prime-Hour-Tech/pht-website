@@ -126,6 +126,50 @@ export type ServicesIndexPage = {
   otherServicesViewAllLabel: string;
 };
 
+export type PostCategory =
+  | "Security"
+  | "Cloud"
+  | "Field notes"
+  | "Compliance"
+  | "Tooling"
+  | "Practice";
+
+export type PostCard = {
+  _id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  category: PostCategory;
+  publishDate: string;
+  coverImage: ImageRef;
+  author: { name: string; role: string };
+};
+
+export type PostFull = Omit<PostCard, "author"> & {
+  body: PortableTextBlock[];
+  author: {
+    _id: string;
+    name: string;
+    role: string;
+    bio: string;
+    photo?: ImageRef;
+  };
+  seoTitle?: string;
+  seoDescription?: string;
+  ogImage?: ImageRef;
+};
+
+export type BlogIndexPage = {
+  heroEyebrow: string;
+  heroHeading: HeadlineRichText;
+  heroDeck: string;
+  ctaEyebrow: string;
+  ctaHeading: HeadlineRichText;
+  ctaDeck: string;
+  ctaLabel: string;
+  ctaHref: string;
+};
+
 // ── Documents referenced from page blocks ────────────────────────────────
 
 export type IconName =

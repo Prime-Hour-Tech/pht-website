@@ -1,0 +1,15 @@
+---
+import type { PostFull } from "../../lib/sanity/types";
+import { renderPortableTextBody } from "../../lib/portable-text-body";
+
+interface Props {
+  post: PostFull;
+}
+
+const { post } = Astro.props;
+const html = renderPortableTextBody(post.body);
+---
+
+<section class="bg-bg px-10 py-8">
+  <div class="max-w-[720px] mx-auto" set:html={html}></div>
+</section>

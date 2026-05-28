@@ -1,9 +1,12 @@
 import { sanityClient } from "sanity:client";
 import type {
+  BlogIndexPage,
   ContactInfo,
   Footer,
   Navigation,
   Page,
+  PostCard,
+  PostFull,
   ServiceCard,
   ServiceFull,
   ServicesIndexPage,
@@ -11,11 +14,16 @@ import type {
 } from "./types";
 import {
   allPageSlugsQuery,
+  allPostsQuery,
+  blogIndexPageQuery,
   contactInfoQuery,
   footerQuery,
   navigationQuery,
   otherServicesQuery,
   pageBySlugQuery,
+  postBySlugQuery,
+  postSlugListQuery,
+  relatedPostsQuery,
   serviceBySlugQuery,
   servicesIndexPageQuery,
   servicesListQuery,
@@ -72,4 +80,24 @@ export async function getOtherServices(slug: string): Promise<ServiceCard[]> {
 
 export async function getServicesIndexPage(): Promise<ServicesIndexPage | null> {
   return await sanityClient.fetch<ServicesIndexPage | null>(servicesIndexPageQuery);
+}
+
+export async function getAllPostSlugs(): Promise<{ slug: string }[]> {
+  return await sanityClient.fetch<{ slug: string }[]>(postSlugListQuery);
+}
+
+export async function getPostBySlug(slug: string): Promise<PostFull | null> {
+  return await sanityClient.fetch<PostFull | null>(postBySlugQuery, { slug });
+}
+
+export async function getAllPosts(): Promise<PostCard[]> {
+  return await sanityClient.fetch<PostCard[]>(allPostsQuery);
+}
+
+export async function getRelatedPosts(category: string, slug: string): Promise<PostCard[]> {
+  return await sanityClient.fetch<PostCard[]>(relatedPostsQuery, { category, slug });
+}
+
+export async function getBlogIndexPage(): Promise<BlogIndexPage | null> {
+  return await sanityClient.fetch<BlogIndexPage | null>(blogIndexPageQuery);
 }

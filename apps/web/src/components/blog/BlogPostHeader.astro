@@ -1,0 +1,44 @@
+---
+import type { PostFull } from "../../lib/sanity/types";
+import { computeReadTimeMinutes } from "../../lib/read-time";
+import ShareButtons from "./ShareButtons.astro";
+
+interface Props {
+  post: PostFull;
+  url: string;
+}
+
+const { post, url } = Astro.props;
+const readTime = computeReadTimeMinutes(post.body);
+const dateText = new Date(post.publishDate).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<section class="bg-bg px-10 pt-12 pb-10">
+  <div class="max-w-narrow mx-auto">
+    <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-5">
+      ◆ {post.category}
+    </div>
+    <h1
+      class="font-serif font-medium text-ink m-0 tracking-display-tight"
+      style="font-size: clamp(40px, 6vw, 64px); line-height: 1.04; text-wrap: balance;"
+    >
+      {post.title}
+    </h1>
+    <p
+      class="mt-5 text-muted text-body-lg leading-snug font-serif italic"
+      style="font-size: 22px;"
+    >
+      {post.excerpt}
+    </p>
+    <div class="mt-8 flex flex-wrap items-center justify-between gap-4">
+      <div class="font-mono text-[12px] text-muted tracking-[0.4px] uppercase">
+        {post.author.name} · {post.author.role} · {dateText} · {readTime} min read
+      </div>
+      <ShareButtons url={url} title={post.title} />
+    </div>
+  </div>
+</section>

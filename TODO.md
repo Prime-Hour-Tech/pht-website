@@ -10,14 +10,6 @@ Remaining work for the PHT marketing site. Slices 1 (Foundation) and 2 (Home) ar
 
 The work was decomposed into 6 slices during initial brainstorming. Each is its own spec → plan → execution cycle.
 
-### Slice 5 — Blog (index + post)
-
-- New document types: `post`, `author`.
-- `/blog` index: hero, sticky filter bar (category chips + sort), featured lead post, 3-col recent-posts grid, pagination, newsletter signup.
-- `/blog/[slug]` post: breadcrumb, header (eyebrow + 64px serif title + italic deck + byline + share buttons), full-bleed cover, prose body (max 720px), pull quote with accent left-rail, inline figure with caption, author bio card, related-posts row.
-- This is the slice that probably forces `@sanity/image-url` integration (cover images need responsive sizing).
-- References: `design_handoff_docs/blog-page.jsx`.
-
 ### Slice 6 — Legal (Terms + Privacy) + cookie banner + polish
 
 - New schema: `legalPage` document type (or two singletons).
@@ -32,6 +24,11 @@ The work was decomposed into 6 slices during initial brainstorming. Each is its 
 
 Small architectural / quality items surfaced during Slice 1/2 reviews and parked. None block shipping; address opportunistically when adjacent code is being touched.
 
+- **Author the `blogIndexPage` singleton + 1–3 starter posts.** Slice 5 ships /blog routes that don't render until content exists. In Studio: create the singleton (initialValue defaults cover most fields; you author the two Portable Text headings + save). Then create 1–3 `post` docs with cover, body, category, publishDate, author. Build will then succeed.
+- **Replace LinkedIn / X icons on `ShareButtons.astro`.** Slice 5 uses `arrowSm` as a placeholder for both share-target icons. Add proper `linkedin` and `x` glyphs to `Icon.astro` + the `IconName` union, then swap the icons in `apps/web/src/components/blog/ShareButtons.astro`.
+- **Retrofit existing image fields to use `urlFor`.** `logoDark`, `logoLight`, and `teamMember.photo` still project raw `asset->url` from Slice 2. Switch to the new `apps/web/src/lib/sanity/imageUrl.ts` builder for responsive sizes the next time those files are touched.
+- **Re-evaluate pagination + newsletter signup.** Both deferred in Slice 5. Add pagination at 20+ posts; add a `newsletterSignup` block once a provider is picked.
+- **Add RSS feed + Article structured data.** Pre-launch tasks. RSS at `/blog/rss.xml`, Article JSON-LD on each `/blog/<slug>` page.
 - **Pick a contact form provider + wire `CONTACT_FORM_URL`.** Slice 4 ships the form as provider-agnostic (POSTs to whatever URL is set in `CONTACT_FORM_URL` env var on the web app). Pick a provider — Web3Forms free tier (250 submissions/mo) is the recommended start. Create the form in their UI, copy the action URL into Vercel project env vars, redeploy. Until this is done, the form's `action` falls back to `"#"` and submissions don't work.
 - **Author About / Industries / Contact `page` docs in Studio.** Three new `page` documents with slugs `about`, `industries`, `contact`. Schema defaults pre-fill obvious copy via `initialValue`. Required fields (image alts, headline accents, vertical anchor ids, milestone dates) need authoring. Routes won't generate until the docs exist.
 - **Re-save `contactInfo` singleton in Studio to populate `serviceAreaSub`.** Slice 4 adds this required field with an `initialValue`, but `initialValue` only fires on doc creation — not on backfill. Open the singleton in Studio and re-save once. Until then `ContactBody.astro` would render with the field empty; also `pnpm build:web` may surface this as a type-narrowing build error depending on how strict TS is configured.

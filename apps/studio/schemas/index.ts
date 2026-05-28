@@ -4,7 +4,9 @@ import { footer } from "./documents/footer";
 import { contactInfo } from "./documents/contactInfo";
 import { teamMember } from "./documents/teamMember";
 import { service } from "./documents/service";
+import { post } from "./documents/post";
 import { servicesIndexPage } from "./documents/servicesIndexPage";
+import { blogIndexPage } from "./documents/blogIndexPage";
 import { page } from "./documents/page";
 
 import { darkNumbersHero } from "./objects/darkNumbersHero";
@@ -33,7 +35,9 @@ export const schemaTypes = [
   contactInfo,
   teamMember,
   service,
+  post,
   servicesIndexPage,
+  blogIndexPage,
   page,
   darkNumbersHero,
   trustStrip,

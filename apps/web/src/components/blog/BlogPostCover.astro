@@ -1,0 +1,21 @@
+---
+import type { PostFull } from "../../lib/sanity/types";
+import { urlFor } from "../../lib/sanity/imageUrl";
+
+interface Props {
+  post: PostFull;
+}
+
+const { post } = Astro.props;
+const coverUrl = urlFor(post.coverImage).width(2000).fit("max").url();
+---
+
+<section class="bg-bg px-10 pb-10">
+  <div class="max-w-content mx-auto">
+    <img
+      src={coverUrl}
+      alt={post.coverImage.alt}
+      class="w-full h-auto rounded-xl"
+    />
+  </div>
+</section>

@@ -11,6 +11,11 @@ import {
   servicesListQuery,
   otherServicesQuery,
   servicesIndexPageQuery,
+  postSlugListQuery,
+  postBySlugQuery,
+  allPostsQuery,
+  relatedPostsQuery,
+  blogIndexPageQuery,
 } from "./queries";
 
 describe("GROQ queries", () => {
@@ -340,6 +345,73 @@ describe("service queries", () => {
     ];
     for (const field of fields) {
       expect(servicesIndexPageQuery).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+});
+
+describe("blog queries", () => {
+  it("postSlugListQuery selects complete posts (skips incomplete drafts)", () => {
+    expect(postSlugListQuery).toContain('_type == "post"');
+    expect(postSlugListQuery).toContain("defined(slug.current)");
+    expect(postSlugListQuery).toContain("defined(body)");
+    expect(postSlugListQuery).toContain("defined(coverImage)");
+    expect(postSlugListQuery).toContain("defined(category)");
+    expect(postSlugListQuery).toContain("defined(publishDate)");
+    expect(postSlugListQuery).toContain("defined(author)");
+    expect(postSlugListQuery).toContain('"slug": slug.current');
+  });
+
+  it("postBySlugQuery filters by slug and projects all post + dereferenced author fields", () => {
+    expect(postBySlugQuery).toContain('*[_type == "post" && slug.current == $slug][0]');
+    const fields = [
+      "title",
+      "excerpt",
+      "category",
+      "publishDate",
+      "coverImage",
+      "body",
+      "seoTitle",
+      "seoDescription",
+      "ogImage",
+    ];
+    for (const field of fields) {
+      expect(postBySlugQuery).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+    expect(postBySlugQuery).toContain("author->");
+  });
+
+  it("allPostsQuery orders by publishDate desc and projects card-shape fields", () => {
+    expect(allPostsQuery).toContain('_type == "post"');
+    expect(allPostsQuery).toContain("order(publishDate desc)");
+    expect(allPostsQuery).toContain("title");
+    expect(allPostsQuery).toContain("excerpt");
+    expect(allPostsQuery).toContain("category");
+    expect(allPostsQuery).toContain("coverImage");
+    expect(allPostsQuery).toContain("author->");
+  });
+
+  it("relatedPostsQuery filters by category, excludes current slug, orders by publishDate desc", () => {
+    expect(relatedPostsQuery).toContain('_type == "post"');
+    expect(relatedPostsQuery).toContain("category == $category");
+    expect(relatedPostsQuery).toContain("slug.current != $slug");
+    expect(relatedPostsQuery).toContain("order(publishDate desc)");
+    expect(relatedPostsQuery).toContain("[0...3]");
+  });
+
+  it("blogIndexPageQuery selects the singleton with hero + CTA fields", () => {
+    expect(blogIndexPageQuery).toContain('*[_type == "blogIndexPage"][0]');
+    const fields = [
+      "heroEyebrow",
+      "heroHeading",
+      "heroDeck",
+      "ctaEyebrow",
+      "ctaHeading",
+      "ctaDeck",
+      "ctaLabel",
+      "ctaHref",
+    ];
+    for (const field of fields) {
+      expect(blogIndexPageQuery).toMatch(new RegExp(`\\b${field}\\b`));
     }
   });
 });

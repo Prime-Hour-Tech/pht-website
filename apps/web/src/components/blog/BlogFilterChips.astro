@@ -1,0 +1,58 @@
+---
+import type { PostCategory } from "../../lib/sanity/types";
+
+interface Props {
+  categories: PostCategory[];
+}
+
+const { categories } = Astro.props;
+---
+
+<section class="bg-bg-alt border-y border-line sticky top-0 z-10 py-4 px-10">
+  <div class="max-w-content mx-auto flex items-center gap-2 flex-wrap">
+    <span class="font-mono text-[11px] text-muted tracking-mono-eyebrow uppercase mr-2">
+      Filter:
+    </span>
+    <button
+      type="button"
+      data-filter-chip="all"
+      class="filter-chip is-active inline-flex items-center px-3.5 py-1.5 rounded-full border border-line bg-bg text-ink text-[13.5px] font-medium cursor-pointer"
+    >
+      All
+    </button>
+    {categories.map((c) => (
+      <button
+        type="button"
+        data-filter-chip={c}
+        class="filter-chip inline-flex items-center px-3.5 py-1.5 rounded-full border border-line bg-bg text-ink text-[13.5px] font-medium cursor-pointer"
+      >
+        {c}
+      </button>
+    ))}
+  </div>
+</section>
+
+<style>
+  .filter-chip.is-active {
+    border-color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 8%, var(--color-bg));
+    color: var(--color-accent);
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    const chips = document.querySelectorAll('[data-filter-chip]');
+    const cards = document.querySelectorAll('[data-post-card]');
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const target = chip.getAttribute('data-filter-chip');
+        chips.forEach((c) => c.classList.toggle('is-active', c === chip));
+        cards.forEach((card) => {
+          const match = target === 'all' || card.getAttribute('data-category') === target;
+          card.style.display = match ? '' : 'none';
+        });
+      });
+    });
+  })();
+</script>

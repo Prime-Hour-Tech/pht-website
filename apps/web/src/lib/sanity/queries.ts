@@ -339,3 +339,99 @@ export const servicesIndexPageQuery = /* groq */ `
     otherServicesViewAllLabel
   }
 `;
+
+// All four post queries share the same completeness filter — same pattern as
+// the SERVICE_COMPLETE_FILTER above. Posts missing any required structural
+// field are skipped at the query level (no /blog/<slug> route generated, no
+// card appears in lists). Drafts in progress don't break the build.
+const POST_COMPLETE_FILTER =
+  "defined(slug.current) && defined(body) && " +
+  "defined(coverImage) && defined(category) && " +
+  "defined(publishDate) && defined(author)";
+
+export const postSlugListQuery = /* groq */ `
+  *[_type == "post" && ${POST_COMPLETE_FILTER}] {
+    "slug": slug.current
+  }
+`;
+
+export const postBySlugQuery = /* groq */ `
+  *[_type == "post" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    category,
+    publishDate,
+    coverImage {
+      asset,
+      alt
+    },
+    body,
+    seoTitle,
+    seoDescription,
+    ogImage,
+    author->{
+      _id,
+      name,
+      role,
+      bio,
+      photo {
+        asset,
+        alt
+      }
+    }
+  }
+`;
+
+export const allPostsQuery = /* groq */ `
+  *[_type == "post" && ${POST_COMPLETE_FILTER}] | order(publishDate desc) {
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    category,
+    publishDate,
+    coverImage {
+      asset,
+      alt
+    },
+    author->{
+      name,
+      role
+    }
+  }
+`;
+
+export const relatedPostsQuery = /* groq */ `
+  *[_type == "post" && category == $category && slug.current != $slug && ${POST_COMPLETE_FILTER}]
+    | order(publishDate desc) [0...3] {
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    category,
+    publishDate,
+    coverImage {
+      asset,
+      alt
+    },
+    author->{
+      name,
+      role
+    }
+  }
+`;
+
+export const blogIndexPageQuery = /* groq */ `
+  *[_type == "blogIndexPage"][0] {
+    heroEyebrow,
+    heroHeading,
+    heroDeck,
+    ctaEyebrow,
+    ctaHeading,
+    ctaDeck,
+    ctaLabel,
+    ctaHref
+  }
+`;
