@@ -6,6 +6,90 @@ Remaining work for the PHT marketing site. Slices 1 (Foundation) and 2 (Home) ar
 
 ---
 
+## Future pages (design refresh round 2)
+
+Three new page templates landed in `design_handoff_pht_redesign/` (despite the folder name, this is additive — not a redesign of what's already shipped). Each is its own slice when prioritized; none are blocking. References live in the top-level `pht-website/project/` of the design canvas tarball: `services-page.jsx`, `switching-page.jsx`, `landing-page.jsx` (note: not in the `design_handoff_pht_redesign/` subdirectory of the canvas — that subdirectory mirrors the original handoff).
+
+### `/services` redesign — replaces current 6-card singleton list
+
+**Component:** `ServicesIndexPage` in `services-page.jsx`. Much richer than the current `servicesIndexPage` singleton.
+
+**Layout (top → bottom):**
+1. Hero — editorial split (eyebrow + headline + 2-paragraph deck)
+2. Sticky jump-chip row — all 6 services + "Same engineer, same number" live-dot
+3. Featured service (Managed IT) — full-width dark editorial card with iconed eyebrow, large headline, "At a glance" stat (96px serif), 4-capability preview, dual CTA
+4. **Pricing — 3-tier block** ($125 Essentials / $165 Standard ★ most popular / $215 Premier). Per-seat per-month. Per-tier bullets list "What's in it" / "Everything in X, plus…"
+5. Service grid — 5 remaining services as substantial cards (icon, name, deck, 3-capability preview, hero stat) + 6th tile = "Bundle them" companion card (4-line summary of typical bundle)
+6. "How every engagement runs" — 4-step process strip (Discovery / Written SOW / Named engineer / QBR + runbook)
+7. Industry crosslink — "See it by industry instead" with 4 industry tiles (Professional Services / SMB / Regulated / Nonprofits)
+8. Final CTA (reuses existing `CtaCard`/`ctaCard` block pattern)
+
+**New content shapes:**
+- **Pricing tiers** — 3 inline objects per page (name / price / tag / tagline / "includes head" / bullets array / cta label / featured flag). Either an array on a refactored `servicesIndexPage` singleton, or a new `pricingTiers` field. Includes the `flag: "★ Most clients land here"` on the middle tier.
+- **Featured service callout** — schema needs to know which service to feature (likely a reference to a `service` doc, defaulting to managed-it).
+- **Process strip** — 4 inline items {step / title / body}. Reusable; consider a new `processStrip` block.
+- **Industry crosslink** — 4 inline {icon / label / sub / href} items. Could reuse the `industriesContent` schema if those tiles can be auto-derived from the existing /industries page.
+
+**Scope estimate:** ~15–20 files. Migration concern — the existing `servicesIndexPage` singleton has Slice-3 + Slice-3-fix-up fields (heroEyebrow, heroHeading, heroDeck, listEyebrow, listHeading, ctaEyebrow, ctaHeading, ctaDeck, ctaLabel, ctaHref, otherServicesHeading, otherServicesViewAllLabel). The redesign would likely keep most of those + add pricing + process strip + industry crosslink fields. Existing `/services` route file `apps/web/src/pages/services/index.astro` gets a full rewrite.
+
+### `/switching` — new route, "Switching from your current MSP"
+
+**Component:** `SwitchingPage` in `switching-page.jsx`. Targets prospects already with another MSP.
+
+**Layout:**
+1. Breadcrumb (Services › Switching MSPs)
+2. Hero — dark band, 2-col (headline + 2-paragraph deck on left, "The deal in one card" 5-row panel on right) + 4-stat strip beneath ("30 days" / "0 coverage gap" / "You own" / "M-to-M")
+3. Reasons people switch — 3-col cards (3 reasons, one tagged "Most common")
+4. **Migration timeline** — the centerpiece. Vertical 4-week rail with numbered week markers (01-04). Each week: serif title + 2-col body ("What you get this week" check-bullets + "On our side" chip pills). Weeks: Discovery → Documentation/side-by-side → Baseline deployed → Old MSP off
+5. "The awkward part" punchlist — 8 items in 2-col grid (notice letter, credential handover, documentation request, side-by-side, tool removal, vendor re-pointing, backup verification, off-board confirmation)
+6. Comparison table — 8 rows (first-touch / pricing / engineer continuity / after-hours / docs / contract / QBR / location) × 3 cols (aspect, current MSP, PHT). Logomark in the PHT column header.
+7. 4-promise grid — iconed cards (shield, file, lock, users glyphs). NOTE: `lock` icon not in current set.
+8. Testimonial — pull quote + metric card ("14 days · Old MSP fully off-boarded")
+9. FAQ — 6 Q&A in 0.7fr/1.3fr sticky-heading layout
+10. Final CTA + footer
+
+**New content shapes:**
+- New singleton `switchingPage` (recommended over fitting onto an existing doc) — hero, reasons array, timeline weeks array, handle items array, comparison rows array, promises array, testimonial object, faqs array, CTA fields.
+- All arrays are inline; no new doc types needed.
+- New `lock` icon glyph needed in `Icon.astro`.
+
+**Scope estimate:** ~14–18 files. Comparable to Slice 4 About page in complexity (timeline section parallels the milestones timeline; comparison table is novel but mechanical).
+
+### `/landing/[slug]` — paid-ad lander template
+
+**Component:** `LandingV1Editorial` + `LandingV2StickyForm` + `LandingMobile` in `landing-page.jsx`. Two desktop variants of the same content for A/B-style testing of paid-ad campaigns.
+
+**Variants:**
+- **V1 Editorial:** Dark hero with discovery form on the right, full site chrome (utility row + nav). Includes 4-stat fact sheet under the hero on the dark band.
+- **V2 Sticky-form:** Minimal chrome (just brand + open-now pill + phone + book button — no main nav). Sticky discovery form column. Dark final CTA band.
+
+**Shared sections** (used by both variants):
+1. Hero (variant-specific layout)
+2. Trust bar — 1-line strip with 5 trust items
+3. Problem section — 3-col "Pain · 01/02/03" cards
+4. "What flat-rate covers" — 8-bullet 2-col with check icons
+5. "How it works" — 3-step cards (Week 1 / Week 2 / Week 3+)
+6. FAQ — 6 Q&A in 0.7fr/1.3fr layout
+7. Final CTA — variant-specific (V1 reuses CtaCard, V2 has its own dark band + secondary form)
+
+**Content model:**
+- Content lives in a `LANDING` constant in the JSX — single source of truth shared by both variants. In production: a new `landingPage` doc type (NOT a singleton — multiple landing-page instances for different campaigns/cities/services) with all of: city, service, metaEyebrow, heroTitleA, heroTitleB, heroDeck, heroStats[], problem object, included object, howItWorks object, faqs[], trustBar[].
+- Each instance is a separate route: `/landing/managed-it-salt-lake-city`, `/landing/cybersecurity-utah`, etc. Slug-driven via `getStaticPaths`.
+- **Variant selector field:** schema field `layoutVariant: "editorial" | "stickyForm"` picks which template renders.
+
+**Form:** Discovery-call form (name / work email / company / situation textarea + Schedule button). Provider-agnostic POST to `CONTACT_FORM_URL` like the contact form — same field-name conventions + redirect hidden inputs.
+
+**Scope estimate:** ~20–25 files (largest of the three because both variants need their own page render path, even though they share section components).
+
+### Open decisions for these three slices
+
+- Whether to refactor existing `servicesIndexPage` singleton or replace it with a richer schema (pricing tiers are the new piece).
+- Where `/switching` sits in the nav — under Services dropdown? Standalone? Currently rendered with `active="Services"` in the design.
+- Whether to ship ONE landing-page variant first (recommend V1 Editorial — more content, broader applicability) and add V2 later.
+- Landing-page form: same provider URL as `/contact`, or a separate `LANDING_FORM_URL` for tracking source separately?
+
+---
+
 ## Deferred from prior code reviews
 
 Small architectural / quality items surfaced during Slice 1/2 reviews and parked. None block shipping; address opportunistically when adjacent code is being touched.
