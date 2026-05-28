@@ -27,7 +27,10 @@ import type {
 const baseSiteSettings: SiteSettings = {
   siteName: "Prime Hour Tech",
   siteDescription: "Salt Lake City MSP for small + midsize businesses.",
-  logoDark: { url: "https://cdn.sanity.io/images/proj/dataset/abc-200x200.png", alt: "PHT logo" },
+  logoDark: {
+    asset: { _ref: "image-logo-200x200-png", _type: "reference" },
+    alt: "PHT logo",
+  },
 };
 
 const baseContactInfo: ContactInfo = {
@@ -134,9 +137,9 @@ describe("buildOrganizationJsonLd", () => {
     });
     expect(ld.logo).toEqual({
       "@type": "ImageObject",
-      url: "https://cdn.sanity.io/images/proj/dataset/abc-200x200.png",
+      url: "https://cdn.sanity.io/images/proj/dataset/test-1200x630.jpg",
     });
-    expect(ld.image).toBe("https://cdn.sanity.io/images/proj/dataset/abc-200x200.png");
+    expect(ld.image).toBe("https://cdn.sanity.io/images/proj/dataset/test-1200x630.jpg");
   });
 
   it("omits logo and image when logoDark is absent", () => {

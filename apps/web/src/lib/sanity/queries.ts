@@ -3,11 +3,11 @@ export const siteSettingsQuery = /* groq */ `
     siteName,
     siteDescription,
     logoDark {
-      "url": asset->url,
+      asset,
       alt
     },
     logoLight {
-      "url": asset->url,
+      asset,
       alt
     },
     defaultOgImage
@@ -54,7 +54,7 @@ export const pageBySlugQuery = /* groq */ `
           bio,
           order,
           photo {
-            "url": asset->url,
+            asset,
             alt
           }
         } | order(order asc)
@@ -115,7 +115,7 @@ export const pageBySlugQuery = /* groq */ `
       },
       _type == "originPhoto" => {
         image {
-          "url": asset->url,
+          asset,
           alt
         },
         aspectRatio,
@@ -145,7 +145,7 @@ export const pageBySlugQuery = /* groq */ `
       },
       _type == "officeCulture" => {
         image {
-          "url": asset->url,
+          asset,
           alt
         },
         aspectRatio,

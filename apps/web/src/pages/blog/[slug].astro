@@ -51,6 +51,7 @@ const articleLd = buildArticleJsonLd({
 <BaseLayout
   title={post.seoTitle ?? post.title}
   description={post.seoDescription ?? post.excerpt}
+  ogImage={post.ogImage}
 >
   <JsonLd data={articleLd} />
   <Breadcrumb trail={[{ label: "Blog", href: "/blog" }, post.title]} />

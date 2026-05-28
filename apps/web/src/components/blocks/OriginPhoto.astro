@@ -1,5 +1,6 @@
 ---
 import type { OriginPhotoBlock } from "../../lib/sanity/types";
+import { urlFor } from "../../lib/sanity/imageUrl";
 
 interface Props {
   block: OriginPhotoBlock;
@@ -7,6 +8,7 @@ interface Props {
 
 const { block } = Astro.props;
 const aspectStyle = `aspect-ratio: ${block.aspectRatio};`;
+const imageUrl = urlFor(block.image).width(1920).fit("max").url();
 ---
 
 <section class="bg-bg px-10 pb-24">
@@ -16,7 +18,7 @@ const aspectStyle = `aspect-ratio: ${block.aspectRatio};`;
       style={aspectStyle}
     >
       <img
-        src={block.image.url}
+        src={imageUrl}
         alt={block.image.alt}
         class="w-full h-full object-cover"
       />

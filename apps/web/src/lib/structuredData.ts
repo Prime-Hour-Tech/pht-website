@@ -24,7 +24,9 @@ export function buildOrganizationJsonLd(args: {
 }): OrganizationJsonLd {
   const { siteSettings, contactInfo, footer, siteUrl } = args;
 
-  const logoUrl = siteSettings.logoDark?.url;
+  const logoUrl = siteSettings.logoDark
+    ? urlFor(siteSettings.logoDark).width(200).height(200).fit("crop").url()
+    : undefined;
   const sameAs = (footer.socials ?? [])
     .map((s) => s.href)
     .filter((href): href is string => !!href);
@@ -77,7 +79,9 @@ export function buildArticleJsonLd(args: {
   const { post, siteSettings, canonicalUrl, siteUrl } = args;
 
   const imageUrl = urlFor(post.coverImage).width(1200).height(630).fit("crop").url();
-  const logoUrl = siteSettings.logoDark?.url;
+  const logoUrl = siteSettings.logoDark
+    ? urlFor(siteSettings.logoDark).width(200).height(200).fit("crop").url()
+    : undefined;
 
   const publisher: Record<string, unknown> = {
     "@type": "Organization",

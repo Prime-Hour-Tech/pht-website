@@ -4,6 +4,7 @@ import type {
   Navigation,
   SiteSettings,
 } from "../../lib/sanity/types";
+import { urlFor } from "../../lib/sanity/imageUrl";
 
 interface Props {
   siteSettings: SiteSettings;
@@ -13,6 +14,9 @@ interface Props {
 
 const { siteSettings, navigation, contactInfo } = Astro.props;
 const pathname = Astro.url.pathname;
+const logoDarkUrl = siteSettings.logoDark
+  ? urlFor(siteSettings.logoDark).width(72).height(72).fit("max").url()
+  : null;
 
 function isActive(href: string): boolean {
   if (href === "/") return pathname === "/";
@@ -31,10 +35,10 @@ function isActive(href: string): boolean {
   >
     <!-- Brand -->
     <a href="/" class="inline-flex items-center gap-3.5 no-underline text-ink">
-      {siteSettings.logoDark?.url ? (
+      {logoDarkUrl ? (
         <img
-          src={siteSettings.logoDark.url}
-          alt={siteSettings.logoDark.alt}
+          src={logoDarkUrl}
+          alt={siteSettings.logoDark!.alt}
           width="36"
           height="36"
           class="size-9 object-contain"

@@ -2,6 +2,7 @@
 import type { OfficeCultureBlock } from "../../lib/sanity/types";
 import HeadlineRichText from "../HeadlineRichText.astro";
 import Icon from "../Icon.astro";
+import { urlFor } from "../../lib/sanity/imageUrl";
 
 interface Props {
   block: OfficeCultureBlock;
@@ -9,13 +10,14 @@ interface Props {
 
 const { block } = Astro.props;
 const aspectStyle = `aspect-ratio: ${block.aspectRatio};`;
+const imageUrl = urlFor(block.image).width(1200).fit("max").url();
 ---
 
 <section class="bg-bg py-24 px-10">
   <div class="max-w-content mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
     <div class="bg-bg-alt rounded-xl overflow-hidden" style={aspectStyle}>
       <img
-        src={block.image.url}
+        src={imageUrl}
         alt={block.image.alt}
         class="w-full h-full object-cover"
       />

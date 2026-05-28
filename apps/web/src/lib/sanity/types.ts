@@ -10,22 +10,13 @@ export type ImageRef = {
   alt: string;
 };
 
-// Logos are projected with the asset URL resolved at query time (no image
-// URL builder yet — see queries.ts). Other image fields use ImageRef and
-// rely on the future builder for transformations.
-//
 // Two logo variants: logoDark goes on light backgrounds (the navbar),
 // logoLight goes on dark backgrounds (the footer).
-export type ResolvedImage = {
-  url: string;
-  alt: string;
-};
-
 export type SiteSettings = {
   siteName: string;
   siteDescription: string;
-  logoDark?: ResolvedImage;
-  logoLight?: ResolvedImage;
+  logoDark?: ImageRef;
+  logoLight?: ImageRef;
   defaultOgImage?: ImageRef;
 };
 
@@ -478,7 +469,7 @@ export type TeamMemberResolved = {
   role: string;
   bio: string;
   order: number;
-  photo?: ResolvedImage;
+  photo?: ImageRef;
 };
 
 export type ServiceCard = {
@@ -656,7 +647,7 @@ export type PageHeroBlock = {
 export type OriginPhotoBlock = {
   _type: "originPhoto";
   _key: string;
-  image: ResolvedImage;
+  image: ImageRef;
   aspectRatio: "21/9" | "16/9" | "4/3";
   caption: {
     eyebrowLabel: string;
@@ -703,7 +694,7 @@ export type MilestonesTimelineBlock = {
 export type OfficeCultureBlock = {
   _type: "officeCulture";
   _key: string;
-  image: ResolvedImage;
+  image: ImageRef;
   aspectRatio: "4/3" | "1/1" | "3/4";
   eyebrow: string;
   heading: HeadlineRichText;
