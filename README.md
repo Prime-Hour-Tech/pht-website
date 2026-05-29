@@ -97,12 +97,27 @@ After seeding, replace placeholder content in Studio (placeholder engineer names
 
 ## Deploy
 
-- **Web app** auto-deploys to Vercel on push to `main`.
-- **Sanity Studio** is deployed with `pnpm deploy:studio` (only needed after schema changes — content edits don't require a Studio redeploy).
-- **Production rebuilds** can be triggered three ways:
-  1. The **Deploy** button in the Studio (marketer-friendly). Requires `SANITY_STUDIO_VERCEL_DEPLOY_HOOK` to be set on the Studio host.
-  2. A push to `main` (developer-friendly).
-  3. The Vercel dashboard's manual redeploy (fallback).
+The site has two stable URLs — production (`main` branch) and preview (`preview` branch) — sharing the same Sanity dataset. Both rebuild only when explicitly triggered.
+
+- **Web app — production** auto-deploys on push to `main`. The `main` branch is the source of truth.
+- **Web app — preview** rebuilds only via the "Deploy to Preview" button in the Studio. The `preview` branch is auto-fast-forwarded from `main` on every push (via `.github/workflows/sync-preview-branch.yml`), so both URLs always render the same code. Vercel auto-deploy is disabled for the `preview` branch — only the deploy hook rebuilds it.
+- **Sanity Studio** is deployed with `pnpm deploy:studio` (only after schema changes; content edits don't require a Studio redeploy).
+
+### Content sanity-check workflow
+
+When a marketer wants to review changes on the rendered site before going live:
+
+1. Edit + publish content in Sanity Studio. Both URLs are now stale (Sanity publish doesn't trigger any rebuild).
+2. Open the Studio's **Deploy** tool. Click **Deploy to Preview**. The preview URL rebuilds with the published content (1–2 min).
+3. Visit the preview URL → sanity-check the rendered page.
+4. If satisfied, click **Deploy to Production** (confirms before proceeding). Production URL rebuilds with the same content.
+
+Production rebuilds can also be triggered three other ways:
+1. A push to `main` (developer workflow).
+2. The Vercel dashboard's manual redeploy (fallback).
+3. The CLI hitting the production deploy hook directly (CI / scripting).
+
+The Studio Deploy tool needs `SANITY_STUDIO_VERCEL_DEPLOY_HOOK` (production) and `SANITY_STUDIO_VERCEL_PREVIEW_DEPLOY_HOOK` (preview) set on the Studio host.
 
 ## Environment variables
 
@@ -135,7 +150,9 @@ Feature gates (build log warns when unset; features degrade off):
 | `SANITY_STUDIO_PROJECT_ID` | Browser-exposed project ID (required — Studio fails to load without) |
 | `SANITY_STUDIO_DATASET` | Browser-exposed dataset name (default: `production`) |
 | `SANITY_STUDIO_PREVIEW_URL` | URL the Presentation Tool iframe loads (default: `http://localhost:4321`) |
-| `SANITY_STUDIO_VERCEL_DEPLOY_HOOK` | Vercel deploy hook URL — gates the Studio Deploy tool's visibility |
+| `SANITY_STUDIO_VERCEL_DEPLOY_HOOK` | Vercel deploy hook URL for the `main` (production) branch |
+| `SANITY_STUDIO_VERCEL_PREVIEW_DEPLOY_HOOK` | Vercel deploy hook URL for the `preview` branch — rebuilt when the Studio's "Deploy to Preview" button is clicked |
+| `SANITY_STUDIO_VERCEL_PREVIEW_URL` | Optional. Displayed as a "Visit preview" link on the preview Deploy card |
 
 ### Vercel-only
 
