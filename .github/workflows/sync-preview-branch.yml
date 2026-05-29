@@ -1,0 +1,37 @@
+name: Sync preview branch with main
+
+on:
+  push:
+    branches: [main]
+
+# Grant GITHUB_TOKEN write access so the fast-forward push to `preview`
+# succeeds. No PAT needed — GITHUB_TOKEN is ephemeral and auto-rotates per
+# workflow run. Requires the repo's Workflow permissions setting (Settings →
+# Actions → General) to allow "Read and write permissions".
+permissions:
+  contents: write
+
+# Single concurrent run; if multiple main pushes land close together the
+# second waits for the first, keeping fast-forward semantics intact.
+concurrency:
+  group: sync-preview
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: preview
+          fetch-depth: 0
+          # No `token:` field — defaults to GITHUB_TOKEN with the permissions
+          # granted above.
+
+      - name: Fast-forward preview to match main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git merge --ff-only origin/main
+          git push origin preview
