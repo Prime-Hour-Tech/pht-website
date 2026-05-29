@@ -35,6 +35,12 @@ export default defineConfig({
   title: "PHT Website",
   projectId,
   dataset,
+  // Content Releases (scheduled/bundled publishing) isn't part of the
+  // marketer workflow — publishing goes through the Deploy tool's
+  // Preview/Production buttons. Disable to declutter the navbar.
+  releases: {
+    enabled: false,
+  },
   plugins: [
     structureTool({
       title: "Content",
