@@ -11,21 +11,15 @@ const SITE_SETTINGS_ID = "siteSettings";
 const NAVIGATION_ID = "navigation";
 const FOOTER_ID = "footer";
 const CONTACT_INFO_ID = "contactInfo";
-const SERVICES_INDEX_PAGE_ID = "servicesIndexPage";
-const BLOG_INDEX_PAGE_ID = "blogIndexPage";
 const TERMS_PAGE_ID = "termsPage";
 const PRIVACY_PAGE_ID = "privacyPage";
-const SWITCHING_PAGE_ID = "switchingPage";
 const SINGLETONS = [
   SITE_SETTINGS_ID,
   NAVIGATION_ID,
   FOOTER_ID,
   CONTACT_INFO_ID,
-  SERVICES_INDEX_PAGE_ID,
-  BLOG_INDEX_PAGE_ID,
   TERMS_PAGE_ID,
   PRIVACY_PAGE_ID,
-  SWITCHING_PAGE_ID,
 ];
 
 // Helper for the sidebar list — keeps each singleton entry compact.
@@ -50,11 +44,8 @@ export default defineConfig({
             singletonItem(S, NAVIGATION_ID, "Navigation"),
             singletonItem(S, FOOTER_ID, "Footer"),
             singletonItem(S, CONTACT_INFO_ID, "Contact Info"),
-            singletonItem(S, SERVICES_INDEX_PAGE_ID, "Services Index Page"),
-            singletonItem(S, BLOG_INDEX_PAGE_ID, "Blog Index Page"),
             singletonItem(S, TERMS_PAGE_ID, "Terms Page"),
             singletonItem(S, PRIVACY_PAGE_ID, "Privacy Page"),
-            singletonItem(S, SWITCHING_PAGE_ID, "Switching Page"),
             S.divider(),
             S.listItem()
               .title("Team Members")

@@ -1,0 +1,45 @@
+---
+import type { PostListBlock } from "../../lib/sanity/types";
+import HeadlineRichText from "../HeadlineRichText.astro";
+import BlogFeaturedPost from "../blog/BlogFeaturedPost.astro";
+import BlogPostCard from "../blog/BlogPostCard.astro";
+import BlogFilterChips from "../blog/BlogFilterChips.astro";
+import { getAllPosts } from "../../lib/sanity/client";
+import type { PostCategory } from "../../lib/sanity/types";
+
+interface Props {
+  block: PostListBlock;
+}
+
+const { block } = Astro.props;
+const posts = await getAllPosts();
+
+const [featured, ...rest] = posts;
+
+// Distinct categories present in posts (order: first-seen).
+const seen = new Set<PostCategory>();
+for (const p of posts) {
+  if (!seen.has(p.category)) seen.add(p.category);
+}
+const categories = Array.from(seen);
+---
+
+{posts.length > 0 && <BlogFilterChips categories={categories} />}
+
+<section class="bg-bg px-10 py-12">
+  <div class="max-w-content mx-auto">
+    {featured && <BlogFeaturedPost post={featured} />}
+
+    {rest.length > 0 && (
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {rest.map((p) => <BlogPostCard post={p} />)}
+      </div>
+    )}
+
+    {posts.length === 0 && (
+      <div class="text-center py-12 text-muted">
+        {block.emptyStateMessage}
+      </div>
+    )}
+  </div>
+</section>

@@ -17,6 +17,20 @@ import OfficeCulture from "./OfficeCulture.astro";
 import IndustriesContent from "./IndustriesContent.astro";
 import IndustriesDontSeeYours from "./IndustriesDontSeeYours.astro";
 import ContactBody from "./ContactBody.astro";
+import PostList from "./PostList.astro";
+import ServicesIndexHero from "./ServicesIndexHero.astro";
+import PricingTiers from "./PricingTiers.astro";
+import BundleGrid from "./BundleGrid.astro";
+import ProcessStrip from "./ProcessStrip.astro";
+import IndustryCrosslink from "./IndustryCrosslink.astro";
+import SwitchingHero from "./SwitchingHero.astro";
+import SwitchingReasons from "./SwitchingReasons.astro";
+import SwitchingTimeline from "./SwitchingTimeline.astro";
+import SwitchingHandle from "./SwitchingHandle.astro";
+import SwitchingCompare from "./SwitchingCompare.astro";
+import SwitchingPromises from "./SwitchingPromises.astro";
+import SwitchingTestimonial from "./SwitchingTestimonial.astro";
+import FaqList from "./FaqList.astro";
 
 interface Props {
   block: PageBlock;
@@ -43,3 +57,17 @@ const { block, contactInfo } = Astro.props;
 {block._type === "industriesContent" && <IndustriesContent block={block} />}
 {block._type === "industriesDontSeeYours" && <IndustriesDontSeeYours block={block} />}
 {block._type === "contactBody"     && <ContactBody     block={block} />}
+{block._type === "postList"            && <PostList            block={block} />}
+{block._type === "servicesIndexHero"   && <ServicesIndexHero   block={block} />}
+{block._type === "pricingTiers"        && <PricingTiers        block={block} />}
+{block._type === "bundleGrid"          && <BundleGrid          block={block} />}
+{block._type === "processStrip"        && <ProcessStrip        block={block} />}
+{block._type === "industryCrosslink"   && <IndustryCrosslink   block={block} />}
+{block._type === "switchingHero"       && <SwitchingHero       block={block} />}
+{block._type === "switchingReasons"    && <SwitchingReasons    block={block} />}
+{block._type === "switchingTimeline"   && <SwitchingTimeline   block={block} />}
+{block._type === "switchingHandle"     && <SwitchingHandle     block={block} />}
+{block._type === "switchingCompare"    && <SwitchingCompare    block={block} />}
+{block._type === "switchingPromises"   && <SwitchingPromises   block={block} />}
+{block._type === "switchingTestimonial"&& <SwitchingTestimonial block={block} />}
+{block._type === "faqList"             && <FaqList             block={block} />}

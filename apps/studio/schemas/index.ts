@@ -5,11 +5,8 @@ import { contactInfo } from "./documents/contactInfo";
 import { teamMember } from "./documents/teamMember";
 import { service } from "./documents/service";
 import { post } from "./documents/post";
-import { servicesIndexPage } from "./documents/servicesIndexPage";
-import { blogIndexPage } from "./documents/blogIndexPage";
 import { termsPage } from "./documents/termsPage";
 import { privacyPage } from "./documents/privacyPage";
-import { switchingPage } from "./documents/switchingPage";
 import { landingPage } from "./documents/landingPage";
 import { page } from "./documents/page";
 
@@ -31,6 +28,20 @@ import { officeCulture } from "./objects/officeCulture";
 import { industriesContent } from "./objects/industriesContent";
 import { industriesDontSeeYours } from "./objects/industriesDontSeeYours";
 import { contactBody } from "./objects/contactBody";
+import { postList } from "./objects/postList";
+import { servicesIndexHero } from "./objects/servicesIndexHero";
+import { pricingTiers } from "./objects/pricingTiers";
+import { bundleGrid } from "./objects/bundleGrid";
+import { processStrip } from "./objects/processStrip";
+import { industryCrosslink } from "./objects/industryCrosslink";
+import { switchingHero } from "./objects/switchingHero";
+import { switchingReasons } from "./objects/switchingReasons";
+import { switchingTimeline } from "./objects/switchingTimeline";
+import { switchingHandle } from "./objects/switchingHandle";
+import { switchingCompare } from "./objects/switchingCompare";
+import { switchingPromises } from "./objects/switchingPromises";
+import { switchingTestimonial } from "./objects/switchingTestimonial";
+import { faqList } from "./objects/faqList";
 
 export const schemaTypes = [
   siteSettings,
@@ -40,11 +51,8 @@ export const schemaTypes = [
   teamMember,
   service,
   post,
-  servicesIndexPage,
-  blogIndexPage,
   termsPage,
   privacyPage,
-  switchingPage,
   landingPage,
   page,
   darkNumbersHero,
@@ -65,4 +73,18 @@ export const schemaTypes = [
   industriesContent,
   industriesDontSeeYours,
   contactBody,
+  postList,
+  servicesIndexHero,
+  pricingTiers,
+  bundleGrid,
+  processStrip,
+  industryCrosslink,
+  switchingHero,
+  switchingReasons,
+  switchingTimeline,
+  switchingHandle,
+  switchingCompare,
+  switchingPromises,
+  switchingTestimonial,
+  faqList,
 ];

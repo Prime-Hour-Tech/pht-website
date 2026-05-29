@@ -1,0 +1,37 @@
+---
+import type { SwitchingTestimonialBlock } from "../../lib/sanity/types";
+
+interface Props {
+  block: SwitchingTestimonialBlock;
+}
+
+const { block } = Astro.props;
+---
+
+<section class="bg-bg-alt px-10 py-22 border-b border-line">
+  <div class="max-w-narrow mx-auto text-center">
+    <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-5">
+      ◆ {block.eyebrow}
+    </div>
+    <blockquote
+      class="m-0 font-serif italic font-normal text-ink"
+      style="font-size: 34px; letter-spacing: -0.015em; line-height: 1.25; text-wrap: balance;"
+    >
+      &ldquo;{block.quote}&rdquo;
+    </blockquote>
+    <div class="mt-7 inline-flex items-center gap-3.5">
+      <div
+        class="w-11 h-11 rounded-full"
+        style="background: #3a4252; border: 2px solid var(--color-bg);"
+      ></div>
+      <div class="text-left">
+        <div class="text-[14.5px] font-semibold text-ink">
+          {block.attributionRole}
+        </div>
+        <div class="mt-0.5 font-mono text-[11px] text-muted tracking-[0.8px] uppercase">
+          {block.attributionContext}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

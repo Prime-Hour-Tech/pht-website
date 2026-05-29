@@ -1,0 +1,51 @@
+---
+import type { IndustryCrosslinkBlock } from "../../lib/sanity/types";
+import HeadlineRichText from "../HeadlineRichText.astro";
+import Icon from "../Icon.astro";
+
+interface Props {
+  block: IndustryCrosslinkBlock;
+}
+
+const { block } = Astro.props;
+---
+
+<section class="bg-bg px-10 py-18 border-b border-line">
+  <div class="max-w-content mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
+    <div>
+      <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
+        ◆ {block.eyebrow}
+      </div>
+      <h2
+        class="font-serif font-medium text-ink m-0 tracking-display-tight"
+        style="font-size: 36px; line-height: 1.1; text-wrap: balance;"
+      >
+        <HeadlineRichText value={block.heading} />
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+      {block.tiles.map((tile) => (
+        <a
+          href={tile.href}
+          class="bg-bg border border-line rounded-lg p-4 no-underline text-ink flex items-center gap-3 hover:border-accent/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+        >
+          <span
+            class="w-9 h-9 rounded-md bg-accent/10 text-accent inline-flex items-center justify-center"
+          >
+            <Icon name={tile.iconName} size={16} />
+          </span>
+          <div class="flex-1 min-w-0">
+            <div class="text-[14px] font-semibold text-ink leading-tight">
+              {tile.label}
+            </div>
+            <div class="mt-0.5 font-mono text-[10.5px] text-muted tracking-[0.8px] uppercase">
+              {tile.sub}
+            </div>
+          </div>
+          <Icon name="arrowSm" size={14} />
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

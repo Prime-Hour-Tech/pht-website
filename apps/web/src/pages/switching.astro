@@ -1,54 +1,30 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Breadcrumb from "../components/chrome/Breadcrumb.astro";
-import CtaCard from "../components/blocks/CtaCard.astro";
-import SwitchingHero from "../components/switching/SwitchingHero.astro";
-import SwitchingReasons from "../components/switching/SwitchingReasons.astro";
-import SwitchingTimeline from "../components/switching/SwitchingTimeline.astro";
-import SwitchingHandlePunchlist from "../components/switching/SwitchingHandlePunchlist.astro";
-import SwitchingComparisonTable from "../components/switching/SwitchingComparisonTable.astro";
-import SwitchingPromises from "../components/switching/SwitchingPromises.astro";
-import SwitchingTestimonial from "../components/switching/SwitchingTestimonial.astro";
-import SwitchingFaq from "../components/switching/SwitchingFaq.astro";
-import { getSwitchingPage, getContactInfo } from "../lib/sanity/client";
-import type { CtaCardBlock } from "../lib/sanity/types";
+import BlockRenderer from "../components/blocks/BlockRenderer.astro";
+import { getPageBySlug, getContactInfo } from "../lib/sanity/client";
 
 const [page, contactInfo] = await Promise.all([
-  getSwitchingPage(),
+  getPageBySlug("switching"),
   getContactInfo(),
 ]);
+
 if (!page) {
-  throw new Error("Switching Page singleton not found in Sanity.");
+  throw new Error(
+    "Page doc with slug 'switching' not found in Sanity. Create a `page` document with slug 'switching' in the Studio and author the blocks per the design (switchingHero → switchingReasons → switchingTimeline → switchingHandle → switchingCompare → switchingPromises → switchingTestimonial → faqList → ctaCard).",
+  );
 }
 if (!contactInfo) {
   throw new Error("Contact Info singleton not found in Sanity.");
 }
 
-const ctaBlock: CtaCardBlock = {
-  _type: "ctaCard",
-  _key: "switching-cta",
-  eyebrow: `◆ ${page.cta.eyebrow}`,
-  heading: page.cta.heading,
-  deck: page.cta.deck,
-  primaryCtaLabel: page.cta.label,
-  primaryCtaHref: page.cta.href,
-};
+const canonical = new URL("/switching", Astro.site ?? Astro.url.origin).toString();
 ---
 
 <BaseLayout
-  title="Switching MSPs"
-  description="Switching from your current MSP to Prime Hour Tech: a 30-day migration timeline, side-by-side coverage, and a written runbook you own at the end."
+  title={page.seoTitle ?? page.title}
+  description={page.seoDescription}
+  canonical={canonical}
+  ogImage={page.ogImage}
 >
-  <Breadcrumb trail={[{ label: "Services", href: "/services" }, "Switching MSPs"]} />
-
-  <SwitchingHero hero={page.hero} />
-  <SwitchingReasons reasons={page.reasons} />
-  <SwitchingTimeline timeline={page.timeline} />
-  <SwitchingHandlePunchlist handle={page.handle} />
-  <SwitchingComparisonTable compare={page.compare} />
-  <SwitchingPromises promises={page.promises} />
-  <SwitchingTestimonial testimonial={page.testimonial} />
-  <SwitchingFaq faq={page.faq} />
-
-  <CtaCard block={ctaBlock} contactInfo={contactInfo} />
+  {page.blocks?.map((block) => <BlockRenderer block={block} contactInfo={contactInfo} />)}
 </BaseLayout>
