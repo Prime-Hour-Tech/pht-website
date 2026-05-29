@@ -35,8 +35,15 @@ export default defineConfig({
   title: "PHT Website",
   projectId,
   dataset,
+  // Content Releases is an Enterprise-only surcharge feature beyond our
+  // Growth plan — disable it so it doesn't show as a locked upsell.
+  // (Scheduled Drafts is left enabled; it's included in Growth.)
+  releases: {
+    enabled: false,
+  },
   plugins: [
     structureTool({
+      title: "Content",
       structure: (S) =>
         S.list()
           .title("Content")
@@ -67,8 +74,9 @@ export default defineConfig({
             }),
           ]),
     }),
-    visionTool(),
+    visionTool({ title: "Query" }),
     presentationTool({
+      title: "Preview",
       previewUrl: {
         origin: process.env.SANITY_STUDIO_PREVIEW_URL || "http://localhost:4321",
       },
