@@ -37,6 +37,12 @@ export const service = defineType({
       validation: (Rule) => Rule.required().max(200),
     }),
     defineField({
+      name: "specSheetUrl",
+      title: "Spec Sheet URL (Optional)",
+      description: 'Link to a downloadable spec sheet PDF. When set, the "Read the spec sheet" and "Download spec sheet" buttons on /services/{slug} render with this href. When empty, both buttons are hidden.',
+      type: "string",
+    }),
+    defineField({
       name: "iconName",
       title: "Icon",
       description: "Which glyph to render in the services list and on this service page's hero/capability cards.",

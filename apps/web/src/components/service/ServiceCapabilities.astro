@@ -8,9 +8,10 @@ interface Props {
   heading: HRT;
   iconName: IconName;
   capabilities: ServiceCapability[];
+  specSheetUrl?: string;
 }
 
-const { eyebrow, heading, iconName, capabilities } = Astro.props;
+const { eyebrow, heading, iconName, capabilities, specSheetUrl } = Astro.props;
 ---
 
 <section class="bg-bg-alt py-24 px-10 border-b border-line">
@@ -27,14 +28,14 @@ const { eyebrow, heading, iconName, capabilities } = Astro.props;
           <HeadlineRichText value={heading} />
         </h2>
       </div>
-      <a
-        href="#"
-        aria-disabled="true"
-        title="Spec sheet PDFs not yet available"
-        class="text-accent font-semibold no-underline text-body-sm cursor-not-allowed opacity-60"
-      >
-        Download spec sheet →
-      </a>
+      {specSheetUrl && (
+        <a
+          href={specSheetUrl}
+          class="text-accent font-semibold no-underline text-body-sm"
+        >
+          Download spec sheet →
+        </a>
+      )}
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

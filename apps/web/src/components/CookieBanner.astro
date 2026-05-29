@@ -1,0 +1,101 @@
+---
+// Feature-flagged cookie banner. When PUBLIC_COOKIE_BANNER_ENABLED is anything
+// other than the exact string "true", the component returns nothing — zero
+// markup ships to users until legal copy + tracking choices are finalized.
+//
+// When enabled, the banner shows once per browser. Choice is persisted in
+// localStorage under "pht-cookie-consent" with one of: "accepted", "rejected",
+// "settings". The banner DOES NOT load any tracking scripts — it only records
+// the preference for a follow-up integration.
+//
+// TODO: Replace placeholder copy below with legal-approved copy.
+
+const enabled = import.meta.env.PUBLIC_COOKIE_BANNER_ENABLED === "true";
+---
+
+{enabled && (
+  <div
+    id="cookie-banner"
+    role="dialog"
+    aria-live="polite"
+    aria-label="Cookie preferences"
+    class="fixed bottom-0 left-0 right-0 z-50 bg-bg-alt border-t border-line shadow-card"
+    style="display: none;"
+  >
+    <div class="max-w-content mx-auto px-6 py-4 flex flex-col md:flex-row items-start md:items-center gap-4">
+      <div class="flex-1">
+        <div class="font-mono text-[10.5px] text-accent tracking-mono-eyebrow uppercase mb-1">
+          ◆ Cookies · TBD
+        </div>
+        {/* TBD: legal copy */}
+        <p class="m-0 text-ink text-[13.5px] leading-snug max-w-[680px]">
+          We use cookies to keep the site working and to understand how it's used.
+          Choose what we can store. <em>(Copy pending legal sign-off.)</em>
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button
+          type="button"
+          data-cookie-action="accepted"
+          class="bg-accent text-white font-semibold rounded-md inline-flex items-center justify-center no-underline cursor-pointer"
+          style="padding: 10px 16px; font-size: 13.5px;"
+        >
+          Accept all
+        </button>
+        <button
+          type="button"
+          data-cookie-action="rejected"
+          class="bg-bg text-ink font-medium rounded-md border border-line inline-flex items-center justify-center cursor-pointer"
+          style="padding: 10px 16px; font-size: 13.5px;"
+        >
+          Reject
+        </button>
+        <a
+          href="/privacy"
+          data-cookie-action="settings"
+          class="bg-bg text-ink font-medium rounded-md border border-line inline-flex items-center justify-center no-underline"
+          style="padding: 10px 16px; font-size: 13.5px;"
+        >
+          Settings
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var STORAGE_KEY = "pht-cookie-consent";
+      var banner = document.getElementById("cookie-banner");
+      if (!banner) return;
+
+      var hide = function () { banner.style.display = "none"; };
+      var show = function () { banner.style.display = ""; };
+
+      try {
+        var existing = localStorage.getItem(STORAGE_KEY);
+        if (existing) {
+          hide();
+          return;
+        }
+      } catch (_) { /* localStorage blocked — show banner */ }
+
+      show();
+
+      banner.querySelectorAll("[data-cookie-action]").forEach(function (el) {
+        el.addEventListener("click", function () {
+          var choice = el.getAttribute("data-cookie-action");
+          try { localStorage.setItem(STORAGE_KEY, choice); } catch (_) {}
+
+          // Notify subscribers (Analytics, future marketing pixels, etc.) so
+          // they can react without polling localStorage.
+          document.dispatchEvent(new CustomEvent("pht-cookie-consent-changed", {
+            detail: { choice: choice }
+          }));
+
+          // For "settings" we let the <a> navigate; for buttons just hide.
+          if (el.tagName !== "A") hide();
+        });
+      });
+    })();
+  </script>
+)}

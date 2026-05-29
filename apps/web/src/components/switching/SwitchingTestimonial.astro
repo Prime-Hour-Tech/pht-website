@@ -1,0 +1,59 @@
+---
+import type { SwitchingPage } from "../../lib/sanity/types";
+import Icon from "../Icon.astro";
+
+interface Props {
+  testimonial: SwitchingPage["testimonial"];
+}
+
+const { testimonial } = Astro.props;
+---
+
+<section class="bg-bg-alt px-10 py-22 border-b border-line">
+  <div class="max-w-narrow mx-auto grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-14 items-center">
+    <div>
+      <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-4.5">
+        ◆ {testimonial.eyebrow}
+      </div>
+      <blockquote
+        class="m-0 font-serif italic font-normal text-ink"
+        style="font-size: 34px; letter-spacing: -0.015em; line-height: 1.25; text-wrap: balance;"
+      >
+        &ldquo;{testimonial.quote}&rdquo;
+      </blockquote>
+      <div class="mt-7 flex items-center gap-3.5">
+        <div
+          class="w-11 h-11 rounded-full"
+          style="background: #3a4252; border: 2px solid var(--color-bg);"
+        ></div>
+        <div>
+          <div class="text-[14.5px] font-semibold text-ink">
+            {testimonial.name}
+          </div>
+          <div class="mt-0.5 font-mono text-[11px] text-muted tracking-[0.8px] uppercase">
+            {testimonial.role}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-bg border border-line rounded-xl p-7">
+      <div class="font-mono text-meta text-muted tracking-mono-eyebrow uppercase mb-3">
+        ◇ {testimonial.cardEyebrow}
+      </div>
+      <div
+        class="font-serif font-medium text-ink"
+        style="font-size: 72px; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums;"
+      >
+        {testimonial.metricK}
+      </div>
+      <div class="mt-3.5 text-muted text-[14.5px] leading-snug">
+        {testimonial.metricV}
+      </div>
+      <div class="mt-5.5 pt-4 border-t border-line-soft inline-flex items-center gap-2 font-mono text-[11px] text-muted tracking-mono-eyebrow uppercase">
+        <Icon name="compass" size={12} />
+        {testimonial.locationLabel}
+      </div>
+    </div>
+  </div>
+</section>

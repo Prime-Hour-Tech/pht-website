@@ -10,22 +10,13 @@ export type ImageRef = {
   alt: string;
 };
 
-// Logos are projected with the asset URL resolved at query time (no image
-// URL builder yet — see queries.ts). Other image fields use ImageRef and
-// rely on the future builder for transformations.
-//
 // Two logo variants: logoDark goes on light backgrounds (the navbar),
 // logoLight goes on dark backgrounds (the footer).
-export type ResolvedImage = {
-  url: string;
-  alt: string;
-};
-
 export type SiteSettings = {
   siteName: string;
   siteDescription: string;
-  logoDark?: ResolvedImage;
-  logoLight?: ResolvedImage;
+  logoDark?: ImageRef;
+  logoLight?: ImageRef;
   defaultOgImage?: ImageRef;
 };
 
@@ -103,31 +94,351 @@ export type Address = {
 };
 
 export type ContactInfo = {
-  // Optional during the Slice 3 fix-up migration window: the live contactInfo
-  // doc predates the cardTitle field, and Sanity initialValue only fires on
-  // doc creation (not on schema-driven backfill). Consumers fall back to
-  // "Get in touch" via `??`. Tighten to required once the user has re-saved
-  // the contactInfo doc post-deploy.
-  cardTitle?: string;
+  cardTitle: string;
+  serviceAreaSub: string;
   phone: { display: string; dial: string };
   email: string;
   hours: Hours;
   address: Address;
 };
 
+export type PricingTier = {
+  tag: string;
+  tagline: string;
+  price: number;
+  includesHead: string;
+  bullets: string[];
+  ctaLabel: string;
+  ctaHref: string;
+  flagLabel?: string;
+};
+
+export type BundleRow = {
+  serviceLabel: string;
+  descriptor: string;
+};
+
+export type ProcessStep = {
+  title: string;
+  body: string;
+};
+
+export type IndustryCrosslinkTile = {
+  iconName: IconName;
+  label: string;
+  sub: string;
+  href: string;
+};
+
+export type FeaturedService = {
+  _id: string;
+  name: string;
+  slug: string;
+  iconName: IconName;
+  eyebrow: string;
+  headline: HeadlineRichText;
+  deck: string;
+  heroStat: ServiceStat;
+  capabilities: ServiceCapability[];
+};
+
 export type ServicesIndexPage = {
   heroEyebrow: string;
   heroHeading: HeadlineRichText;
   heroDeck: string;
-  listEyebrow: string;
-  listHeading: string;
+
+  featuredService: FeaturedService;
+
+  pricingHeading: { eyebrow: string; heading: HeadlineRichText; deck: string };
+  pricingTiers: {
+    essentials: PricingTier;
+    standard: PricingTier;
+    premier: PricingTier;
+  };
+  pricingFooterNote: string;
+  pricingFooterLinkLabel: string;
+  pricingFooterLinkHref: string;
+
+  gridHeading: {
+    eyebrow: string;
+    heading: HeadlineRichText;
+    secondaryLinkLabel?: string;
+    secondaryLinkHref?: string;
+  };
+  bundleTile: {
+    eyebrow: string;
+    heading: string;
+    body: string;
+    rows: BundleRow[];
+    footerHeadline: HeadlineRichText;
+    footerLinkLabel: string;
+    footerLinkHref: string;
+  };
+
+  processStrip: {
+    eyebrow: string;
+    heading: HeadlineRichText;
+    deck: string;
+    steps: ProcessStep[]; // length 4
+  };
+
+  industryCrosslink: {
+    eyebrow: string;
+    heading: HeadlineRichText;
+    deck: string;
+    ctaLinkLabel: string;
+    ctaLinkHref: string;
+    tiles: IndustryCrosslinkTile[]; // length 4
+  };
+
   ctaEyebrow: string;
   ctaHeading: HeadlineRichText;
   ctaDeck: string;
   ctaLabel: string;
   ctaHref: string;
+
   otherServicesHeading: string;
   otherServicesViewAllLabel: string;
+};
+
+export type PostCategory =
+  | "Security"
+  | "Cloud"
+  | "Field notes"
+  | "Compliance"
+  | "Tooling"
+  | "Practice";
+
+export type PostCard = {
+  _id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  category: PostCategory;
+  publishDate: string;
+  coverImage: ImageRef;
+  author: { name: string; role: string };
+};
+
+export type PostRssItem = {
+  title: string;
+  slug: string;
+  excerpt: string;
+  category: PostCategory;
+  publishDate: string;
+};
+
+export type PostFull = Omit<PostCard, "author"> & {
+  body: PortableTextBlock[];
+  author: {
+    _id: string;
+    name: string;
+    role: string;
+    bio: string;
+    photo?: ImageRef;
+  };
+  seoTitle?: string;
+  seoDescription?: string;
+  ogImage?: ImageRef;
+  // Projected from Sanity's _updatedAt; used for Article JSON-LD dateModified.
+  updatedAt?: string;
+};
+
+export type BlogIndexPage = {
+  heroEyebrow: string;
+  heroHeading: HeadlineRichText;
+  heroDeck: string;
+  ctaEyebrow: string;
+  ctaHeading: HeadlineRichText;
+  ctaDeck: string;
+  ctaLabel: string;
+  ctaHref: string;
+};
+
+export type LegalSection = {
+  title: string;
+  body: PortableTextBlock[];
+};
+
+type LegalPageBase = {
+  eyebrow: string;
+  title: string;
+  lastUpdated: string;
+  summaryHeading: string;
+  summaryBody: PortableTextBlock[];
+  sections: LegalSection[];
+  contactCardLabel: string;
+  contactCardCopy: string;
+  contactCardCtaLabel: string;
+  contactCardCtaHref: string;
+};
+
+export type TermsPage = LegalPageBase;
+export type PrivacyPage = LegalPageBase;
+
+export type DealCardRow = { label: string; value: string };
+
+export type SwitchingReason = {
+  head: string;
+  body: string;
+  flagLabel?: string;
+};
+
+export type SwitchingWeek = {
+  k: string;
+  sub: string;
+  head: string;
+  body: string;
+  deliverables: string[];
+  ours: string[];
+};
+
+export type SwitchingHandleItem = { head: string; body: string };
+
+export type SwitchingCompareRow = {
+  aspect: string;
+  currentMsp: string;
+  pht: string;
+};
+
+export type SwitchingPromise = {
+  iconName: IconName;
+  head: string;
+  body: string;
+};
+
+export type SwitchingFaqEntry = { question: string; answer: string };
+
+export type SwitchingPage = {
+  hero: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    ctaPrimaryLabel: string;
+    ctaPrimaryHref: string;
+    ctaSecondaryLabel: string;
+    ctaSecondaryHref: string;
+    dealCard: { eyebrow: string; rows: DealCardRow[] };
+    factSheetLabel: string;
+    liveDotLabel: string;
+    stats: ServiceStat[];
+  };
+  reasons: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    items: SwitchingReason[];
+  };
+  timeline: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    weeks: SwitchingWeek[];
+  };
+  handle: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    items: SwitchingHandleItem[];
+  };
+  compare: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    rows: SwitchingCompareRow[];
+  };
+  promises: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    items: SwitchingPromise[];
+  };
+  testimonial: {
+    eyebrow: string;
+    quote: string;
+    name: string;
+    role: string;
+    cardEyebrow: string;
+    metricK: string;
+    metricV: string;
+    locationLabel: string;
+  };
+  faq: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    items: SwitchingFaqEntry[];
+  };
+  cta: {
+    eyebrow: string;
+    heading: HeadlineRichText;
+    deck: string;
+    label: string;
+    href: string;
+  };
+};
+
+export type LandingPainItem = { head: string; body: string };
+export type LandingIncludedBullet = { head: string; body: string };
+export type LandingHowItWorksStep = { k: string; head: string; body: string };
+export type LandingFaqEntry = { question: string; answer: string };
+
+export type LandingPage = {
+  title: string;
+  slug: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  ogImage?: ImageRef;
+  hero: {
+    metaEyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    ctaPrimaryLabel: string;
+    ctaPrimaryHref: string;
+    heroStats: ServiceStat[]; // length 4
+  };
+  form: {
+    cardEyebrow: string;
+    heading: string;
+    deck: string;
+    situationPlaceholder: string;
+    submitLabel: string;
+    replyNote: string;
+    successHeading: string;
+    successBody: string;
+  };
+  trustBar: {
+    prefixLabel: string;
+    items: string[]; // 3-8 items
+  };
+  problem: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    items: LandingPainItem[]; // length 3
+  };
+  included: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    bullets: LandingIncludedBullet[]; // 6-10
+  };
+  howItWorks: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    steps: LandingHowItWorksStep[]; // length 3
+  };
+  faq: {
+    eyebrow: string;
+    title: HeadlineRichText;
+    deck: string;
+    items: LandingFaqEntry[];
+  };
+  cta: {
+    eyebrow: string;
+    heading: HeadlineRichText;
+    deck: string;
+    label: string;
+    href: string;
+  };
 };
 
 // ── Documents referenced from page blocks ────────────────────────────────
@@ -144,7 +455,13 @@ export type IconName =
   | "check"
   | "phone"
   | "mail"
-  | "chevron";
+  | "chevron"
+  | "file"
+  | "users"
+  | "spark"
+  | "lock"
+  | "linkedin"
+  | "x";
 
 export type TeamMemberResolved = {
   _id: string;
@@ -152,7 +469,7 @@ export type TeamMemberResolved = {
   role: string;
   bio: string;
   order: number;
-  photo?: ResolvedImage;
+  photo?: ImageRef;
 };
 
 export type ServiceCard = {
@@ -185,6 +502,7 @@ export type ServiceFaqEntry = {
 
 export type ServiceFull = ServiceCard & {
   order: number;
+  specSheetUrl?: string;
   // Hero
   eyebrow: string;
   headline: HeadlineRichText;
@@ -318,6 +636,117 @@ export type CtaCardBlock = {
   primaryCtaHref: string;
 };
 
+export type PageHeroBlock = {
+  _type: "pageHero";
+  _key: string;
+  eyebrow: string;
+  headline: HeadlineRichText;
+  deck: string[];
+};
+
+export type OriginPhotoBlock = {
+  _type: "originPhoto";
+  _key: string;
+  image: ImageRef;
+  aspectRatio: "21/9" | "16/9" | "4/3";
+  caption: {
+    eyebrowLabel: string;
+    quote: string;
+    attribution: string;
+  };
+};
+
+export type StoryColumn = {
+  eyebrow: string;
+  heading: string;
+  body: string;
+};
+
+export type StoryThreeColBlock = {
+  _type: "storyThreeCol";
+  _key: string;
+  eyebrow: string;
+  heading: HeadlineRichText;
+  columns: StoryColumn[];
+};
+
+export type NumbersStripBlock = {
+  _type: "numbersStrip";
+  _key: string;
+  stats: { k: string; v: string }[];
+};
+
+export type Milestone = {
+  date: string;
+  title: string;
+  body: string;
+};
+
+export type MilestonesTimelineBlock = {
+  _type: "milestonesTimeline";
+  _key: string;
+  eyebrow: string;
+  heading: HeadlineRichText;
+  deck?: string;
+  items: Milestone[];
+};
+
+export type OfficeCultureBlock = {
+  _type: "officeCulture";
+  _key: string;
+  image: ImageRef;
+  aspectRatio: "4/3" | "1/1" | "3/4";
+  eyebrow: string;
+  heading: HeadlineRichText;
+  body: string;
+  bullets: string[];
+};
+
+export type IndustryVertical = {
+  id: string;
+  iconName: IconName;
+  name: string;
+  sub: string;
+  intro: string;
+  bullets: string[];
+  examples: string[];
+};
+
+export type IndustriesContentBlock = {
+  _type: "industriesContent";
+  _key: string;
+  jumpLabel: string;
+  verticals: IndustryVertical[];
+};
+
+export type IndustriesDontSeeYoursBlock = {
+  _type: "industriesDontSeeYours";
+  _key: string;
+  eyebrow: string;
+  heading: HeadlineRichText;
+  deck: string;
+  primaryCta: CtaLink;
+  secondaryCta: CtaLink;
+};
+
+export type ContactBodyBlock = {
+  _type: "contactBody";
+  _key: string;
+  formHeading: string;
+  formDeck: string;
+  promptingOptions: string[];
+  submitLabel: string;
+  submitNote?: string;
+  successHeading: string;
+  successBody: string;
+  existingClientPanel?: {
+    label: string;
+    primary: string;
+    sub: string;
+    href: string;
+  };
+};
+
 export type PageBlock =
   | DarkNumbersHeroBlock
   | TrustStripBlock
@@ -326,4 +755,13 @@ export type PageBlock =
   | SavingsBlock
   | ServicesListBlock
   | BeliefsBlock
-  | CtaCardBlock;
+  | CtaCardBlock
+  | PageHeroBlock
+  | OriginPhotoBlock
+  | StoryThreeColBlock
+  | NumbersStripBlock
+  | MilestonesTimelineBlock
+  | OfficeCultureBlock
+  | IndustriesContentBlock
+  | IndustriesDontSeeYoursBlock
+  | ContactBodyBlock;

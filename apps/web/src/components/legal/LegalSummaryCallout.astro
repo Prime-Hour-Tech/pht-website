@@ -1,0 +1,23 @@
+---
+import type { PortableTextBlock } from "@portabletext/types";
+import { renderPortableTextBody } from "../../lib/portable-text-body";
+
+interface Props {
+  heading: string;
+  body: PortableTextBlock[];
+}
+
+const { heading, body } = Astro.props;
+const html = renderPortableTextBody(body);
+---
+
+<section class="bg-bg px-10 pb-10">
+  <div class="max-w-content mx-auto">
+    <div class="bg-accent/8 border border-accent/30 rounded-xl p-6 md:p-8">
+      <div class="font-mono text-[11px] text-accent tracking-mono-eyebrow uppercase mb-3">
+        ◇ {heading}
+      </div>
+      <div class="text-ink" set:html={html}></div>
+    </div>
+  </div>
+</section>

@@ -1,5 +1,6 @@
 ---
 import type { TeamGridBlock } from "../../lib/sanity/types";
+import { urlFor } from "../../lib/sanity/imageUrl";
 
 interface Props {
   block: TeamGridBlock;
@@ -36,31 +37,36 @@ const members = block.members?.filter(Boolean) ?? [];
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-      {members.map((m) => (
-        <div>
-          {m.photo?.url ? (
-            <img
-              src={m.photo.url}
-              alt={m.photo.alt}
-              class="block w-full aspect-[4/5] object-cover rounded-lg mb-4"
-            />
-          ) : (
-            <div
-              class="block w-full aspect-[4/5] rounded-lg bg-bg border border-line mb-4"
-              aria-hidden="true"
-            ></div>
-          )}
-          <div class="font-serif text-[20px] font-medium tracking-h3 text-ink leading-tight">
-            {m.name}
+      {members.map((m) => {
+        const photoUrl = m.photo
+          ? urlFor(m.photo).width(600).height(750).fit("crop").url()
+          : null;
+        return (
+          <div>
+            {photoUrl ? (
+              <img
+                src={photoUrl}
+                alt={m.photo!.alt}
+                class="block w-full aspect-[4/5] object-cover rounded-lg mb-4"
+              />
+            ) : (
+              <div
+                class="block w-full aspect-[4/5] rounded-lg bg-bg border border-line mb-4"
+                aria-hidden="true"
+              ></div>
+            )}
+            <div class="font-serif text-[20px] font-medium tracking-h3 text-ink leading-tight">
+              {m.name}
+            </div>
+            <div class="font-mono text-meta text-accent uppercase tracking-mono-label mt-1">
+              {m.role}
+            </div>
+            <p class="mt-2.5 text-muted text-[14px] leading-body">
+              {m.bio}
+            </p>
           </div>
-          <div class="font-mono text-meta text-accent uppercase tracking-mono-label mt-1">
-            {m.role}
-          </div>
-          <p class="mt-2.5 text-muted text-[14px] leading-body">
-            {m.bio}
-          </p>
-        </div>
-      ))}
+        );
+      })}
     </div>
   </div>
 </section>

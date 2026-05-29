@@ -1,0 +1,79 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlogHero from "../../components/blog/BlogHero.astro";
+import BlogFilterChips from "../../components/blog/BlogFilterChips.astro";
+import BlogFeaturedPost from "../../components/blog/BlogFeaturedPost.astro";
+import BlogPostCard from "../../components/blog/BlogPostCard.astro";
+import HeadlineRichText from "../../components/HeadlineRichText.astro";
+import Icon from "../../components/Icon.astro";
+import { getAllPosts, getBlogIndexPage } from "../../lib/sanity/client";
+import type { PostCategory } from "../../lib/sanity/types";
+
+const [posts, indexPage] = await Promise.all([
+  getAllPosts(),
+  getBlogIndexPage(),
+]);
+
+if (!indexPage) {
+  throw new Error("Blog Index Page singleton not found in Sanity.");
+}
+
+const [featured, ...rest] = posts;
+
+// Distinct categories present in posts (order: first-seen).
+const seen = new Set<PostCategory>();
+for (const p of posts) {
+  if (!seen.has(p.category)) seen.add(p.category);
+}
+const categories = Array.from(seen);
+---
+
+<BaseLayout
+  title="Blog"
+  description="Field notes, advisories, and write-ups from the Prime Hour Tech team."
+>
+  <BlogHero page={indexPage} />
+
+  {posts.length > 0 && <BlogFilterChips categories={categories} />}
+
+  <section class="bg-bg px-10 py-12">
+    <div class="max-w-content mx-auto">
+      {featured && <BlogFeaturedPost post={featured} />}
+
+      {rest.length > 0 && (
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {rest.map((p) => <BlogPostCard post={p} />)}
+        </div>
+      )}
+
+      {posts.length === 0 && (
+        <div class="text-center py-12 text-muted">
+          No posts published yet. Check back soon.
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="bg-bg-alt px-10 py-20 border-t border-line">
+    <div class="max-w-narrow mx-auto text-center">
+      <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-4">
+        ◆ {indexPage.ctaEyebrow}
+      </div>
+      <h2
+        class="font-serif font-medium text-ink m-0 mx-auto max-w-[820px] tracking-display-tight"
+        style="font-size: 52px; line-height: 1; text-wrap: balance;"
+      >
+        <HeadlineRichText value={indexPage.ctaHeading} />
+      </h2>
+      <p class="mt-5 text-muted text-[17px] leading-snug max-w-[620px] mx-auto">{indexPage.ctaDeck}</p>
+      <a
+        href={indexPage.ctaHref}
+        class="bg-accent text-white font-semibold rounded-md inline-flex items-center justify-center gap-2.5 no-underline shadow-button-accent mt-7"
+        style="padding: 15px 26px; font-size: 15.5px;"
+      >
+        {indexPage.ctaLabel}
+        <Icon name="arrow" size={16} />
+      </a>
+    </div>
+  </section>
+</BaseLayout>

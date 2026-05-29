@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumb from "../components/chrome/Breadcrumb.astro";
+import CtaCard from "../components/blocks/CtaCard.astro";
+import SwitchingHero from "../components/switching/SwitchingHero.astro";
+import SwitchingReasons from "../components/switching/SwitchingReasons.astro";
+import SwitchingTimeline from "../components/switching/SwitchingTimeline.astro";
+import SwitchingHandlePunchlist from "../components/switching/SwitchingHandlePunchlist.astro";
+import SwitchingComparisonTable from "../components/switching/SwitchingComparisonTable.astro";
+import SwitchingPromises from "../components/switching/SwitchingPromises.astro";
+import SwitchingTestimonial from "../components/switching/SwitchingTestimonial.astro";
+import SwitchingFaq from "../components/switching/SwitchingFaq.astro";
+import { getSwitchingPage, getContactInfo } from "../lib/sanity/client";
+import type { CtaCardBlock } from "../lib/sanity/types";
+
+const [page, contactInfo] = await Promise.all([
+  getSwitchingPage(),
+  getContactInfo(),
+]);
+if (!page) {
+  throw new Error("Switching Page singleton not found in Sanity.");
+}
+if (!contactInfo) {
+  throw new Error("Contact Info singleton not found in Sanity.");
+}
+
+const ctaBlock: CtaCardBlock = {
+  _type: "ctaCard",
+  _key: "switching-cta",
+  eyebrow: `◆ ${page.cta.eyebrow}`,
+  heading: page.cta.heading,
+  deck: page.cta.deck,
+  primaryCtaLabel: page.cta.label,
+  primaryCtaHref: page.cta.href,
+};
+---
+
+<BaseLayout
+  title="Switching MSPs"
+  description="Switching from your current MSP to Prime Hour Tech: a 30-day migration timeline, side-by-side coverage, and a written runbook you own at the end."
+>
+  <Breadcrumb trail={[{ label: "Services", href: "/services" }, "Switching MSPs"]} />
+
+  <SwitchingHero hero={page.hero} />
+  <SwitchingReasons reasons={page.reasons} />
+  <SwitchingTimeline timeline={page.timeline} />
+  <SwitchingHandlePunchlist handle={page.handle} />
+  <SwitchingComparisonTable compare={page.compare} />
+  <SwitchingPromises promises={page.promises} />
+  <SwitchingTestimonial testimonial={page.testimonial} />
+  <SwitchingFaq faq={page.faq} />
+
+  <CtaCard block={ctaBlock} contactInfo={contactInfo} />
+</BaseLayout>

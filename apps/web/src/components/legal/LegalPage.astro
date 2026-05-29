@@ -1,0 +1,43 @@
+---
+import type { TermsPage, PrivacyPage } from "../../lib/sanity/types";
+import LegalHeader from "./LegalHeader.astro";
+import LegalSummaryCallout from "./LegalSummaryCallout.astro";
+import LegalTocSidebar from "./LegalTocSidebar.astro";
+import LegalSection from "./LegalSection.astro";
+import LegalClosingCard from "./LegalClosingCard.astro";
+
+interface Props {
+  page: TermsPage | PrivacyPage;
+}
+
+const { page } = Astro.props;
+---
+
+<LegalHeader
+  eyebrow={page.eyebrow}
+  title={page.title}
+  lastUpdated={page.lastUpdated}
+/>
+
+<LegalSummaryCallout
+  heading={page.summaryHeading}
+  body={page.summaryBody}
+/>
+
+<section class="bg-bg px-10 py-8">
+  <div class="max-w-content mx-auto grid grid-cols-1 md:grid-cols-[260px_1fr] gap-12">
+    <LegalTocSidebar sections={page.sections} />
+    <div>
+      {page.sections.map((s, i) => (
+        <LegalSection section={s} index={i} />
+      ))}
+    </div>
+  </div>
+</section>
+
+<LegalClosingCard
+  label={page.contactCardLabel}
+  copy={page.contactCardCopy}
+  ctaLabel={page.contactCardCtaLabel}
+  ctaHref={page.contactCardCtaHref}
+/>

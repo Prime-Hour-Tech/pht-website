@@ -3,11 +3,11 @@ export const siteSettingsQuery = /* groq */ `
     siteName,
     siteDescription,
     logoDark {
-      "url": asset->url,
+      asset,
       alt
     },
     logoLight {
-      "url": asset->url,
+      asset,
       alt
     },
     defaultOgImage
@@ -54,7 +54,7 @@ export const pageBySlugQuery = /* groq */ `
           bio,
           order,
           photo {
-            "url": asset->url,
+            asset,
             alt
           }
         } | order(order asc)
@@ -107,6 +107,81 @@ export const pageBySlugQuery = /* groq */ `
         deck,
         primaryCtaLabel,
         primaryCtaHref
+      },
+      _type == "pageHero" => {
+        eyebrow,
+        headline,
+        deck
+      },
+      _type == "originPhoto" => {
+        image {
+          asset,
+          alt
+        },
+        aspectRatio,
+        caption {
+          eyebrowLabel,
+          quote,
+          attribution
+        }
+      },
+      _type == "storyThreeCol" => {
+        eyebrow,
+        heading,
+        columns[]{
+          eyebrow,
+          heading,
+          body
+        }
+      },
+      _type == "numbersStrip" => {
+        stats[]{ k, v }
+      },
+      _type == "milestonesTimeline" => {
+        eyebrow,
+        heading,
+        deck,
+        items[]{ date, title, body }
+      },
+      _type == "officeCulture" => {
+        image {
+          asset,
+          alt
+        },
+        aspectRatio,
+        eyebrow,
+        heading,
+        body,
+        bullets
+      },
+      _type == "industriesContent" => {
+        jumpLabel,
+        verticals[]{
+          "id": id.current,
+          iconName,
+          name,
+          sub,
+          intro,
+          bullets,
+          examples
+        }
+      },
+      _type == "industriesDontSeeYours" => {
+        eyebrow,
+        heading,
+        deck,
+        primaryCta { label, href },
+        secondaryCta { label, href }
+      },
+      _type == "contactBody" => {
+        formHeading,
+        formDeck,
+        promptingOptions,
+        submitLabel,
+        submitNote,
+        successHeading,
+        successBody,
+        existingClientPanel { label, primary, sub, href }
       }
     }
   }
@@ -158,6 +233,7 @@ export const footerQuery = /* groq */ `
 export const contactInfoQuery = /* groq */ `
   *[_type == "contactInfo"][0] {
     cardTitle,
+    serviceAreaSub,
     phone {
       display,
       dial
@@ -206,6 +282,7 @@ export const serviceBySlugQuery = /* groq */ `
     shortDescription,
     iconName,
     order,
+    specSheetUrl,
     eyebrow,
     headline,
     deck,
@@ -252,8 +329,50 @@ export const servicesIndexPageQuery = /* groq */ `
     heroEyebrow,
     heroHeading,
     heroDeck,
-    listEyebrow,
-    listHeading,
+    featuredService->{
+      _id,
+      name,
+      "slug": slug.current,
+      iconName,
+      eyebrow,
+      headline,
+      deck,
+      heroStat,
+      capabilities
+    },
+    pricingHeading { eyebrow, heading, deck },
+    pricingTiers {
+      essentials { tag, tagline, price, includesHead, bullets, ctaLabel, ctaHref, flagLabel },
+      standard   { tag, tagline, price, includesHead, bullets, ctaLabel, ctaHref, flagLabel },
+      premier    { tag, tagline, price, includesHead, bullets, ctaLabel, ctaHref, flagLabel }
+    },
+    pricingFooterNote,
+    pricingFooterLinkLabel,
+    pricingFooterLinkHref,
+    gridHeading { eyebrow, heading, secondaryLinkLabel, secondaryLinkHref },
+    bundleTile {
+      eyebrow,
+      heading,
+      body,
+      rows[]{ serviceLabel, descriptor },
+      footerHeadline,
+      footerLinkLabel,
+      footerLinkHref
+    },
+    processStrip {
+      eyebrow,
+      heading,
+      deck,
+      steps[]{ title, body }
+    },
+    industryCrosslink {
+      eyebrow,
+      heading,
+      deck,
+      ctaLinkLabel,
+      ctaLinkHref,
+      tiles[]{ iconName, label, sub, href }
+    },
     ctaEyebrow,
     ctaHeading,
     ctaDeck,
@@ -261,5 +380,305 @@ export const servicesIndexPageQuery = /* groq */ `
     ctaHref,
     otherServicesHeading,
     otherServicesViewAllLabel
+  }
+`;
+
+// All four post queries share the same completeness filter — same pattern as
+// the SERVICE_COMPLETE_FILTER above. Posts missing any required structural
+// field are skipped at the query level (no /blog/<slug> route generated, no
+// card appears in lists). Drafts in progress don't break the build.
+const POST_COMPLETE_FILTER =
+  "defined(slug.current) && defined(body) && " +
+  "defined(coverImage) && defined(category) && " +
+  "defined(publishDate) && defined(author)";
+
+export const postSlugListQuery = /* groq */ `
+  *[_type == "post" && ${POST_COMPLETE_FILTER}] {
+    "slug": slug.current
+  }
+`;
+
+export const postBySlugQuery = /* groq */ `
+  *[_type == "post" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    category,
+    publishDate,
+    coverImage {
+      asset,
+      alt
+    },
+    body,
+    seoTitle,
+    seoDescription,
+    ogImage,
+    "updatedAt": _updatedAt,
+    author->{
+      _id,
+      name,
+      role,
+      bio,
+      photo {
+        asset,
+        alt
+      }
+    }
+  }
+`;
+
+export const allPostsQuery = /* groq */ `
+  *[_type == "post" && ${POST_COMPLETE_FILTER}] | order(publishDate desc) {
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    category,
+    publishDate,
+    coverImage {
+      asset,
+      alt
+    },
+    author->{
+      name,
+      role
+    }
+  }
+`;
+
+// Latest 20 published posts, projected to the minimum fields needed for RSS items.
+// Matches PostRssItem in types.ts. Sorted by publishDate desc; empty array if zero posts.
+export const allPostsForRssQuery = /* groq */ `
+  *[_type == "post" && defined(slug.current) && defined(publishDate)]
+  | order(publishDate desc)
+  [0...20] {
+    title,
+    "slug": slug.current,
+    excerpt,
+    category,
+    publishDate
+  }
+`;
+
+export const relatedPostsQuery = /* groq */ `
+  *[_type == "post" && category == $category && slug.current != $slug && ${POST_COMPLETE_FILTER}]
+    | order(publishDate desc) [0...3] {
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    category,
+    publishDate,
+    coverImage {
+      asset,
+      alt
+    },
+    author->{
+      name,
+      role
+    }
+  }
+`;
+
+export const blogIndexPageQuery = /* groq */ `
+  *[_type == "blogIndexPage"][0] {
+    heroEyebrow,
+    heroHeading,
+    heroDeck,
+    ctaEyebrow,
+    ctaHeading,
+    ctaDeck,
+    ctaLabel,
+    ctaHref
+  }
+`;
+
+export const termsPageQuery = /* groq */ `
+  *[_type == "termsPage"][0] {
+    eyebrow,
+    title,
+    lastUpdated,
+    summaryHeading,
+    summaryBody,
+    sections[]{
+      title,
+      body
+    },
+    contactCardLabel,
+    contactCardCopy,
+    contactCardCtaLabel,
+    contactCardCtaHref
+  }
+`;
+
+export const privacyPageQuery = /* groq */ `
+  *[_type == "privacyPage"][0] {
+    eyebrow,
+    title,
+    lastUpdated,
+    summaryHeading,
+    summaryBody,
+    sections[]{
+      title,
+      body
+    },
+    contactCardLabel,
+    contactCardCopy,
+    contactCardCtaLabel,
+    contactCardCtaHref
+  }
+`;
+
+// Landing pages: dynamic /landing/{slug} routes from a multi-instance doc type.
+// Filter on minimum-required structural fields so half-authored drafts don't
+// generate broken routes. Same pattern as the services queries.
+const LANDING_COMPLETE_FILTER =
+  "defined(slug.current) && defined(hero) && defined(form) && defined(cta)";
+
+export const allLandingSlugsQuery = /* groq */ `
+  *[_type == "landingPage" && ${LANDING_COMPLETE_FILTER}] {
+    "slug": slug.current
+  }
+`;
+
+export const landingBySlugQuery = /* groq */ `
+  *[_type == "landingPage" && slug.current == $slug][0] {
+    title,
+    "slug": slug.current,
+    seoTitle,
+    seoDescription,
+    ogImage,
+    hero {
+      metaEyebrow,
+      title,
+      deck,
+      ctaPrimaryLabel,
+      ctaPrimaryHref,
+      heroStats[]{ k, v }
+    },
+    form {
+      cardEyebrow,
+      heading,
+      deck,
+      situationPlaceholder,
+      submitLabel,
+      replyNote,
+      successHeading,
+      successBody
+    },
+    trustBar {
+      prefixLabel,
+      items
+    },
+    problem {
+      eyebrow,
+      title,
+      deck,
+      items[]{ head, body }
+    },
+    included {
+      eyebrow,
+      title,
+      deck,
+      bullets[]{ head, body }
+    },
+    howItWorks {
+      eyebrow,
+      title,
+      steps[]{ k, head, body }
+    },
+    faq {
+      eyebrow,
+      title,
+      deck,
+      items[]{ question, answer }
+    },
+    cta {
+      eyebrow,
+      heading,
+      deck,
+      label,
+      href
+    }
+  }
+`;
+
+export const switchingPageQuery = /* groq */ `
+  *[_type == "switchingPage"][0] {
+    hero {
+      eyebrow,
+      title,
+      deck,
+      ctaPrimaryLabel,
+      ctaPrimaryHref,
+      ctaSecondaryLabel,
+      ctaSecondaryHref,
+      dealCard {
+        eyebrow,
+        rows[]{ label, value }
+      },
+      factSheetLabel,
+      liveDotLabel,
+      stats[]{ k, v }
+    },
+    reasons {
+      eyebrow,
+      title,
+      deck,
+      items[]{ head, body, flagLabel }
+    },
+    timeline {
+      eyebrow,
+      title,
+      deck,
+      weeks[]{
+        k,
+        sub,
+        head,
+        body,
+        deliverables,
+        ours
+      }
+    },
+    handle {
+      eyebrow,
+      title,
+      deck,
+      items[]{ head, body }
+    },
+    compare {
+      eyebrow,
+      title,
+      rows[]{ aspect, currentMsp, pht }
+    },
+    promises {
+      eyebrow,
+      title,
+      items[]{ iconName, head, body }
+    },
+    testimonial {
+      eyebrow,
+      quote,
+      name,
+      role,
+      cardEyebrow,
+      metricK,
+      metricV,
+      locationLabel
+    },
+    faq {
+      eyebrow,
+      title,
+      deck,
+      items[]{ question, answer }
+    },
+    cta {
+      eyebrow,
+      heading,
+      deck,
+      label,
+      href
+    }
   }
 `;

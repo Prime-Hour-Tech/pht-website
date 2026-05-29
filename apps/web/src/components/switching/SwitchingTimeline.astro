@@ -1,0 +1,118 @@
+---
+import type { SwitchingPage } from "../../lib/sanity/types";
+import HeadlineRichText from "../HeadlineRichText.astro";
+import Icon from "../Icon.astro";
+
+interface Props {
+  timeline: SwitchingPage["timeline"];
+}
+
+const { timeline } = Astro.props;
+---
+
+<section id="timeline" class="bg-bg-alt px-10 py-22 border-b border-line scroll-mt-24">
+  <div class="max-w-content mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-16 items-end mb-14">
+      <div>
+        <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-4">
+          ◆ {timeline.eyebrow}
+        </div>
+        <h2
+          class="font-serif font-medium text-ink m-0 tracking-display-tight"
+          style="font-size: 52px; line-height: 1.02; text-wrap: balance;"
+        >
+          <HeadlineRichText value={timeline.title} />
+        </h2>
+      </div>
+      <p class="m-0 text-muted text-body-lg leading-body">{timeline.deck}</p>
+    </div>
+
+    <div class="relative">
+      <div
+        class="absolute hidden md:block"
+        style="left: 96px; top: 24px; bottom: 24px; width: 1px; background: linear-gradient(to bottom, var(--color-accent), var(--color-line));"
+      ></div>
+
+      {timeline.weeks.map((week, i) => {
+        const num = String(i + 1).padStart(2, "0");
+        return (
+          <div
+            class={`grid grid-cols-1 md:grid-cols-[120px_1fr] gap-10 ${
+              i === 0 ? "pt-0" : "pt-9"
+            } pb-9 ${
+              i === timeline.weeks.length - 1 ? "" : "border-b border-line"
+            } relative`}
+          >
+            <div class="relative">
+              <div
+                class="absolute hidden md:flex items-center justify-center font-mono font-semibold text-accent"
+                style="left: 80px; top: 16px; width: 32px; height: 32px; border-radius: 999px; background: var(--color-bg); border: 2px solid var(--color-accent); font-size: 12px;"
+              >
+                {num}
+              </div>
+              <div
+                class="font-serif font-medium text-ink"
+                style="font-size: 32px; letter-spacing: -0.02em; line-height: 1;"
+              >
+                {week.k}
+              </div>
+              <div class="mt-1.5 font-mono text-[11px] text-muted tracking-mono-eyebrow uppercase">
+                {week.sub}
+              </div>
+            </div>
+
+            <div class="md:pl-8">
+              <h3
+                class="font-serif font-medium text-ink m-0"
+                style="font-size: 30px; letter-spacing: -0.02em; line-height: 1.1; text-wrap: balance;"
+              >
+                {week.head}
+              </h3>
+              <p class="mt-3.5 text-muted text-[16.5px] leading-body max-w-[700px]">
+                {week.body}
+              </p>
+
+              <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <div class="font-mono text-[10.5px] text-accent tracking-mono-eyebrow uppercase mb-2.5">
+                    ◇ What you get this week
+                  </div>
+                  <ul class="m-0 p-0 list-none">
+                    {week.deliverables.map((d, j) => (
+                      <li
+                        class={`grid grid-cols-[20px_1fr] gap-2.5 py-2 text-[14px] text-ink ${
+                          j === 0 ? "" : "border-t border-line-soft"
+                        }`}
+                      >
+                        <span class="text-accent mt-0.5">
+                          <Icon name="check" size={14} stroke={2} />
+                        </span>
+                        <span>{d}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                  <div class="font-mono text-[10.5px] text-muted tracking-mono-eyebrow uppercase">
+                    ◇ On our side
+                  </div>
+                  <div class="flex flex-wrap gap-1.5">
+                    {week.ours.map((o) => (
+                      <span
+                        class="rounded-full bg-bg border border-line text-[12px] text-ink"
+                        style="padding: 6px 10px;"
+                      >
+                        {o}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>

@@ -47,15 +47,15 @@ const { service } = Astro.props;
         >
           Schedule a discovery call <Icon name="arrow" size={16} />
         </a>
-        <a
-          href="#"
-          aria-disabled="true"
-          title="Spec sheet PDFs not yet available"
-          class="text-dark-text font-medium no-underline rounded-md border border-dark-line cursor-not-allowed opacity-60"
-          style="padding: 15px 22px; font-size: 15.5px;"
-        >
-          Read the spec sheet →
-        </a>
+        {service.specSheetUrl && (
+          <a
+            href={service.specSheetUrl}
+            class="text-dark-text font-medium no-underline rounded-md border border-dark-line"
+            style="padding: 15px 22px; font-size: 15.5px;"
+          >
+            Read the spec sheet →
+          </a>
+        )}
       </div>
     </div>
 

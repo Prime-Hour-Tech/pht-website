@@ -1,0 +1,27 @@
+---
+import type { LegalSection } from "../../lib/sanity/types";
+import { renderPortableTextBody } from "../../lib/portable-text-body";
+
+interface Props {
+  section: LegalSection;
+  index: number;
+}
+
+const { section, index } = Astro.props;
+const num = String(index + 1).padStart(2, "0");
+const id = `section-${num}`;
+const html = renderPortableTextBody(section.body);
+---
+
+<section id={id} class="scroll-mt-24 py-8 border-b border-line-soft last:border-b-0">
+  <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3">
+    §&nbsp;{num}
+  </div>
+  <h2
+    class="font-serif font-medium text-ink m-0 mb-4"
+    style="font-size: 28px; line-height: 1.18; letter-spacing: -0.015em; text-wrap: balance;"
+  >
+    {section.title}
+  </h2>
+  <div set:html={html}></div>
+</section>

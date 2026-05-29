@@ -4,6 +4,7 @@ import type {
   Footer as FooterData,
   SiteSettings,
 } from "../../lib/sanity/types";
+import { urlFor } from "../../lib/sanity/imageUrl";
 
 interface Props {
   footer: FooterData;
@@ -14,6 +15,9 @@ interface Props {
 const { footer, siteSettings, contactInfo } = Astro.props;
 const year = new Date().getUTCFullYear();
 const copyright = footer.copyright.replace("{{year}}", String(year));
+const logoLightUrl = siteSettings.logoLight
+  ? urlFor(siteSettings.logoLight).width(72).height(72).fit("max").url()
+  : null;
 
 // Design's FooterB uses a 5-column grid: 1.5fr brand block + 4×1fr link
 // columns. Tailwind doesn't have an arbitrary-fraction syntax that works
@@ -29,10 +33,10 @@ const copyright = footer.copyright.replace("{{year}}", String(year));
       <!-- Brand block -->
       <div>
         <div class="inline-flex items-center gap-3.5 mb-[18px] text-dark-text">
-          {siteSettings.logoLight?.url ? (
+          {logoLightUrl ? (
             <img
-              src={siteSettings.logoLight.url}
-              alt={siteSettings.logoLight.alt}
+              src={logoLightUrl}
+              alt={siteSettings.logoLight!.alt}
               width="36"
               height="36"
               class="size-9 object-contain"

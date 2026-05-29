@@ -1,0 +1,28 @@
+---
+import type { PostCard } from "../../lib/sanity/types";
+import BlogPostCard from "./BlogPostCard.astro";
+
+interface Props {
+  posts: PostCard[];
+}
+
+const { posts } = Astro.props;
+---
+
+{posts.length > 0 && (
+  <section class="bg-bg px-10 py-16">
+    <div class="max-w-content mx-auto">
+      <div class="flex items-baseline justify-between mb-6">
+        <h2 class="font-serif font-medium text-ink m-0" style="font-size: 32px; letter-spacing: -0.02em;">
+          More from the field notes
+        </h2>
+        <a href="/blog" class="text-accent font-semibold no-underline text-body-sm">
+          All posts →
+        </a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {posts.map((p) => <BlogPostCard post={p} />)}
+      </div>
+    </div>
+  </section>
+)}

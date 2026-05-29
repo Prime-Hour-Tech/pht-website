@@ -15,6 +15,14 @@ export const contactInfo = defineType({
       validation: (Rule) => Rule.required().max(40),
     }),
     defineField({
+      name: "serviceAreaSub",
+      title: "Service Area — Sub Line",
+      description: "Secondary line shown under City, State on the Contact page Service Area panel. e.g., \"Statewide Utah on-site · Remote support across the US\".",
+      type: "string",
+      initialValue: "Statewide Utah on-site · Remote support across the US",
+      validation: (Rule) => Rule.required().max(120),
+    }),
+    defineField({
       name: "phone",
       title: "Phone",
       type: "object",

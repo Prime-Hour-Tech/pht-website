@@ -4,7 +4,13 @@ import { footer } from "./documents/footer";
 import { contactInfo } from "./documents/contactInfo";
 import { teamMember } from "./documents/teamMember";
 import { service } from "./documents/service";
+import { post } from "./documents/post";
 import { servicesIndexPage } from "./documents/servicesIndexPage";
+import { blogIndexPage } from "./documents/blogIndexPage";
+import { termsPage } from "./documents/termsPage";
+import { privacyPage } from "./documents/privacyPage";
+import { switchingPage } from "./documents/switchingPage";
+import { landingPage } from "./documents/landingPage";
 import { page } from "./documents/page";
 
 import { darkNumbersHero } from "./objects/darkNumbersHero";
@@ -16,6 +22,15 @@ import { servicesList } from "./objects/servicesList";
 import { beliefs } from "./objects/beliefs";
 import { headline } from "./objects/headline";
 import { ctaCard } from "./objects/ctaCard";
+import { pageHero } from "./objects/pageHero";
+import { originPhoto } from "./objects/originPhoto";
+import { storyThreeCol } from "./objects/storyThreeCol";
+import { numbersStrip } from "./objects/numbersStrip";
+import { milestonesTimeline } from "./objects/milestonesTimeline";
+import { officeCulture } from "./objects/officeCulture";
+import { industriesContent } from "./objects/industriesContent";
+import { industriesDontSeeYours } from "./objects/industriesDontSeeYours";
+import { contactBody } from "./objects/contactBody";
 
 export const schemaTypes = [
   siteSettings,
@@ -24,7 +39,13 @@ export const schemaTypes = [
   contactInfo,
   teamMember,
   service,
+  post,
   servicesIndexPage,
+  blogIndexPage,
+  termsPage,
+  privacyPage,
+  switchingPage,
+  landingPage,
   page,
   darkNumbersHero,
   trustStrip,
@@ -35,4 +56,13 @@ export const schemaTypes = [
   beliefs,
   headline,
   ctaCard,
+  pageHero,
+  originPhoto,
+  storyThreeCol,
+  numbersStrip,
+  milestonesTimeline,
+  officeCulture,
+  industriesContent,
+  industriesDontSeeYours,
+  contactBody,
 ];

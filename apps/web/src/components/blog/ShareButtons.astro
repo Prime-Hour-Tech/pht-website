@@ -1,0 +1,66 @@
+---
+import Icon from "../Icon.astro";
+
+interface Props {
+  url: string;
+  title: string;
+}
+
+const { url, title } = Astro.props;
+const encodedUrl = encodeURIComponent(url);
+const encodedTitle = encodeURIComponent(title);
+const linkedinHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+const xHref = `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`;
+---
+
+<div class="flex items-center gap-2" data-share-buttons>
+  <span class="font-mono text-[11px] text-muted tracking-mono-eyebrow uppercase mr-2">Share:</span>
+  <a
+    href={linkedinHref}
+    target="_blank"
+    rel="noopener"
+    aria-label="Share on LinkedIn"
+    class="inline-flex w-8 h-8 items-center justify-center rounded-md border border-line text-ink hover:border-accent/40 no-underline"
+  >
+    <Icon name="linkedin" size={14} />
+  </a>
+  <a
+    href={xHref}
+    target="_blank"
+    rel="noopener"
+    aria-label="Share on X"
+    class="inline-flex w-8 h-8 items-center justify-center rounded-md border border-line text-ink hover:border-accent/40 no-underline"
+  >
+    <Icon name="x" size={14} />
+  </a>
+  <button
+    type="button"
+    data-copy-link
+    aria-label="Copy link"
+    class="inline-flex w-8 h-8 items-center justify-center rounded-md border border-line text-ink hover:border-accent/40 bg-transparent cursor-pointer"
+  >
+    <Icon name="check" size={14} />
+  </button>
+  <span data-copy-feedback aria-live="polite" class="text-meta text-muted opacity-0 transition-opacity"></span>
+</div>
+
+<script is:inline>
+  (function () {
+    document.querySelectorAll('[data-share-buttons]').forEach((root) => {
+      const btn = root.querySelector('[data-copy-link]');
+      const fb = root.querySelector('[data-copy-feedback]');
+      if (!btn || !fb) return;
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          fb.textContent = 'Copied!';
+          fb.style.opacity = '1';
+          setTimeout(() => { fb.style.opacity = '0'; }, 1800);
+        } catch (_) {
+          fb.textContent = 'Copy failed';
+          fb.style.opacity = '1';
+        }
+      });
+    });
+  })();
+</script>

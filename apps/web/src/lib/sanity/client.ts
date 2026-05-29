@@ -1,26 +1,45 @@
 import { sanityClient } from "sanity:client";
 import type {
+  BlogIndexPage,
   ContactInfo,
   Footer,
+  LandingPage,
   Navigation,
   Page,
+  PostCard,
+  PostFull,
+  PostRssItem,
+  PrivacyPage,
   ServiceCard,
   ServiceFull,
   ServicesIndexPage,
   SiteSettings,
+  SwitchingPage,
+  TermsPage,
 } from "./types";
 import {
+  allLandingSlugsQuery,
   allPageSlugsQuery,
+  allPostsForRssQuery,
+  allPostsQuery,
+  blogIndexPageQuery,
   contactInfoQuery,
   footerQuery,
+  landingBySlugQuery,
   navigationQuery,
   otherServicesQuery,
   pageBySlugQuery,
+  postBySlugQuery,
+  postSlugListQuery,
+  privacyPageQuery,
+  relatedPostsQuery,
   serviceBySlugQuery,
   servicesIndexPageQuery,
   servicesListQuery,
   servicesSlugListQuery,
   siteSettingsQuery,
+  switchingPageQuery,
+  termsPageQuery,
 } from "./queries";
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
@@ -72,4 +91,48 @@ export async function getOtherServices(slug: string): Promise<ServiceCard[]> {
 
 export async function getServicesIndexPage(): Promise<ServicesIndexPage | null> {
   return await sanityClient.fetch<ServicesIndexPage | null>(servicesIndexPageQuery);
+}
+
+export async function getAllPostSlugs(): Promise<{ slug: string }[]> {
+  return await sanityClient.fetch<{ slug: string }[]>(postSlugListQuery);
+}
+
+export async function getPostBySlug(slug: string): Promise<PostFull | null> {
+  return await sanityClient.fetch<PostFull | null>(postBySlugQuery, { slug });
+}
+
+export async function getAllPosts(): Promise<PostCard[]> {
+  return await sanityClient.fetch<PostCard[]>(allPostsQuery);
+}
+
+export async function getAllPostsForRss(): Promise<PostRssItem[]> {
+  return await sanityClient.fetch<PostRssItem[]>(allPostsForRssQuery);
+}
+
+export async function getRelatedPosts(category: string, slug: string): Promise<PostCard[]> {
+  return await sanityClient.fetch<PostCard[]>(relatedPostsQuery, { category, slug });
+}
+
+export async function getBlogIndexPage(): Promise<BlogIndexPage | null> {
+  return await sanityClient.fetch<BlogIndexPage | null>(blogIndexPageQuery);
+}
+
+export async function getTermsPage(): Promise<TermsPage | null> {
+  return await sanityClient.fetch<TermsPage | null>(termsPageQuery);
+}
+
+export async function getPrivacyPage(): Promise<PrivacyPage | null> {
+  return await sanityClient.fetch<PrivacyPage | null>(privacyPageQuery);
+}
+
+export async function getSwitchingPage(): Promise<SwitchingPage | null> {
+  return await sanityClient.fetch<SwitchingPage | null>(switchingPageQuery);
+}
+
+export async function getAllLandingSlugs(): Promise<{ slug: string }[]> {
+  return await sanityClient.fetch<{ slug: string }[]>(allLandingSlugsQuery);
+}
+
+export async function getLandingBySlug(slug: string): Promise<LandingPage | null> {
+  return await sanityClient.fetch<LandingPage | null>(landingBySlugQuery, { slug });
 }

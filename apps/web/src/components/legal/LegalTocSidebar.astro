@@ -1,0 +1,37 @@
+---
+import type { LegalSection } from "../../lib/sanity/types";
+
+interface Props {
+  sections: LegalSection[];
+}
+
+const { sections } = Astro.props;
+
+function sectionId(i: number): string {
+  return `section-${String(i + 1).padStart(2, "0")}`;
+}
+---
+
+<nav class="md:sticky md:top-22 self-start" aria-label="Sections">
+  <details class="md:open" open>
+    <summary class="md:hidden cursor-pointer font-mono text-[11px] text-muted tracking-mono-eyebrow uppercase py-3 border-b border-line">
+      Jump to section
+    </summary>
+    <div class="hidden md:block font-mono text-[11px] text-muted tracking-mono-eyebrow uppercase mb-3">
+      Contents
+    </div>
+    <ol class="list-none m-0 p-0 flex flex-col gap-1.5">
+      {sections.map((s, i) => (
+        <li class="text-[14px] leading-snug">
+          <a
+            href={`#${sectionId(i)}`}
+            class="text-muted hover:text-accent no-underline inline-flex gap-2"
+          >
+            <span class="font-mono text-accent shrink-0">§&nbsp;{String(i + 1).padStart(2, "0")}</span>
+            <span class="text-ink">{s.title}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </details>
+</nav>

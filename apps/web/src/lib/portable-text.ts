@@ -8,17 +8,10 @@ import type { PortableTextBlock } from "@portabletext/types";
 //
 // Returns inline-only output (no outer <p>/<h*>) so consumers can wrap in
 // whatever heading tag they need.
-//
-// Legacy-string branch: during the Slice 3 migration window, some Sanity
-// documents may still hold the old plain-string heading shape (pre-migration
-// CtaCard). Render those as HTML-escaped plain text so the page doesn't blank
-// out before re-authoring. Remove this branch once all legacy data is gone.
 export function renderHeadlineRichText(
-  value: PortableTextBlock[] | string | null | undefined,
+  value: PortableTextBlock[] | null | undefined,
 ): string {
-  if (value == null) return "";
-  if (typeof value === "string") return escapeHtml(value);
-  if (!Array.isArray(value) || value.length === 0) return "";
+  if (value == null || value.length === 0) return "";
 
   return toHTML(value, {
     components: {
@@ -31,13 +24,4 @@ export function renderHeadlineRichText(
       },
     },
   });
-}
-
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
 }
