@@ -35,9 +35,9 @@ export default defineConfig({
   title: "PHT Website",
   projectId,
   dataset,
-  // Content Releases (scheduled/bundled publishing) isn't part of the
-  // marketer workflow — publishing goes through the Deploy tool's
-  // Preview/Production buttons. Disable to declutter the navbar.
+  // Content Releases is an Enterprise-only surcharge feature beyond our
+  // Growth plan — disable it so it doesn't show as a locked upsell.
+  // (Scheduled Drafts is left enabled; it's included in Growth.)
   releases: {
     enabled: false,
   },
