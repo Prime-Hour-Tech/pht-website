@@ -74,6 +74,11 @@ export default defineConfig({
       token,
       stega: {
         studioUrl: process.env.PUBLIC_SANITY_STUDIO_URL || "http://localhost:3333",
+        // Stega encodes an invisible per-field source map into content strings;
+        // the Presentation overlay needs it to detect documents on the page and
+        // map a click to its field. Gate on the same flag as the overlay so the
+        // encoding (and its byte overhead) never ships to production.
+        enabled: process.env.PUBLIC_SANITY_VISUAL_EDITING === "true",
       },
     }),
     sitemap({
