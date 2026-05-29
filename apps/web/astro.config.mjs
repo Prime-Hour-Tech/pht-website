@@ -4,6 +4,7 @@ import { config as loadDotenv } from "dotenv";
 import tailwindcss from "@tailwindcss/vite";
 import sanity from "@sanity/astro";
 import sitemap from "@astrojs/sitemap";
+import react from "@astrojs/react";
 
 // Astro's config runs in Node before Vite starts, so process.env is NOT populated
 // from apps/web/.env automatically. dotenv loads it explicitly. (On Vercel, env
@@ -81,6 +82,10 @@ export default defineConfig({
       // landing page also renders <meta name="robots" content="noindex, nofollow">.
       filter: (page) => !page.includes("/landing/"),
     }),
+    // React renderer — required for the <VisualEditing> island (client:only="react")
+    // in BaseLayout. Only instantiated when PUBLIC_SANITY_VISUAL_EDITING=true (preview),
+    // so no React ships to production where the flag is off.
+    react(),
   ],
   vite: {
     plugins: [tailwindcss()],

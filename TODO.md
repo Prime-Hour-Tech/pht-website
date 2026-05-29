@@ -39,16 +39,6 @@ Configuration and provider picks. Most are env-var pastes in Vercel; a few are s
   Test: open Studio → Presentation tab → iframe renders the preview deployment → click any element to edit its field.
 - **Domain swap to `primehourtech.com`.** DNS update in Vercel, swap `SITE_URL` env var, update `Sitemap:` line in `apps/web/public/robots.txt` to the new host.
 - **Wire downstream landing-form attribution.** The discovery form posts a `source: landing-{slug}` hidden field for paid-ad attribution. Configure your form provider's filtering / CRM tagging on that field.
-- **Wire the dual-deploy workflow (Slice 18 HANDOFF).** Shipped in Slice 18: dual-button Deploy tool + auto-sync GitHub Action. To activate:
-  1. **GitHub Workflow permissions:** at <https://github.com/Prime-Hour-Tech/pht-website/settings/actions> → "Workflow permissions" section → confirm **Read and write permissions** is selected. (The sync workflow uses the built-in `GITHUB_TOKEN` to push to `preview`, which needs write access. No PAT needed.)
-  2. **Vercel Project Settings → Git → Production Branch:** confirm `main`.
-  3. **Disable preview auto-deploy** — handled in `vercel.json` via `git.deploymentEnabled: { "preview": false }` (committed). This stops the sync action's push to `preview` from auto-deploying; the deploy hook still rebuilds preview on the button click. (No Ignored Build Step snippet needed — that approach had an ambiguous deploy-hook interaction.)
-  4. **Vercel Project Settings → Git → Deploy Hooks:** create a new hook for branch `preview`. Copy the URL.
-  5. **Vercel Project Settings → Domains** (optional): alias e.g. `preview.primehourtech.com` to the latest `preview` deployment for a prettier URL.
-  6. **Studio host env vars** (Sanity-hosted studio config OR wherever `sanity dev` / `sanity build` runs):
-     - `SANITY_STUDIO_VERCEL_PREVIEW_DEPLOY_HOOK` from step 4
-     - `SANITY_STUDIO_VERCEL_PREVIEW_URL` from step 5 (or the default Vercel branch URL)
-  7. **Verify:** push a trivial commit to `main` → check GitHub Actions tab → workflow runs green → preview branch updated. Open Studio → Deploy → both cards render → click Deploy to Preview → preview URL builds.
 
 ## C. Post-deploy verification
 

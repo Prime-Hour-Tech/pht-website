@@ -116,6 +116,6 @@ const enableVisualEditing = import.meta.env.PUBLIC_SANITY_VISUAL_EDITING === "tr
       contactInfo={contactInfo}
     />
     <CookieBanner />
-    {enableVisualEditing && <VisualEditing />}
+    <VisualEditing enabled={enableVisualEditing} />
   </body>
 </html>
