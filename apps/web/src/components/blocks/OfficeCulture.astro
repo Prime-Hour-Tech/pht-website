@@ -15,7 +15,7 @@ const imageUrl = block.image
   : null;
 ---
 
-<section class="bg-bg py-24 px-10">
+<section class="bg-bg py-24 px-5 md:px-10">
   <div class="max-w-content mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
     <div class="bg-bg-alt rounded-xl overflow-hidden" style={aspectStyle}>
       {imageUrl ? (
@@ -34,7 +34,7 @@ const imageUrl = block.image
       </div>
       <h2
         class="font-serif font-medium text-ink m-0"
-        style="font-size: 44px; line-height: 1.05; letter-spacing: -0.025em; text-wrap: balance;"
+        style="font-size: clamp(30px, 6vw, 44px); line-height: 1.05; letter-spacing: -0.025em; text-wrap: balance;"
       >
         <HeadlineRichText value={block.heading} />
       </h2>

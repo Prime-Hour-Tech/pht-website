@@ -36,7 +36,7 @@ const { block } = Astro.props;
       <div class="flex items-baseline gap-[18px] mb-2.5 flex-wrap">
         <span
           class="font-sans font-semibold leading-none tabular-nums text-dark-text"
-          style="font-size:144px; letter-spacing:-0.045em;"
+          style="font-size: clamp(56px, 13vw, 144px); letter-spacing:-0.045em;"
         >
           {block.bigNumber}
         </span>
@@ -76,7 +76,7 @@ const { block } = Astro.props;
 
     <!-- Right column — flush to artboard right edge, no right radius -->
     <div
-      class="self-stretch bg-white/[0.04] border border-dark-line border-r-0 p-6 mt-16 mb-6"
+      class="self-stretch bg-white/[0.04] border border-dark-line md:border-r-0 px-5 md:px-6 py-6 mt-16 mb-6"
       style="border-top-left-radius: var(--radius-xxl); border-bottom-left-radius: var(--radius-xxl);"
     >
       <div

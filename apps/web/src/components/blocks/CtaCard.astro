@@ -11,13 +11,13 @@ interface Props {
 const { block, contactInfo } = Astro.props;
 ---
 
-<section class="bg-bg py-24 px-10 border-b border-line">
+<section class="bg-bg py-24 px-5 md:px-10 border-b border-line">
   <div class="max-w-narrow mx-auto grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-14 items-center">
     <div>
       <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
         {block.eyebrow}
       </div>
-      <h2 class="font-serif font-medium tracking-display leading-display text-ink m-0" style="font-size: 56px; text-wrap: balance;">
+      <h2 class="font-serif font-medium tracking-display leading-display text-ink m-0" style="font-size: clamp(34px, 7vw, 56px); text-wrap: balance;">
         <HeadlineRichText value={block.heading} />
       </h2>
       <p class="mt-4 text-muted text-body-lg leading-body max-w-[500px]">

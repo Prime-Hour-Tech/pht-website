@@ -10,7 +10,7 @@ const { block } = Astro.props;
 const isTwoCol = block.deck.length === 2;
 ---
 
-<section class="bg-bg py-20 px-10">
+<section class="bg-bg py-20 px-5 md:px-10">
   <div class={`max-w-content mx-auto grid ${isTwoCol ? "grid-cols-1 md:grid-cols-[1.5fr_1fr]" : "grid-cols-1"} gap-16 items-end`}>
     <div>
       <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-4">
@@ -18,7 +18,7 @@ const isTwoCol = block.deck.length === 2;
       </div>
       <h1
         class="font-serif font-medium text-ink m-0 tracking-display-tight"
-        style="font-size: clamp(56px, 8vw, 104px); line-height: 0.94; text-wrap: balance;"
+        style="font-size: clamp(40px, 11vw, 104px); line-height: 0.94; text-wrap: balance;"
       >
         <HeadlineRichText value={block.headline} />
       </h1>

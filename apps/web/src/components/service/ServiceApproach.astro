@@ -13,7 +13,7 @@ interface Props {
 const { eyebrow, heading, body, bullets } = Astro.props;
 ---
 
-<section class="bg-bg py-24 px-10 border-b border-line">
+<section class="bg-bg py-24 px-5 md:px-10 border-b border-line">
   <div class="max-w-content mx-auto grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-16 items-start">
     <div class="md:sticky md:top-24">
       <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
@@ -21,7 +21,7 @@ const { eyebrow, heading, body, bullets } = Astro.props;
       </div>
       <h2
         class="font-serif font-medium text-ink m-0"
-        style="font-size: 48px; letter-spacing: -0.025em; line-height: 1.05; text-wrap: balance;"
+        style="font-size: clamp(30px, 6vw, 48px); letter-spacing: -0.025em; line-height: 1.05; text-wrap: balance;"
       >
         <HeadlineRichText value={heading} />
       </h2>

@@ -17,7 +17,7 @@ const tierEntries: Array<{ key: "essentials" | "standard" | "premier"; name: str
 ];
 ---
 
-<section class="bg-bg-alt px-10 py-20 border-y border-line">
+<section class="bg-bg-alt px-5 md:px-10 py-20 border-y border-line">
   <div class="max-w-content mx-auto">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-end mb-11">
       <div>
@@ -26,7 +26,7 @@ const tierEntries: Array<{ key: "essentials" | "standard" | "premier"; name: str
         </div>
         <h2
           class="font-serif font-medium text-ink m-0 tracking-display-tight"
-          style="font-size: 44px; line-height: 1.05; text-wrap: balance;"
+          style="font-size: clamp(30px, 6vw, 44px); line-height: 1.05; text-wrap: balance;"
         >
           <HeadlineRichText value={block.heading} />
         </h2>
@@ -76,7 +76,7 @@ const tierEntries: Array<{ key: "essentials" | "standard" | "premier"; name: str
           <div class="mt-4.5 flex items-baseline gap-2 relative">
             <span
               class={`font-serif font-medium ${featured ? "text-dark-text" : "text-ink"}`}
-              style="font-size: 64px; letter-spacing: -0.035em; line-height: 1; font-variant-numeric: tabular-nums;"
+              style="font-size: clamp(36px, 7vw, 64px); letter-spacing: -0.035em; line-height: 1; font-variant-numeric: tabular-nums;"
             >
               ${tier.price}
             </span>

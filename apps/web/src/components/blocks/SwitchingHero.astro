@@ -10,7 +10,7 @@ interface Props {
 const { block } = Astro.props;
 ---
 
-<section class="bg-dark text-dark-text px-10 pt-18 pb-0 relative overflow-hidden">
+<section class="bg-dark text-dark-text px-5 md:px-10 pt-18 pb-0 relative overflow-hidden">
   <!-- radial glow -->
   <div
     class="absolute pointer-events-none"
@@ -26,7 +26,7 @@ const { block } = Astro.props;
         </div>
         <h1
           class="font-serif font-medium text-dark-text m-0 tracking-display-tight"
-          style="font-size: 84px; line-height: 0.96; text-wrap: balance;"
+          style="font-size: clamp(42px, 9vw, 84px); line-height: 0.96; text-wrap: balance;"
         >
           <HeadlineRichText value={block.title} />
         </h1>
@@ -96,7 +96,7 @@ const { block } = Astro.props;
           <div class={i === 0 ? "" : "md:pl-7 md:border-l md:border-dark-line"}>
             <div
               class="font-serif font-medium text-dark-text"
-              style="font-size: 64px; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums;"
+              style="font-size: clamp(36px, 7vw, 64px); letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums;"
             >
               {s.k}
             </div>
