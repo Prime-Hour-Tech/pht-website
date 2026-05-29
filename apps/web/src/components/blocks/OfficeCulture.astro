@@ -10,17 +10,23 @@ interface Props {
 
 const { block } = Astro.props;
 const aspectStyle = `aspect-ratio: ${block.aspectRatio};`;
-const imageUrl = urlFor(block.image).width(1200).fit("max").url();
+const imageUrl = block.image
+  ? urlFor(block.image).width(1200).fit("max").url()
+  : null;
 ---
 
 <section class="bg-bg py-24 px-10">
   <div class="max-w-content mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
     <div class="bg-bg-alt rounded-xl overflow-hidden" style={aspectStyle}>
-      <img
-        src={imageUrl}
-        alt={block.image.alt}
-        class="w-full h-full object-cover"
-      />
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={block.image!.alt}
+          class="w-full h-full object-cover"
+        />
+      ) : (
+        <div class="w-full h-full" aria-hidden="true"></div>
+      )}
     </div>
     <div>
       <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
