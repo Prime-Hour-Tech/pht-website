@@ -6,7 +6,8 @@
     "dev": "sanity dev",
     "build": "sanity build",
     "deploy": "sanity deploy",
-    "seed": "sanity dataset import seed/initial-content.ndjson production"
+    "seed": "sanity dataset import seed/initial-content.ndjson --dataset production --missing",
+    "seed:replace": "sanity dataset import seed/initial-content.ndjson --dataset production --replace"
   },
   "dependencies": {
     "@sanity/icons": "^3.7.4",

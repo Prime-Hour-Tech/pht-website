@@ -4,21 +4,24 @@ NDJSON file pre-populating the Sanity dataset with content lifted from the desig
 
 ## Usage
 
-From the `apps/studio/` directory:
+From the repo root:
 
 ```bash
-# Default — additive (safe, won't overwrite existing docs)
-pnpm seed
+# Default — additive (uses --missing flag; skips docs that already exist by _id)
+pnpm seed:studio
 
-# OR equivalently:
-pnpm sanity dataset import seed/initial-content.ndjson production
+# Replace — overwrites every doc that matches an _id in the seed (loses author edits)
+pnpm seed:studio:replace
 ```
 
-To replace existing docs with the seed version (loses any author edits):
+Or from `apps/studio/`:
 
 ```bash
-pnpm sanity dataset import seed/initial-content.ndjson production --replace
+pnpm seed           # additive (--missing)
+pnpm seed:replace   # overwrite (--replace)
 ```
+
+**Important Sanity CLI default:** `sanity dataset import` without `--missing` or `--replace` flags **fails on the first conflict** ("Document by ID X already exists"). Our `pnpm seed` script wraps `--missing` so the import is safe and re-runnable. Use `pnpm seed:replace` only when you intentionally want to reset existing docs to the seed version.
 
 The CLI prompts for confirmation before importing. Cancel with `Ctrl+C`.
 
