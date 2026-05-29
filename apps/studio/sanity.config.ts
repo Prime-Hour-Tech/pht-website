@@ -37,6 +37,7 @@ export default defineConfig({
   dataset,
   plugins: [
     structureTool({
+      title: "Content",
       structure: (S) =>
         S.list()
           .title("Content")
@@ -67,8 +68,9 @@ export default defineConfig({
             }),
           ]),
     }),
-    visionTool(),
+    visionTool({ title: "Query" }),
     presentationTool({
+      title: "Preview",
       previewUrl: {
         origin: process.env.SANITY_STUDIO_PREVIEW_URL || "http://localhost:4321",
       },
