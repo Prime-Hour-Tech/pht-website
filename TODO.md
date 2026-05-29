@@ -10,7 +10,7 @@ Remaining work for the PHT marketing site. **Codebase is launch-ready.** Build s
 
 The seed populated every doc with design-source copy and placeholders. Replace section by section as real content becomes available — author in Studio (visual editing makes this easy: click any rendered element to jump to its field).
 
-- **Upload images.** The seed left every image field empty. Upload in Studio:
+- **Upload images.** The seed left every image field empty. Upload full-resolution — images are automatically resized per breakpoint, served as WebP/AVIF, and lazy-loaded (via `urlForResponsive`). Upload in Studio:
   - `siteSettings.logoDark` + `siteSettings.logoLight` (PHT logo variants — one is uploaded today)
   - `siteSettings.defaultOgImage` (1200×630 PHT-branded share card, neutral enough for any page)
   - `teamMember.photo` × 4 (4:5 portraits)
@@ -18,7 +18,7 @@ The seed populated every doc with design-source copy and placeholders. Replace s
   - `originPhoto.image` on the about page (founder/office photo)
   - `officeCulture.image` on the about page
   - `industriesContent` hero image (optional)
-- **Replace placeholder team members.** 3 of 4 `teamMember` docs are seeded with obvious placeholder names ("Engineer Two/Three/Four"). Replace with real engineer names, roles, bios, and photos.
+- **Replace placeholder team members.** All 4 `teamMember` docs are seeded with generic placeholder names ("Staff One"–"Staff Four"). Replace with real names, roles, bios, and photos.
 - **Swap `contactInfo` placeholders.** Seed values for phone `(801) 555-0100`, email `hello@primehourtech.com`, and address (Salt Lake City, UT only) are placeholders. Run `pnpm seed:studio:replace` to set `serviceAreaSub`, then edit the contact info in Studio with real phone/email/full address.
 - **Real customer logos in the trust strip.** Currently text placeholders ("LAW FIRM 01" etc.) in the home page's `trustStrip` block. Edit `items[]` to real customer names or upload SVG logos.
 - **Real testimonial.** `/switching` testimonial uses design's placeholder quote ("Operations Director · Professional services firm · 42 seats"). Swap with a real customer migration story when available.
@@ -48,7 +48,7 @@ Once deployed, validate the shipped SEO/feed infrastructure works against the li
 - **Verify RSS feed.** Hit `https://primehourtech.com/blog/rss.xml` — expect valid RSS 2.0 XML with up to 20 latest posts. Confirm `<link rel="alternate" type="application/rss+xml">` discovery tag in page source.
 - **Verify sitemap exclusions.** Hit `/sitemap-index.xml` → references `/sitemap-0.xml`. Open `/sitemap-0.xml` → confirm `/landing/*` URLs are absent, all other routes present. Spot-check a landing page's view-source → confirm `<meta name="robots" content="noindex, nofollow">` in head.
 - **Verify OG image previews.** Test deployed URLs at [opengraph.xyz](https://www.opengraph.xyz/) or LinkedIn Post Inspector. Pages with their own `ogImage` use that; others fall back to `siteSettings.defaultOgImage`.
-- **Lighthouse pass.** Run on home + a service detail page + a blog post. Verify Core Web Vitals before launch. Address any flags (likely candidates: image lazy-loading, font preload, JS bundle splitting).
+- **Lighthouse pass.** Run on home + a service detail page + a blog post. Verify Core Web Vitals before launch. (Responsive images, WebP/AVIF, and lazy-loading already ship.) Likely remaining flags: font preload, JS bundle splitting.
 - **Cross-browser sweep.** Chrome / Safari / Firefox / Edge on desktop + mobile Safari + Chrome Android. Especially the switching page's dealCard sidebar and the comparison table's responsive behavior.
 
 ## D. Optional / future / YAGNI
