@@ -40,7 +40,12 @@ export default defineConfig({
       useCdn: true,
       token,
     }),
-    sitemap(),
+    sitemap({
+      // Paid-ad landers are excluded from the sitemap. They're built for
+      // ad-campaign attribution and shouldn't compete in organic search. Each
+      // landing page also renders <meta name="robots" content="noindex, nofollow">.
+      filter: (page) => !page.includes("/landing/"),
+    }),
   ],
   vite: {
     plugins: [tailwindcss()],

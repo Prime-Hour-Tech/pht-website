@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import SEO from "../components/SEO.astro";
 import JsonLd from "../components/JsonLd.astro";
+import Analytics from "../components/Analytics.astro";
 import UtilityRow from "../components/chrome/UtilityRow.astro";
 import SiteNav from "../components/chrome/SiteNav.astro";
 import Footer from "../components/chrome/Footer.astro";
@@ -22,9 +23,11 @@ interface Props {
   description?: string;
   canonical: string;
   ogImage?: ImageRef;
+  /** Render <meta name="robots" content="noindex, nofollow">. Used by paid-ad landers. */
+  noindex?: boolean;
 }
 
-const { title, description: descriptionProp, canonical, ogImage } = Astro.props;
+const { title, description: descriptionProp, canonical, ogImage, noindex } = Astro.props;
 
 // Chrome data — parallel fetch. Each is required; missing = misconfiguration,
 // surface as a build failure with a helpful message.
@@ -85,6 +88,7 @@ const resolvedOgImageUrl = ogImageUrl(ogImage, siteSettings.defaultOgImage);
       siteName={siteSettings.siteName}
       ogImageUrl={resolvedOgImageUrl}
     />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link
       rel="alternate"
       type="application/rss+xml"
@@ -92,6 +96,7 @@ const resolvedOgImageUrl = ogImageUrl(ogImage, siteSettings.defaultOgImage);
       href="/blog/rss.xml"
     />
     <JsonLd data={organizationLd} />
+    <Analytics />
   </head>
   <body class="bg-bg text-ink-body antialiased">
     <UtilityRow contactInfo={contactInfo} />

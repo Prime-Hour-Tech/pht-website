@@ -85,6 +85,13 @@ const enabled = import.meta.env.PUBLIC_COOKIE_BANNER_ENABLED === "true";
         el.addEventListener("click", function () {
           var choice = el.getAttribute("data-cookie-action");
           try { localStorage.setItem(STORAGE_KEY, choice); } catch (_) {}
+
+          // Notify subscribers (Analytics, future marketing pixels, etc.) so
+          // they can react without polling localStorage.
+          document.dispatchEvent(new CustomEvent("pht-cookie-consent-changed", {
+            detail: { choice: choice }
+          }));
+
           // For "settings" we let the <a> navigate; for buttons just hide.
           if (el.tagName !== "A") hide();
         });
