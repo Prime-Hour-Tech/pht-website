@@ -14,6 +14,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@astrojs/react": "^5.0.6",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
     "@portabletext/to-html": "^5.0.2",
@@ -22,10 +23,14 @@
     "@sanity/client": "^7.22.0",
     "@sanity/image-url": "^2.1.1",
     "@sanity/visual-editing": "^5.4.3",
-    "astro": "^6.3.7"
+    "astro": "^6.3.7",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4",
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
     "dotenv": "^17.4.2",
     "tailwindcss": "^4",
     "vitest": "^4.1.7"
