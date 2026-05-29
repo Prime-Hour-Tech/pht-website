@@ -251,6 +251,7 @@ These hold data referenced from across the site. Author once; consumed everywher
 
 ## Authoring conventions
 
+- **Visual editing in Studio's Presentation pane.** Open any page doc → click the "Presentation" tab in Studio. An iframe of the rendered site appears. Click any heading, hero, pricing tier, or button to jump straight to its field in the editor — no need to scroll the blocks array or remember which block contains what.
 - **Slugs:** Use the route's exact slug for each `page` doc. The route file throws a build error naming the expected slug if the doc is missing — that's your authoring cue.
 - **Required fields:** Every block has `initialValue` seeds for its required string fields. You can save a block with no edits to get the design's defaults, but most blocks have at least one field without a seed (icons, bullets, or array items with redesigned shapes).
 - **`headline` fields:** A custom Portable Text type with one toolbar button — `Italic accent` — that styles a fragment as italic + accent red. Use it on the trailing word/phrase of a headline for the design's typical treatment ("Help that *actually moves the needle*"). Don't use it on every fragment; the design treats one accent run per headline.
@@ -273,4 +274,5 @@ These hold data referenced from across the site. Author once; consumed everywher
 - `page` docs needed (HANDOFF): `home`, `about`, `industries`, `contact`, `services`, `blog`, `switching`.
 - Singletons still to author: `termsPage`, `privacyPage`.
 - Content docs needed: 4 `teamMember`, 6 `service`, 1+ `post`, 1+ `landingPage` (per ad campaign).
+- Visual editing: icons + field-derived block previews + 7 insert-menu groups + Presentation Tool with click-to-edit overlays (Slice 15). Published-content only; draft preview is a follow-up if needed.
 - Updates to this map: when adding a new block type or changing a page's block sequence, update both the per-page section and the block library reference.

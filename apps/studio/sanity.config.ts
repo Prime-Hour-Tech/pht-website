@@ -1,6 +1,7 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
+import { presentationTool } from "sanity/presentation";
 import { schemaTypes } from "./schemas";
 import { getSanityEnv } from "./lib/env";
 import { DeployTool } from "./lib/deployTool";
@@ -67,6 +68,48 @@ export default defineConfig({
           ]),
     }),
     visionTool(),
+    presentationTool({
+      previewUrl: {
+        origin: process.env.SANITY_STUDIO_PREVIEW_URL || "http://localhost:4321",
+      },
+      resolve: {
+        locations: {
+          page: {
+            select: { slug: "slug.current", title: "title" },
+            resolve: (doc) => ({
+              locations: [{
+                href: doc?.slug === "home" ? "/" : `/${doc?.slug}`,
+                title: doc?.title || "Page",
+              }],
+            }),
+          },
+          post: {
+            select: { slug: "slug.current", title: "title" },
+            resolve: (doc) => ({
+              locations: [{ href: `/blog/${doc?.slug}`, title: doc?.title || "Post" }],
+            }),
+          },
+          service: {
+            select: { slug: "slug.current", name: "name" },
+            resolve: (doc) => ({
+              locations: [{ href: `/services/${doc?.slug}`, title: doc?.name || "Service" }],
+            }),
+          },
+          landingPage: {
+            select: { slug: "slug.current", title: "title" },
+            resolve: (doc) => ({
+              locations: [{ href: `/landing/${doc?.slug}`, title: doc?.title || "Landing page" }],
+            }),
+          },
+          termsPage: {
+            resolve: () => ({ locations: [{ href: "/terms", title: "Terms" }] }),
+          },
+          privacyPage: {
+            resolve: () => ({ locations: [{ href: "/privacy", title: "Privacy" }] }),
+          },
+        },
+      },
+    }),
   ],
   tools: [
     {

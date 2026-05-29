@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { DocumentsIcon } from "@sanity/icons";
 
 export const postList = defineType({
   name: "postList",
   title: "Post List",
   type: "object",
+  icon: DocumentsIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -29,6 +31,14 @@ export const postList = defineType({
     }),
   ],
   preview: {
-    prepare: () => ({ title: "Post List", subtitle: "Renders the blog post grid" }),
+    select: { eyebrow: "eyebrow", headline: "heading.0.children.0.text" },
+    prepare: ({ eyebrow, headline }: { eyebrow?: string; headline?: string }) => {
+      const subtitleParts = [eyebrow, headline].filter(Boolean);
+      return {
+        title: "Post list",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: DocumentsIcon,
+      };
+    },
   },
 });

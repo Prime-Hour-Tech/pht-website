@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { ClockIcon } from "@sanity/icons";
 
 export const milestonesTimeline = defineType({
   name: "milestonesTimeline",
   title: "Milestones Timeline",
   type: "object",
+  icon: ClockIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -60,10 +62,14 @@ export const milestonesTimeline = defineType({
     }),
   ],
   preview: {
-    select: { eyebrow: "eyebrow", count: "items.length" },
-    prepare: ({ eyebrow, count }) => ({
-      title: "Milestones Timeline",
-      subtitle: `${eyebrow ?? "?"} · ${count ?? 0} items`,
-    }),
+    select: { eyebrow: "eyebrow", items: "items" },
+    prepare: ({ eyebrow, items }: { eyebrow?: string; items?: unknown[] }) => {
+      const subtitleParts = [items?.length ? items.length + " milestones" : null, eyebrow || null].filter(Boolean);
+      return {
+        title: "Milestones timeline",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: ClockIcon,
+      };
+    },
   },
 });

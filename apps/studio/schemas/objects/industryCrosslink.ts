@@ -1,4 +1,5 @@
 import { defineType, defineField } from "sanity";
+import { LinkIcon } from "@sanity/icons";
 
 const ICON_OPTIONS = [
   "monitor", "shield", "cloud", "server", "compass", "globe",
@@ -10,6 +11,7 @@ export const industryCrosslink = defineType({
   name: "industryCrosslink",
   title: "Industry Crosslink",
   type: "object",
+  icon: LinkIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -67,5 +69,15 @@ export const industryCrosslink = defineType({
       validation: (Rule) => Rule.required().length(4),
     }),
   ],
-  preview: { prepare: () => ({ title: "Industry Crosslink" }) },
+  preview: {
+    select: { eyebrow: "eyebrow", tiles: "tiles" },
+    prepare: ({ eyebrow, tiles }: { eyebrow?: string; tiles?: unknown[] }) => {
+      const subtitleParts = [tiles?.length ? tiles.length + " tiles" : null, eyebrow || null].filter(Boolean);
+      return {
+        title: "Industry crosslink",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: LinkIcon,
+      };
+    },
+  },
 });

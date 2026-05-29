@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { SplitVerticalIcon } from "@sanity/icons";
 
 export const switchingCompare = defineType({
   name: "switchingCompare",
   title: "Switching Compare",
   type: "object",
+  icon: SplitVerticalIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -42,5 +44,15 @@ export const switchingCompare = defineType({
       validation: (Rule) => Rule.required().min(4).max(8),
     }),
   ],
-  preview: { prepare: () => ({ title: "Switching Compare" }) },
+  preview: {
+    select: { eyebrow: "eyebrow", rows: "rows" },
+    prepare: ({ eyebrow, rows }: { eyebrow?: string; rows?: unknown[] }) => {
+      const subtitleParts = [rows?.length ? rows.length + " rows" : null, eyebrow || null].filter(Boolean);
+      return {
+        title: "Comparison table",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: SplitVerticalIcon,
+      };
+    },
+  },
 });

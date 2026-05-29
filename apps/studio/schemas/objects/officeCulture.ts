@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { HomeIcon } from "@sanity/icons";
 
 export const officeCulture = defineType({
   name: "officeCulture",
   title: "Office / Culture",
   type: "object",
+  icon: HomeIcon,
   fields: [
     defineField({
       name: "image",
@@ -63,7 +65,14 @@ export const officeCulture = defineType({
     }),
   ],
   preview: {
-    select: { eyebrow: "eyebrow" },
-    prepare: ({ eyebrow }) => ({ title: "Office / Culture", subtitle: eyebrow ?? "Block" }),
+    select: { eyebrow: "eyebrow", headline: "heading.0.children.0.text" },
+    prepare: ({ eyebrow, headline }: { eyebrow?: string; headline?: string }) => {
+      const subtitleParts = [eyebrow, headline].filter(Boolean);
+      return {
+        title: "Office / culture",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: HomeIcon,
+      };
+    },
   },
 });

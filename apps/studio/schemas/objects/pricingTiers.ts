@@ -1,4 +1,5 @@
 import { defineType, defineField } from "sanity";
+import { BillIcon } from "@sanity/icons";
 
 const pricingTierFields = () => [
   defineField({ name: "tag", title: "Tag (Sub-Label)", type: "string", validation: (Rule) => Rule.required().max(60) }),
@@ -21,6 +22,7 @@ export const pricingTiers = defineType({
   name: "pricingTiers",
   title: "Pricing Tiers",
   type: "object",
+  icon: BillIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -110,5 +112,15 @@ export const pricingTiers = defineType({
       validation: (Rule) => Rule.required(),
     }),
   ],
-  preview: { prepare: () => ({ title: "Pricing Tiers" }) },
+  preview: {
+    select: { eyebrow: "eyebrow", headline: "heading.0.children.0.text" },
+    prepare: ({ eyebrow, headline }: { eyebrow?: string; headline?: string }) => {
+      const subtitleParts = ["3 tiers", eyebrow || headline || null].filter(Boolean);
+      return {
+        title: "Pricing tiers",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: BillIcon,
+      };
+    },
+  },
 });

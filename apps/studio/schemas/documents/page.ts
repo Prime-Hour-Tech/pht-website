@@ -88,6 +88,51 @@ export const page = defineType({
         defineArrayMember({ type: "switchingTestimonial" }),
         defineArrayMember({ type: "faqList" }),
       ],
+      options: {
+        insertMenu: {
+          groups: [
+            {
+              name: "heroes",
+              title: "Heroes",
+              of: ["darkNumbersHero", "pageHero", "servicesIndexHero", "switchingHero"],
+            },
+            {
+              name: "editorial",
+              title: "Editorial",
+              of: [
+                "storyThreeCol", "headaches", "beliefs", "originPhoto", "officeCulture",
+                "milestonesTimeline", "numbersStrip",
+                "switchingReasons", "switchingHandle", "switchingPromises", "switchingTestimonial",
+              ],
+            },
+            {
+              name: "pricing",
+              title: "Pricing & Process",
+              of: ["pricingTiers", "bundleGrid", "savings", "processStrip", "switchingTimeline", "switchingCompare"],
+            },
+            {
+              name: "trust",
+              title: "Trust & Team",
+              of: ["teamGrid", "trustStrip", "servicesList"],
+            },
+            {
+              name: "industries",
+              title: "Industries",
+              of: ["industriesContent", "industriesDontSeeYours", "industryCrosslink"],
+            },
+            {
+              name: "blog",
+              title: "Blog & FAQ",
+              of: ["postList", "faqList"],
+            },
+            {
+              name: "cta",
+              title: "Contact & CTA",
+              of: ["contactBody", "ctaCard"],
+            },
+          ],
+        },
+      },
     }),
   ],
   preview: {

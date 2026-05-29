@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { TargetIcon } from "@sanity/icons";
 
 export const switchingHero = defineType({
   name: "switchingHero",
   title: "Switching Hero",
   type: "object",
+  icon: TargetIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -119,5 +121,15 @@ export const switchingHero = defineType({
       validation: (Rule) => Rule.required().length(4),
     }),
   ],
-  preview: { prepare: () => ({ title: "Switching Hero" }) },
+  preview: {
+    select: { eyebrow: "eyebrow", headline: "title.0.children.0.text" },
+    prepare: ({ eyebrow, headline }: { eyebrow?: string; headline?: string }) => {
+      const subtitleParts = [eyebrow, headline].filter(Boolean);
+      return {
+        title: "Hero (switching + deal card)",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: TargetIcon,
+      };
+    },
+  },
 });

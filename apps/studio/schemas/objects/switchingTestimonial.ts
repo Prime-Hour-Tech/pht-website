@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { BlockquoteIcon } from "@sanity/icons";
 
 export const switchingTestimonial = defineType({
   name: "switchingTestimonial",
   title: "Switching Testimonial",
   type: "object",
+  icon: BlockquoteIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -36,5 +38,15 @@ export const switchingTestimonial = defineType({
       validation: (Rule) => Rule.required().max(80),
     }),
   ],
-  preview: { prepare: () => ({ title: "Switching Testimonial" }) },
+  preview: {
+    select: { eyebrow: "eyebrow", quote: "quote" },
+    prepare: ({ eyebrow, quote }: { eyebrow?: string; quote?: string }) => {
+      const subtitleParts = [eyebrow, quote].filter(Boolean);
+      return {
+        title: "Testimonial",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: BlockquoteIcon,
+      };
+    },
+  },
 });

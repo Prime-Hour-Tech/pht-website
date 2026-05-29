@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { ProjectsIcon } from "@sanity/icons";
 
 export const storyThreeCol = defineType({
   name: "storyThreeCol",
   title: "Story (3-Column)",
   type: "object",
+  icon: ProjectsIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -53,10 +55,14 @@ export const storyThreeCol = defineType({
     }),
   ],
   preview: {
-    select: { eyebrow: "eyebrow" },
-    prepare: ({ eyebrow }) => ({
-      title: eyebrow || "Story (3-Column)",
-      subtitle: "Block",
-    }),
+    select: { eyebrow: "eyebrow", headline: "heading.0.children.0.text" },
+    prepare: ({ eyebrow, headline }: { eyebrow?: string; headline?: string }) => {
+      const subtitleParts = [eyebrow, headline].filter(Boolean);
+      return {
+        title: "Story (3 columns)",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: ProjectsIcon,
+      };
+    },
   },
 });

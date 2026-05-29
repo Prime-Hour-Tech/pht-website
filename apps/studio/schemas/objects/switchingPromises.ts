@@ -1,4 +1,5 @@
 import { defineType, defineField } from "sanity";
+import { LockIcon } from "@sanity/icons";
 
 const ICON_OPTIONS = [
   "monitor", "shield", "cloud", "server", "compass", "globe",
@@ -10,6 +11,7 @@ export const switchingPromises = defineType({
   name: "switchingPromises",
   title: "Switching Promises",
   type: "object",
+  icon: LockIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -62,5 +64,15 @@ export const switchingPromises = defineType({
       validation: (Rule) => Rule.required().length(4),
     }),
   ],
-  preview: { prepare: () => ({ title: "Switching Promises" }) },
+  preview: {
+    select: { eyebrow: "eyebrow", promises: "promises" },
+    prepare: ({ eyebrow, promises }: { eyebrow?: string; promises?: unknown[] }) => {
+      const subtitleParts = [promises?.length ? promises.length + " promises" : null, eyebrow || null].filter(Boolean);
+      return {
+        title: "Promises",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: LockIcon,
+      };
+    },
+  },
 });

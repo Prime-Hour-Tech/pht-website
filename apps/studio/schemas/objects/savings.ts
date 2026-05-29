@@ -1,9 +1,11 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
+import { ArrowDownIcon } from "@sanity/icons";
 
 export const savings = defineType({
   name: "savings",
   title: "Savings Section",
   type: "object",
+  icon: ArrowDownIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -96,10 +98,14 @@ export const savings = defineType({
     }),
   ],
   preview: {
-    select: { title: "heading" },
-    prepare: ({ title }) => ({
-      title: title ?? "Savings",
-      subtitle: "Block",
-    }),
+    select: { eyebrow: "eyebrow", headline: "heading" },
+    prepare: ({ eyebrow, headline }: { eyebrow?: string; headline?: string }) => {
+      const subtitleParts = [eyebrow, headline].filter(Boolean);
+      return {
+        title: "Savings chart",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: ArrowDownIcon,
+      };
+    },
   },
 });

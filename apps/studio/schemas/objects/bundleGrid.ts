@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { PackageIcon } from "@sanity/icons";
 
 export const bundleGrid = defineType({
   name: "bundleGrid",
   title: "Bundle Grid",
   type: "object",
+  icon: PackageIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -45,5 +47,15 @@ export const bundleGrid = defineType({
       validation: (Rule) => Rule.required(),
     }),
   ],
-  preview: { prepare: () => ({ title: "Bundle Grid" }) },
+  preview: {
+    select: { eyebrow: "eyebrow", tiles: "tiles" },
+    prepare: ({ eyebrow, tiles }: { eyebrow?: string; tiles?: unknown[] }) => {
+      const subtitleParts = [tiles?.length ? tiles.length + " bundles" : null, eyebrow || null].filter(Boolean);
+      return {
+        title: "Bundle grid",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: PackageIcon,
+      };
+    },
+  },
 });

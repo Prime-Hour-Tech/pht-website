@@ -1,4 +1,5 @@
 import { defineType, defineField } from "sanity";
+import { EarthGlobeIcon } from "@sanity/icons";
 
 const ICON_OPTIONS = [
   "monitor", "shield", "cloud", "server", "compass", "globe",
@@ -9,6 +10,7 @@ export const industriesContent = defineType({
   name: "industriesContent",
   title: "Industries Content",
   type: "object",
+  icon: EarthGlobeIcon,
   fields: [
     defineField({
       name: "jumpLabel",
@@ -90,10 +92,14 @@ export const industriesContent = defineType({
     }),
   ],
   preview: {
-    select: { firstName: "verticals.0.name" },
-    prepare: ({ firstName }) => ({
-      title: "Industries Content",
-      subtitle: firstName ? `Starts: ${firstName}` : "Block",
-    }),
+    select: { verticals: "verticals" },
+    prepare: ({ verticals }: { verticals?: unknown[] }) => {
+      const subtitleParts = [verticals?.length ? verticals.length + " verticals" : null].filter(Boolean);
+      return {
+        title: "Industries (verticals)",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: EarthGlobeIcon,
+      };
+    },
   },
 });

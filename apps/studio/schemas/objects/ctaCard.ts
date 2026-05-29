@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { LaunchIcon } from "@sanity/icons";
 
 export const ctaCard = defineType({
   name: "ctaCard",
   title: "CTA Card",
   type: "object",
+  icon: LaunchIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -42,17 +44,13 @@ export const ctaCard = defineType({
     }),
   ],
   preview: {
-    select: { heading: "heading" },
-    prepare: ({ heading }) => {
-      // heading is now a Portable Text array; extract first block's text.
-      const firstBlock = Array.isArray(heading) ? heading[0] : null;
-      const text =
-        firstBlock && Array.isArray(firstBlock.children)
-          ? firstBlock.children.map((c: { text?: string }) => c.text ?? "").join("")
-          : "";
+    select: { eyebrow: "eyebrow", heading: "heading.0.children.0.text" },
+    prepare: ({ eyebrow, heading }: { eyebrow?: string; heading?: string }) => {
+      const subtitleParts = [eyebrow, heading].filter(Boolean);
       return {
-        title: text ? `${text} (CTA)` : "CTA Card",
-        subtitle: "Block",
+        title: "CTA card",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: LaunchIcon,
       };
     },
   },

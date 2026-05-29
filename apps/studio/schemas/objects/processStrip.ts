@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { CheckmarkCircleIcon } from "@sanity/icons";
 
 export const processStrip = defineType({
   name: "processStrip",
   title: "Process Strip",
   type: "object",
+  icon: CheckmarkCircleIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -54,5 +56,15 @@ export const processStrip = defineType({
       validation: (Rule) => Rule.required().min(3).max(6),
     }),
   ],
-  preview: { prepare: () => ({ title: "Process Strip" }) },
+  preview: {
+    select: { eyebrow: "eyebrow", steps: "steps" },
+    prepare: ({ eyebrow, steps }: { eyebrow?: string; steps?: unknown[] }) => {
+      const subtitleParts = [steps?.length ? steps.length + " steps" : null, eyebrow || null].filter(Boolean);
+      return {
+        title: "Process strip",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: CheckmarkCircleIcon,
+      };
+    },
+  },
 });

@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { ImageIcon } from "@sanity/icons";
 
 export const originPhoto = defineType({
   name: "originPhoto",
   title: "Origin Photo",
   type: "object",
+  icon: ImageIcon,
   fields: [
     defineField({
       name: "image",
@@ -67,10 +69,14 @@ export const originPhoto = defineType({
     }),
   ],
   preview: {
-    select: { quote: "caption.quote" },
-    prepare: ({ quote }) => ({
-      title: quote || "Origin Photo",
-      subtitle: "Block",
-    }),
+    select: { quote: "caption.quote", attribution: "caption.attribution" },
+    prepare: ({ quote, attribution }: { quote?: string; attribution?: string }) => {
+      const subtitleParts = [quote, attribution].filter(Boolean);
+      return {
+        title: "Origin photo",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: ImageIcon,
+      };
+    },
   },
 });

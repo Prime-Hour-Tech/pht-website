@@ -39,6 +39,9 @@ export default defineConfig({
       apiVersion,
       useCdn: true,
       token,
+      stega: {
+        studioUrl: process.env.PUBLIC_SANITY_STUDIO_URL || "http://localhost:3333",
+      },
     }),
     sitemap({
       // Paid-ad landers are excluded from the sitemap. They're built for

@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { HelpCircleIcon } from "@sanity/icons";
 
 export const faqList = defineType({
   name: "faqList",
   title: "FAQ List",
   type: "object",
+  icon: HelpCircleIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -53,5 +55,15 @@ export const faqList = defineType({
       validation: (Rule) => Rule.required().min(3).max(10),
     }),
   ],
-  preview: { prepare: () => ({ title: "FAQ List" }) },
+  preview: {
+    select: { eyebrow: "eyebrow", headline: "heading.0.children.0.text", items: "items" },
+    prepare: ({ eyebrow, headline, items }: { eyebrow?: string; headline?: string; items?: unknown[] }) => {
+      const subtitleParts = [items?.length ? items.length + " questions" : null, eyebrow || headline || null].filter(Boolean);
+      return {
+        title: "FAQ list",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: HelpCircleIcon,
+      };
+    },
+  },
 });

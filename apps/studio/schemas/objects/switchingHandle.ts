@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { WrenchIcon } from "@sanity/icons";
 
 export const switchingHandle = defineType({
   name: "switchingHandle",
   title: "Switching Handle (Awkward Parts)",
   type: "object",
+  icon: WrenchIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -38,5 +40,15 @@ export const switchingHandle = defineType({
       validation: (Rule) => Rule.required().min(3).max(6),
     }),
   ],
-  preview: { prepare: () => ({ title: "Switching Handle" }) },
+  preview: {
+    select: { eyebrow: "eyebrow", items: "items" },
+    prepare: ({ eyebrow, items }: { eyebrow?: string; items?: unknown[] }) => {
+      const subtitleParts = [items?.length ? items.length + " items" : null, eyebrow || null].filter(Boolean);
+      return {
+        title: "Awkward parts",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: WrenchIcon,
+      };
+    },
+  },
 });

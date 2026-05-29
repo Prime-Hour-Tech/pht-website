@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { RocketIcon } from "@sanity/icons";
 
 export const servicesIndexHero = defineType({
   name: "servicesIndexHero",
   title: "Services Index Hero",
   type: "object",
+  icon: RocketIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -35,7 +37,14 @@ export const servicesIndexHero = defineType({
     }),
   ],
   preview: {
-    select: { eyebrow: "eyebrow" },
-    prepare: ({ eyebrow }) => ({ title: "Services Index Hero", subtitle: eyebrow }),
+    select: { eyebrow: "eyebrow", headline: "heading.0.children.0.text", featured: "featuredService.name" },
+    prepare: ({ eyebrow, featured }: { eyebrow?: string; headline?: string; featured?: string }) => {
+      const subtitleParts = [eyebrow, featured ? "→ " + featured : null].filter(Boolean);
+      return {
+        title: "Hero (services + featured)",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: RocketIcon,
+      };
+    },
   },
 });

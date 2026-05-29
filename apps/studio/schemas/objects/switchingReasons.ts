@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { HelpCircleIcon } from "@sanity/icons";
 
 export const switchingReasons = defineType({
   name: "switchingReasons",
   title: "Switching Reasons",
   type: "object",
+  icon: HelpCircleIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -52,5 +54,23 @@ export const switchingReasons = defineType({
       validation: (Rule) => Rule.required().length(3),
     }),
   ],
-  preview: { prepare: () => ({ title: "Switching Reasons" }) },
+  preview: {
+    select: {
+      eyebrow: "eyebrow",
+      headline: "title.0.children.0.text",
+      items: "items",
+    },
+    prepare: ({ eyebrow, headline, items }: { eyebrow?: string; headline?: string; items?: unknown[] }) => {
+      const count = Array.isArray(items) ? items.length : 0;
+      const subtitleParts = [
+        count > 0 ? `${count} cards` : null,
+        eyebrow || headline || null,
+      ].filter(Boolean);
+      return {
+        title: "Reasons",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: HelpCircleIcon,
+      };
+    },
+  },
 });

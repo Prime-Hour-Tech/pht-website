@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { BlockElementIcon } from "@sanity/icons";
 
 export const pageHero = defineType({
   name: "pageHero",
   title: "Page Hero",
   type: "object",
+  icon: BlockElementIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -29,16 +31,13 @@ export const pageHero = defineType({
     }),
   ],
   preview: {
-    select: { headline: "headline", eyebrow: "eyebrow" },
-    prepare: ({ headline, eyebrow }) => {
-      const firstBlock = Array.isArray(headline) ? headline[0] : null;
-      const text =
-        firstBlock && Array.isArray(firstBlock.children)
-          ? firstBlock.children.map((c: { text?: string }) => c.text ?? "").join("")
-          : "";
+    select: { eyebrow: "eyebrow", headline: "headline.0.children.0.text" },
+    prepare: ({ eyebrow, headline }: { eyebrow?: string; headline?: string }) => {
+      const subtitleParts = [eyebrow, headline].filter(Boolean);
       return {
-        title: text || "Page Hero",
-        subtitle: eyebrow ? `Eyebrow: ${eyebrow}` : "Block",
+        title: "Hero (simple)",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: BlockElementIcon,
       };
     },
   },

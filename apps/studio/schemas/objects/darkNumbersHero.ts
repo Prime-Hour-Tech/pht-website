@@ -1,9 +1,11 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
+import { BoltIcon } from "@sanity/icons";
 
 export const darkNumbersHero = defineType({
   name: "darkNumbersHero",
   title: "Dark Numbers Hero",
   type: "object",
+  icon: BoltIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -113,10 +115,14 @@ export const darkNumbersHero = defineType({
     }),
   ],
   preview: {
-    select: { num: "bigNumber", cap: "bigNumberCaption" },
-    prepare: ({ num, cap }) => ({
-      title: `${num ?? ""} ${cap ?? ""}`.trim() || "Dark Numbers Hero",
-      subtitle: "Hero block",
-    }),
+    select: { num: "bigNumber", cap: "bigNumberCaption", eyebrow: "eyebrow" },
+    prepare: ({ num, cap, eyebrow }: { num?: string; cap?: string; eyebrow?: string }) => {
+      const subtitleParts = [num, cap, eyebrow].filter(Boolean);
+      return {
+        title: "Hero (dark numbers)",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: BoltIcon,
+      };
+    },
   },
 });

@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { ClockIcon } from "@sanity/icons";
 
 export const switchingTimeline = defineType({
   name: "switchingTimeline",
   title: "Switching Timeline",
   type: "object",
+  icon: ClockIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -38,5 +40,15 @@ export const switchingTimeline = defineType({
       validation: (Rule) => Rule.required().min(3).max(5),
     }),
   ],
-  preview: { prepare: () => ({ title: "Switching Timeline" }) },
+  preview: {
+    select: { eyebrow: "eyebrow", phases: "phases" },
+    prepare: ({ eyebrow, phases }: { eyebrow?: string; phases?: unknown[] }) => {
+      const subtitleParts = [phases?.length ? phases.length + " phases" : null, eyebrow || null].filter(Boolean);
+      return {
+        title: "Migration timeline",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: ClockIcon,
+      };
+    },
+  },
 });
