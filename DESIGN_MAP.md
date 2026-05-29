@@ -271,8 +271,7 @@ These hold data referenced from across the site. Author once; consumed everywher
 
 - All page templates are code-complete. Blocks library: 31 blocks.
 - Singletons authored: `siteSettings`, `navigation`, `footer`, `contactInfo` (existing).
-- `page` docs needed (HANDOFF): `home`, `about`, `industries`, `contact`, `services`, `blog`, `switching`.
-- Singletons still to author: `termsPage`, `privacyPage`.
-- Content docs needed: 4 `teamMember`, 6 `service`, 1+ `post`, 1+ `landingPage` (per ad campaign).
+- All `page` / `service` / `teamMember` / `post` / `landingPage` / legal-singleton docs seeded via `apps/studio/seed/initial-content.ndjson` (Slice 17). Run `pnpm seed` from `apps/studio/` to import.
+- Marketer replaces seeded content section-by-section in Studio: real engineer names/bios for 3 placeholder team members, real customer testimonials, real contact info, real images (uploaded via Studio after seeding).
 - Visual editing: icons + field-derived block previews + 7 insert-menu groups + Presentation Tool with click-to-edit overlays (Slice 15). Published-content only; draft preview is a follow-up if needed.
 - Updates to this map: when adding a new block type or changing a page's block sequence, update both the per-page section and the block library reference.
