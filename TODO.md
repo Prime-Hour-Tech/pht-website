@@ -95,3 +95,5 @@ Don't pick up until a real trigger fires.
 - **Working slice specs + plans:** `docs/superpowers/specs/` and `docs/superpowers/plans/`. **Note: `docs/` is gitignored** — these files are local-only and may not exist in a fresh checkout. They're working artifacts; reconstructable from this TODO + git history.
 
 ---
+
+Test Deployment
