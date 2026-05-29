@@ -84,7 +84,7 @@ Scope: published-content only — editors see what's currently live. To preview 
 
 ## Seeding the Sanity dataset
 
-A comprehensive seed file at `apps/studio/seed/initial-content.ndjson` populates 25 starter docs (7 page docs, 6 services, 4 team members, 3 posts, 2 landing pages, 3 singletons) with copy lifted from the design canvas. Run from the repo root:
+A comprehensive seed file at `apps/studio/seed/initial-content.ndjson` populates 28 starter docs (7 page docs, 6 services, 4 team members, 3 posts, 2 landing pages, 6 singletons — including `siteSettings`/`navigation`/`footer`, which are hard-required for the build) with copy lifted from the design canvas. Run from the repo root:
 
 ```bash
 pnpm seed:studio              # additive — skips existing docs

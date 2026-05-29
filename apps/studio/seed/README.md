@@ -27,18 +27,18 @@ The CLI prompts for confirmation before importing. Cancel with `Ctrl+C`.
 
 ## What gets seeded
 
-25 docs total. Default `pnpm seed` (additive) creates docs that don't exist and skips ones that do:
+28 docs total. Default `pnpm seed` (additive) creates docs that don't exist and skips ones that do:
 
 - **7 page docs** with full block sequences — home, about, industries, contact, services, blog, switching
 - **6 service docs** — managed-it, cybersecurity, cloud, infrastructure, vcio-advisory, compliance
 - **4 teamMember docs** — Devin + 3 placeholder engineers (swap names + bios when real info is available)
 - **3 post docs** — varied categories for blog grid visual richness
 - **2 landingPage docs** — example paid-ad landers (Managed IT + Cybersecurity)
-- **3 singletons** — termsPage, privacyPage (full Portable Text bodies), contactInfo
+- **6 singletons** — `siteSettings` (text only — `siteName` + `siteDescription`), `navigation` (5 nav items + CTA), `footer` (3 link columns + Terms/Privacy + LinkedIn placeholder + copyright), `contactInfo`, `termsPage`, `privacyPage` (the last two with full Portable Text bodies)
+
+The three "chrome" singletons (`siteSettings`, `navigation`, `footer`) are **hard-required** — `BaseLayout.astro` throws a build error if any is missing. Seeding them means a from-scratch import produces a buildable site. Because they use fixed `_id`s, an additive `pnpm seed` into a dataset where they already exist will **skip** them (no clobbering); they only land in a fresh/empty dataset.
 
 ## What's NOT seeded (intentionally)
-
-- **`siteSettings`, `navigation`, `footer`** — these are likely already authored (the build's BaseLayout gets past them). Including them in the seed would risk clobbering existing values. To reseed these explicitly, edit the NDJSON to include them and run with `--replace`.
 
 - **Image assets** — NDJSON references asset `_ref`s but binaries need separate upload. After seeding, upload these in Studio:
   - `siteSettings.logoDark`, `siteSettings.logoLight`, `siteSettings.defaultOgImage` (1200×630 PHT share card)
