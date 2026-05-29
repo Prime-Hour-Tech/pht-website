@@ -2,7 +2,7 @@
 import type { OfficeCultureBlock } from "../../lib/sanity/types";
 import HeadlineRichText from "../HeadlineRichText.astro";
 import Icon from "../Icon.astro";
-import { urlFor } from "../../lib/sanity/imageUrl";
+import { urlForResponsive } from "../../lib/sanity/imageUrl";
 
 interface Props {
   block: OfficeCultureBlock;
@@ -10,19 +10,24 @@ interface Props {
 
 const { block } = Astro.props;
 const aspectStyle = `aspect-ratio: ${block.aspectRatio};`;
-const imageUrl = block.image
-  ? urlFor(block.image).width(1200).fit("max").url()
+const img = block.image
+  ? urlForResponsive(block.image, { widths: [480, 768, 1024, 1200] })
   : null;
 ---
 
 <section class="bg-bg py-24 px-5 md:px-10">
   <div class="max-w-content mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
     <div class="bg-bg-alt rounded-xl overflow-hidden" style={aspectStyle}>
-      {imageUrl ? (
+      {img ? (
         <img
-          src={imageUrl}
+          src={img.src}
+          srcset={img.srcset}
+          sizes="(min-width: 1280px) 600px, (min-width: 768px) 48vw, 100vw"
+          width={img.width}
           alt={block.image!.alt}
           class="w-full h-full object-cover"
+          loading="lazy"
+          decoding="async"
         />
       ) : (
         <div class="w-full h-full" aria-hidden="true"></div>

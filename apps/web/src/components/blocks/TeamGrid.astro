@@ -1,6 +1,6 @@
 ---
 import type { TeamGridBlock } from "../../lib/sanity/types";
-import { urlFor } from "../../lib/sanity/imageUrl";
+import { urlForResponsive } from "../../lib/sanity/imageUrl";
 
 interface Props {
   block: TeamGridBlock;
@@ -36,18 +36,24 @@ const members = block.members?.filter(Boolean) ?? [];
       )}
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
       {members.map((m) => {
-        const photoUrl = m.photo
-          ? urlFor(m.photo).width(600).height(750).fit("crop").url()
+        const photo = m.photo
+          ? urlForResponsive(m.photo, { widths: [160, 320, 480, 600], aspect: 0.8 })
           : null;
         return (
           <div>
-            {photoUrl ? (
+            {photo ? (
               <img
-                src={photoUrl}
+                src={photo.src}
+                srcset={photo.srcset}
+                sizes="(min-width: 1024px) 290px, (min-width: 640px) 23vw, 45vw"
+                width={photo.width}
+                height={photo.height}
                 alt={m.photo!.alt}
                 class="block w-full aspect-[4/5] object-cover rounded-lg mb-4"
+                loading="lazy"
+                decoding="async"
               />
             ) : (
               <div

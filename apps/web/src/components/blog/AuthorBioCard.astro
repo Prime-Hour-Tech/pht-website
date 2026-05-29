@@ -1,24 +1,30 @@
 ---
 import type { PostFull } from "../../lib/sanity/types";
-import { urlFor } from "../../lib/sanity/imageUrl";
+import { urlForResponsive } from "../../lib/sanity/imageUrl";
 
 interface Props {
   author: PostFull["author"];
 }
 
 const { author } = Astro.props;
-const photoUrl = author.photo
-  ? urlFor(author.photo).width(160).height(160).fit("crop").url()
+const photo = author.photo
+  ? urlForResponsive(author.photo, { widths: [80, 160, 240], aspect: 1 })
   : null;
 ---
 
 <section class="bg-bg-alt px-10 py-12 border-y border-line">
   <div class="max-w-[720px] mx-auto flex flex-col sm:flex-row gap-6 items-start">
-    {photoUrl ? (
+    {photo ? (
       <img
-        src={photoUrl}
+        src={photo.src}
+        srcset={photo.srcset}
+        sizes="80px"
+        width={photo.width}
+        height={photo.height}
         alt={author.photo?.alt ?? author.name}
         class="w-20 h-20 rounded-full object-cover flex-shrink-0"
+        loading="lazy"
+        decoding="async"
       />
     ) : (
       <div class="w-20 h-20 rounded-full bg-bg-alt border border-line flex-shrink-0"></div>
