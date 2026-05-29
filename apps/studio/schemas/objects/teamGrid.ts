@@ -1,9 +1,11 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
+import { UsersIcon } from "@sanity/icons";
 
 export const teamGrid = defineType({
   name: "teamGrid",
   title: "Team Grid",
   type: "object",
+  icon: UsersIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -58,10 +60,14 @@ export const teamGrid = defineType({
     }),
   ],
   preview: {
-    select: { title: "heading" },
-    prepare: ({ title }) => ({
-      title: title ?? "Team Grid",
-      subtitle: "Block",
-    }),
+    select: { eyebrow: "eyebrow", members: "members" },
+    prepare: ({ eyebrow, members }: { eyebrow?: string; members?: unknown[] }) => {
+      const subtitleParts = [members?.length ? members.length + " members" : null, eyebrow || null].filter(Boolean);
+      return {
+        title: "Team grid",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: UsersIcon,
+      };
+    },
   },
 });

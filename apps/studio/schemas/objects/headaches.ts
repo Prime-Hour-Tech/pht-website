@@ -1,9 +1,11 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
+import { HeartIcon } from "@sanity/icons";
 
 export const headaches = defineType({
   name: "headaches",
   title: "Headaches Section",
   type: "object",
+  icon: HeartIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -53,10 +55,14 @@ export const headaches = defineType({
     }),
   ],
   preview: {
-    select: { title: "heading" },
-    prepare: ({ title }) => ({
-      title: title ?? "Headaches",
-      subtitle: "Block",
-    }),
+    select: { eyebrow: "eyebrow", headline: "heading", items: "items" },
+    prepare: ({ eyebrow, headline, items }: { eyebrow?: string; headline?: string; items?: unknown[] }) => {
+      const subtitleParts = [items?.length ? items.length + " items" : null, eyebrow || headline || null].filter(Boolean);
+      return {
+        title: "Headaches",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: HeartIcon,
+      };
+    },
   },
 });

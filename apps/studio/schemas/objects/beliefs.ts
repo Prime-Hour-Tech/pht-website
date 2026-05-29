@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { SparkleIcon } from "@sanity/icons";
 
 export const beliefs = defineType({
   name: "beliefs",
   title: "Beliefs Section",
   type: "object",
+  icon: SparkleIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -34,10 +36,14 @@ export const beliefs = defineType({
     }),
   ],
   preview: {
-    select: { title: "heading" },
-    prepare: ({ title }) => ({
-      title: title ?? "Beliefs",
-      subtitle: "Block",
-    }),
+    select: { eyebrow: "eyebrow", headline: "heading", items: "items" },
+    prepare: ({ eyebrow, items }: { eyebrow?: string; headline?: string; items?: unknown[] }) => {
+      const subtitleParts = [items?.length ? items.length + " beliefs" : null, eyebrow || null].filter(Boolean);
+      return {
+        title: "Beliefs",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: SparkleIcon,
+      };
+    },
   },
 });

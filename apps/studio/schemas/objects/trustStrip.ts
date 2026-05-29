@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { UsersIcon } from "@sanity/icons";
 
 export const trustStrip = defineType({
   name: "trustStrip",
   title: "Trust Strip",
   type: "object",
+  icon: UsersIcon,
   fields: [
     defineField({
       name: "label",
@@ -22,10 +24,14 @@ export const trustStrip = defineType({
     }),
   ],
   preview: {
-    select: { items: "items" },
-    prepare: ({ items }) => ({
-      title: `Trust strip (${(items ?? []).length} labels)`,
-      subtitle: "Block",
-    }),
+    select: { label: "label", items: "items" },
+    prepare: ({ label, items }: { label?: string; items?: unknown[] }) => {
+      const subtitleParts = [label, items?.length ? items.length + " items" : null].filter(Boolean);
+      return {
+        title: "Trust strip",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: UsersIcon,
+      };
+    },
   },
 });

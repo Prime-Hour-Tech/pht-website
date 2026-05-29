@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { UserIcon } from "@sanity/icons";
 
 export const contactBody = defineType({
   name: "contactBody",
   title: "Contact Body",
   type: "object",
+  icon: UserIcon,
   fields: [
     defineField({
       name: "formHeading",
@@ -103,6 +105,10 @@ export const contactBody = defineType({
     }),
   ],
   preview: {
-    prepare: () => ({ title: "Contact Body", subtitle: "Block" }),
+    prepare: () => ({
+      title: "Contact body",
+      subtitle: "Form + hours + map",
+      media: UserIcon,
+    }),
   },
 });

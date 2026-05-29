@@ -1,9 +1,11 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
+import { StackCompactIcon } from "@sanity/icons";
 
 export const servicesList = defineType({
   name: "servicesList",
   title: "Services List",
   type: "object",
+  icon: StackCompactIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -32,10 +34,14 @@ export const servicesList = defineType({
     }),
   ],
   preview: {
-    select: { title: "heading" },
-    prepare: ({ title }) => ({
-      title: title ?? "Services List",
-      subtitle: "Block",
-    }),
+    select: { eyebrow: "eyebrow", headline: "heading", services: "services" },
+    prepare: ({ eyebrow, services }: { eyebrow?: string; headline?: string; services?: unknown[] }) => {
+      const subtitleParts = [services?.length ? services.length + " services" : null, eyebrow || null].filter(Boolean);
+      return {
+        title: "Services list",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: StackCompactIcon,
+      };
+    },
   },
 });

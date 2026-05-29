@@ -182,6 +182,109 @@ export const pageBySlugQuery = /* groq */ `
         successHeading,
         successBody,
         existingClientPanel { label, primary, sub, href }
+      },
+      _type == "postList" => {
+        eyebrow,
+        heading,
+        emptyStateMessage
+      },
+      _type == "servicesIndexHero" => {
+        eyebrow,
+        heading,
+        deck,
+        featuredService->{
+          _id,
+          name,
+          "slug": slug.current,
+          iconName,
+          eyebrow,
+          headline,
+          deck,
+          heroStat,
+          capabilities
+        }
+      },
+      _type == "pricingTiers" => {
+        eyebrow,
+        heading,
+        deck,
+        essentials,
+        standard,
+        premier
+      },
+      _type == "bundleGrid" => {
+        eyebrow,
+        heading,
+        deck,
+        secondaryLinkLabel,
+        secondaryLinkHref,
+        tiles,
+        footerLinkLabel,
+        footerLinkHref
+      },
+      _type == "processStrip" => {
+        eyebrow,
+        heading,
+        steps
+      },
+      _type == "industryCrosslink" => {
+        eyebrow,
+        heading,
+        tiles
+      },
+      _type == "switchingHero" => {
+        eyebrow,
+        title,
+        deck,
+        ctaPrimaryLabel,
+        ctaPrimaryHref,
+        ctaSecondaryLabel,
+        ctaSecondaryHref,
+        dealCard,
+        factSheetLabel,
+        liveDotLabel,
+        stats
+      },
+      _type == "switchingReasons" => {
+        eyebrow,
+        title,
+        deck,
+        items
+      },
+      _type == "switchingTimeline" => {
+        eyebrow,
+        title,
+        deck,
+        phases
+      },
+      _type == "switchingHandle" => {
+        eyebrow,
+        title,
+        deck,
+        items
+      },
+      _type == "switchingCompare" => {
+        eyebrow,
+        title,
+        usHeader,
+        themHeader,
+        rows
+      },
+      _type == "switchingPromises" => {
+        eyebrow,
+        title,
+        promises
+      },
+      _type == "switchingTestimonial" => {
+        eyebrow,
+        quote,
+        attributionRole,
+        attributionContext
+      },
+      _type == "faqList" => {
+        eyebrow,
+        heading,
+        items
       }
     }
   }
@@ -324,64 +427,6 @@ export const otherServicesQuery = /* groq */ `
   }
 `;
 
-export const servicesIndexPageQuery = /* groq */ `
-  *[_type == "servicesIndexPage"][0] {
-    heroEyebrow,
-    heroHeading,
-    heroDeck,
-    featuredService->{
-      _id,
-      name,
-      "slug": slug.current,
-      iconName,
-      eyebrow,
-      headline,
-      deck,
-      heroStat,
-      capabilities
-    },
-    pricingHeading { eyebrow, heading, deck },
-    pricingTiers {
-      essentials { tag, tagline, price, includesHead, bullets, ctaLabel, ctaHref, flagLabel },
-      standard   { tag, tagline, price, includesHead, bullets, ctaLabel, ctaHref, flagLabel },
-      premier    { tag, tagline, price, includesHead, bullets, ctaLabel, ctaHref, flagLabel }
-    },
-    pricingFooterNote,
-    pricingFooterLinkLabel,
-    pricingFooterLinkHref,
-    gridHeading { eyebrow, heading, secondaryLinkLabel, secondaryLinkHref },
-    bundleTile {
-      eyebrow,
-      heading,
-      body,
-      rows[]{ serviceLabel, descriptor },
-      footerHeadline,
-      footerLinkLabel,
-      footerLinkHref
-    },
-    processStrip {
-      eyebrow,
-      heading,
-      deck,
-      steps[]{ title, body }
-    },
-    industryCrosslink {
-      eyebrow,
-      heading,
-      deck,
-      ctaLinkLabel,
-      ctaLinkHref,
-      tiles[]{ iconName, label, sub, href }
-    },
-    ctaEyebrow,
-    ctaHeading,
-    ctaDeck,
-    ctaLabel,
-    ctaHref,
-    otherServicesHeading,
-    otherServicesViewAllLabel
-  }
-`;
 
 // All four post queries share the same completeness filter — same pattern as
 // the SERVICE_COMPLETE_FILTER above. Posts missing any required structural
@@ -481,18 +526,6 @@ export const relatedPostsQuery = /* groq */ `
   }
 `;
 
-export const blogIndexPageQuery = /* groq */ `
-  *[_type == "blogIndexPage"][0] {
-    heroEyebrow,
-    heroHeading,
-    heroDeck,
-    ctaEyebrow,
-    ctaHeading,
-    ctaDeck,
-    ctaLabel,
-    ctaHref
-  }
-`;
 
 export const termsPageQuery = /* groq */ `
   *[_type == "termsPage"][0] {
@@ -604,81 +637,3 @@ export const landingBySlugQuery = /* groq */ `
   }
 `;
 
-export const switchingPageQuery = /* groq */ `
-  *[_type == "switchingPage"][0] {
-    hero {
-      eyebrow,
-      title,
-      deck,
-      ctaPrimaryLabel,
-      ctaPrimaryHref,
-      ctaSecondaryLabel,
-      ctaSecondaryHref,
-      dealCard {
-        eyebrow,
-        rows[]{ label, value }
-      },
-      factSheetLabel,
-      liveDotLabel,
-      stats[]{ k, v }
-    },
-    reasons {
-      eyebrow,
-      title,
-      deck,
-      items[]{ head, body, flagLabel }
-    },
-    timeline {
-      eyebrow,
-      title,
-      deck,
-      weeks[]{
-        k,
-        sub,
-        head,
-        body,
-        deliverables,
-        ours
-      }
-    },
-    handle {
-      eyebrow,
-      title,
-      deck,
-      items[]{ head, body }
-    },
-    compare {
-      eyebrow,
-      title,
-      rows[]{ aspect, currentMsp, pht }
-    },
-    promises {
-      eyebrow,
-      title,
-      items[]{ iconName, head, body }
-    },
-    testimonial {
-      eyebrow,
-      quote,
-      name,
-      role,
-      cardEyebrow,
-      metricK,
-      metricV,
-      locationLabel
-    },
-    faq {
-      eyebrow,
-      title,
-      deck,
-      items[]{ question, answer }
-    },
-    cta {
-      eyebrow,
-      heading,
-      deck,
-      label,
-      href
-    }
-  }
-`;

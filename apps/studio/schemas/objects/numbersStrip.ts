@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { BarChartIcon } from "@sanity/icons";
 
 export const numbersStrip = defineType({
   name: "numbersStrip",
   title: "Numbers Strip",
   type: "object",
+  icon: BarChartIcon,
   fields: [
     defineField({
       name: "stats",
@@ -34,6 +36,14 @@ export const numbersStrip = defineType({
     }),
   ],
   preview: {
-    prepare: () => ({ title: "Numbers Strip", subtitle: "Block" }),
+    select: { stats: "stats" },
+    prepare: ({ stats }: { stats?: unknown[] }) => {
+      const subtitleParts = [stats?.length ? stats.length + " stats" : null].filter(Boolean);
+      return {
+        title: "Numbers strip",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: BarChartIcon,
+      };
+    },
   },
 });

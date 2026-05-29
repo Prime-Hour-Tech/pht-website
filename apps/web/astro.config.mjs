@@ -29,6 +29,38 @@ if (!token) {
   );
 }
 
+// Feature-gate env checks. These don't break the build — the corresponding
+// feature gracefully degrades when unset — but the build log should announce
+// what's missing so pre-launch checklist items don't slip through.
+// All warnings are prefixed [env] for greppability in Vercel logs.
+const warn = (msg) => console.warn(`[env] ${msg}`);
+
+const siteUrl = process.env.SITE_URL;
+const vercelEnv = process.env.VERCEL_ENV;
+if ((!siteUrl || siteUrl === "http://localhost:4321") && vercelEnv && vercelEnv !== "development") {
+  warn(
+    "SITE_URL is unset or points at localhost on a non-dev Vercel deployment. Canonical URLs, JSON-LD, sitemap, and RSS will reference localhost. Set to https://primehourtech.com (or the live URL) before launch.",
+  );
+}
+
+if (!process.env.CONTACT_FORM_URL) {
+  warn(
+    "CONTACT_FORM_URL is unset. The contact form's action falls back to \"#\" and submissions will not work. Pick a provider (Web3Forms / Formspree / Basin) and set its action URL.",
+  );
+}
+
+if (!process.env.PUBLIC_GTM_CONTAINER_ID) {
+  warn(
+    "PUBLIC_GTM_CONTAINER_ID is unset. Analytics disabled — no GTM script will load. Create a GTM container at tagmanager.google.com and set the GTM-XXXXXXX ID.",
+  );
+}
+
+if (process.env.PUBLIC_COOKIE_BANNER_ENABLED !== "true") {
+  warn(
+    "PUBLIC_COOKIE_BANNER_ENABLED is not \"true\". Cookie banner hidden — GTM will never fire (it's consent-gated). Set to \"true\" after legal copy is finalized.",
+  );
+}
+
 export default defineConfig({
   site: process.env.SITE_URL ?? "http://localhost:4321",
   output: "static",
@@ -39,6 +71,9 @@ export default defineConfig({
       apiVersion,
       useCdn: true,
       token,
+      stega: {
+        studioUrl: process.env.PUBLIC_SANITY_STUDIO_URL || "http://localhost:3333",
+      },
     }),
     sitemap({
       // Paid-ad landers are excluded from the sitemap. They're built for

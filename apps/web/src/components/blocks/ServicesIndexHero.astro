@@ -1,0 +1,128 @@
+---
+import type { ServicesIndexHeroBlock } from "../../lib/sanity/types";
+import HeadlineRichText from "../HeadlineRichText.astro";
+import Icon from "../Icon.astro";
+
+interface Props {
+  block: ServicesIndexHeroBlock;
+}
+
+const { block } = Astro.props;
+const featured = block.featuredService;
+const topFour = featured.capabilities.slice(0, 4);
+---
+
+<section class="bg-dark text-dark-text px-10 py-20 relative overflow-hidden" aria-label="Services index hero">
+  <div class="max-w-content mx-auto relative">
+    <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
+      ◆ {block.eyebrow}
+    </div>
+    <h1
+      class="font-serif font-medium text-dark-text m-0 leading-tight"
+      style="font-size: 56px; letter-spacing: -0.03em; text-wrap: balance;"
+    >
+      <HeadlineRichText value={block.heading} />
+    </h1>
+    <p class="mt-4 text-dark-muted text-body-lg leading-body max-w-[640px]">
+      {block.deck}
+    </p>
+  </div>
+</section>
+
+<section id={featured.slug} class="bg-bg px-10 py-22">
+  <div class="max-w-content mx-auto">
+    <div class="flex items-baseline justify-between mb-6 flex-wrap gap-4">
+      <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase">
+        ◆ Featured · The spine of every engagement
+      </div>
+    </div>
+
+    <div
+      class="bg-dark text-dark-text rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-[1.35fr_1fr] min-h-[460px] relative"
+    >
+      <!-- radial glow -->
+      <div
+        class="absolute pointer-events-none"
+        style="top: -120px; right: -140px; width: 460px; height: 460px; background: radial-gradient(circle, rgb(220 38 38 / 0.2), transparent 70%);"
+      ></div>
+
+      <!-- left — copy -->
+      <div class="p-11 flex flex-col relative z-10">
+        <div class="inline-flex items-center gap-3 mb-5">
+          <span
+            class="w-12 h-12 rounded-xl bg-accent/20 text-accent border border-accent/40 inline-flex items-center justify-center"
+          >
+            <Icon name={featured.iconName} size={22} />
+          </span>
+          <span class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase">
+            {featured.eyebrow}
+          </span>
+        </div>
+        <h2
+          class="font-serif font-medium text-dark-text m-0 tracking-display-tight"
+          style="font-size: 64px; line-height: 0.98; text-wrap: balance;"
+        >
+          <HeadlineRichText value={featured.headline} />
+        </h2>
+        <p class="mt-4.5 text-dark-muted text-body-md leading-body max-w-[520px]">
+          {featured.deck}
+        </p>
+
+        <div class="mt-auto pt-8 flex gap-3 items-center flex-wrap">
+          <a
+            href={`/services/${featured.slug}`}
+            class="bg-accent text-white font-semibold rounded-md inline-flex items-center justify-center gap-2.5 no-underline shadow-button-accent"
+            style="padding: 14px 22px; font-size: 15px;"
+          >
+            Read the {featured.name} spec
+            <Icon name="arrow" size={16} />
+          </a>
+          <a
+            href="/contact"
+            class="text-dark-text no-underline font-medium rounded-md border border-dark-line"
+            style="padding: 14px 20px; font-size: 15px;"
+          >
+            Schedule a discovery call →
+          </a>
+        </div>
+      </div>
+
+      <!-- right — stat + capabilities -->
+      <div
+        class="p-11 border-l border-dark-line flex flex-col relative z-10"
+        style="background: rgba(255,255,255,0.02);"
+      >
+        <div class="font-mono text-meta text-dark-muted tracking-mono-eyebrow uppercase">
+          ◇ At a glance
+        </div>
+        <div class="mt-4.5">
+          <div
+            class="font-serif font-medium text-dark-text"
+            style="font-size: 96px; letter-spacing: -0.04em; line-height: 0.95; font-variant-numeric: tabular-nums;"
+          >
+            {featured.heroStat.k}
+          </div>
+          <div class="mt-2.5 text-dark-muted text-body-base leading-tight max-w-[280px]">
+            {featured.heroStat.v}
+          </div>
+        </div>
+
+        <ul class="mt-auto p-0 list-none flex flex-col gap-0">
+          {topFour.map((cap) => (
+            <li
+              class="flex items-center justify-between py-3 border-t border-dark-line text-[13.5px] text-dark-text"
+            >
+              <span class="inline-flex items-center gap-2.5">
+                <span class="text-accent"><Icon name="check" size={14} stroke={2} /></span>
+                {cap.name}
+              </span>
+              <span class="font-mono text-[10px] text-dark-muted tracking-[1px] uppercase">
+                Included
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

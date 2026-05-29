@@ -12,6 +12,8 @@
     "build:web": "pnpm --filter web build",
     "build:studio": "pnpm --filter studio build",
     "deploy:studio": "pnpm --filter studio run deploy",
+    "seed:studio": "pnpm --filter studio seed",
+    "seed:studio:replace": "pnpm --filter studio seed:replace",
     "test": "pnpm -r test"
   }
 }

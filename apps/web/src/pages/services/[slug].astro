@@ -13,7 +13,6 @@ import {
   getServiceBySlug,
   getOtherServices,
   getContactInfo,
-  getServicesIndexPage,
 } from "../../lib/sanity/client";
 
 export async function getStaticPaths() {
@@ -29,11 +28,10 @@ if (!slug) {
   throw new Error("Service slug missing at build time.");
 }
 
-const [service, others, contactInfo, indexPage] = await Promise.all([
+const [service, others, contactInfo] = await Promise.all([
   getServiceBySlug(slug),
   getOtherServices(slug),
   getContactInfo(),
-  getServicesIndexPage(),
 ]);
 
 if (!service) {
@@ -44,12 +42,6 @@ if (!service) {
 if (!contactInfo) {
   throw new Error("Contact Info singleton not found in Sanity (required by service page).");
 }
-// indexPage is optional here: service detail pages only consume two short
-// labels from it (Other Services row). When the singleton hasn't been
-// authored yet — e.g., right after the schema lands but before the user
-// fills it in Studio — we fall back to the same defaults the schema's
-// `initialValue` uses. The /services index page genuinely needs the
-// singleton (10 fields incl. HeadlineRichText) and still throws.
 ---
 
 <BaseLayout title={service.name} description={service.shortDescription}>
@@ -82,8 +74,8 @@ if (!contactInfo) {
   />
 
   <OtherServices
-    heading={indexPage?.otherServicesHeading ?? "Other services"}
-    viewAllLabel={indexPage?.otherServicesViewAllLabel ?? "View all →"}
+    heading="Other services"
+    viewAllLabel="View all →"
     services={others}
   />
 

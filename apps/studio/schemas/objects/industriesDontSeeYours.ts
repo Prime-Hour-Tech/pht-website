@@ -1,4 +1,5 @@
 import { defineType, defineField } from "sanity";
+import { EnvelopeIcon } from "@sanity/icons";
 
 const ctaLinkField = (name: string, title: string, labelDefault: string, hrefDefault: string) =>
   defineField({
@@ -28,6 +29,7 @@ export const industriesDontSeeYours = defineType({
   name: "industriesDontSeeYours",
   title: "Industries — Don't See Yours",
   type: "object",
+  icon: EnvelopeIcon,
   fields: [
     defineField({
       name: "eyebrow",
@@ -53,10 +55,14 @@ export const industriesDontSeeYours = defineType({
     ctaLinkField("secondaryCta", "Secondary CTA", "Read about our approach", "/about"),
   ],
   preview: {
-    select: { eyebrow: "eyebrow" },
-    prepare: ({ eyebrow }) => ({
-      title: "Don't See Yours? (Industries CTA)",
-      subtitle: eyebrow ?? "Block",
-    }),
+    select: { eyebrow: "eyebrow", headline: "heading.0.children.0.text" },
+    prepare: ({ eyebrow, headline }: { eyebrow?: string; headline?: string }) => {
+      const subtitleParts = [eyebrow, headline].filter(Boolean);
+      return {
+        title: "Don't see your industry",
+        subtitle: subtitleParts.join(" · ") || "—",
+        media: EnvelopeIcon,
+      };
+    },
   },
 });

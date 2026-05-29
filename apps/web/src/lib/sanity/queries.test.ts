@@ -10,16 +10,13 @@ import {
   serviceBySlugQuery,
   servicesListQuery,
   otherServicesQuery,
-  servicesIndexPageQuery,
   postSlugListQuery,
   postBySlugQuery,
   allPostsForRssQuery,
   allPostsQuery,
   relatedPostsQuery,
-  blogIndexPageQuery,
   termsPageQuery,
   privacyPageQuery,
-  switchingPageQuery,
   allLandingSlugsQuery,
   landingBySlugQuery,
 } from "./queries";
@@ -246,6 +243,133 @@ describe("pageBySlugQuery — block projections", () => {
       expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
     }
   });
+
+  it("projects postList fields", () => {
+    expect(pageBySlugQuery).toContain('"postList"');
+    const block = pageBySlugQuery.match(/_type == "postList"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "heading", "emptyStateMessage"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects servicesIndexHero fields", () => {
+    expect(pageBySlugQuery).toContain('"servicesIndexHero"');
+    const block = pageBySlugQuery.match(/_type == "servicesIndexHero"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "heading", "deck", "featuredService"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+    expect(block![1]).toContain("featuredService->");
+  });
+
+  it("projects pricingTiers fields", () => {
+    expect(pageBySlugQuery).toContain('"pricingTiers"');
+    const block = pageBySlugQuery.match(/_type == "pricingTiers"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "heading", "deck", "essentials", "standard", "premier"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects bundleGrid fields", () => {
+    expect(pageBySlugQuery).toContain('"bundleGrid"');
+    const block = pageBySlugQuery.match(/_type == "bundleGrid"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "heading", "deck", "secondaryLinkLabel", "secondaryLinkHref", "tiles", "footerLinkLabel", "footerLinkHref"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects processStrip fields", () => {
+    expect(pageBySlugQuery).toContain('"processStrip"');
+    const block = pageBySlugQuery.match(/_type == "processStrip"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "heading", "steps"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects industryCrosslink fields", () => {
+    expect(pageBySlugQuery).toContain('"industryCrosslink"');
+    const block = pageBySlugQuery.match(/_type == "industryCrosslink"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "heading", "tiles"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects switchingHero fields", () => {
+    expect(pageBySlugQuery).toContain('"switchingHero"');
+    const block = pageBySlugQuery.match(/_type == "switchingHero"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "title", "deck", "ctaPrimaryLabel", "ctaPrimaryHref", "ctaSecondaryLabel", "ctaSecondaryHref", "dealCard", "factSheetLabel", "liveDotLabel", "stats"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects switchingReasons fields", () => {
+    expect(pageBySlugQuery).toContain('"switchingReasons"');
+    const block = pageBySlugQuery.match(/_type == "switchingReasons"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "title", "deck", "items"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects switchingTimeline fields", () => {
+    expect(pageBySlugQuery).toContain('"switchingTimeline"');
+    const block = pageBySlugQuery.match(/_type == "switchingTimeline"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "title", "deck", "phases"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects switchingHandle fields", () => {
+    expect(pageBySlugQuery).toContain('"switchingHandle"');
+    const block = pageBySlugQuery.match(/_type == "switchingHandle"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "title", "deck", "items"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects switchingCompare fields", () => {
+    expect(pageBySlugQuery).toContain('"switchingCompare"');
+    const block = pageBySlugQuery.match(/_type == "switchingCompare"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "title", "usHeader", "themHeader", "rows"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects switchingPromises fields", () => {
+    expect(pageBySlugQuery).toContain('"switchingPromises"');
+    const block = pageBySlugQuery.match(/_type == "switchingPromises"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "title", "promises"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects switchingTestimonial fields", () => {
+    expect(pageBySlugQuery).toContain('"switchingTestimonial"');
+    const block = pageBySlugQuery.match(/_type == "switchingTestimonial"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "quote", "attributionRole", "attributionContext"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
+
+  it("projects faqList fields", () => {
+    expect(pageBySlugQuery).toContain('"faqList"');
+    const block = pageBySlugQuery.match(/_type == "faqList"[^{}]*\{([\s\S]*?)\}\s*\}/);
+    expect(block).not.toBeNull();
+    for (const field of ["eyebrow", "heading", "items"]) {
+      expect(block![1]).toMatch(new RegExp(`\\b${field}\\b`));
+    }
+  });
 });
 
 describe("service queries", () => {
@@ -335,44 +459,6 @@ describe("service queries", () => {
     expect(otherServicesQuery).toContain("iconName");
   });
 
-  it("servicesIndexPageQuery selects the singleton with all new fields + dereferenced featuredService", () => {
-    expect(servicesIndexPageQuery).toContain('*[_type == "servicesIndexPage"][0]');
-    // Dereferenced featured service projection
-    expect(servicesIndexPageQuery).toContain("featuredService->");
-    // Top-level fields (use word-boundary regex so substring matches don't pass)
-    const fields = [
-      "heroEyebrow",
-      "heroHeading",
-      "heroDeck",
-      "featuredService",
-      "pricingHeading",
-      "pricingTiers",
-      "pricingFooterNote",
-      "pricingFooterLinkLabel",
-      "pricingFooterLinkHref",
-      "gridHeading",
-      "bundleTile",
-      "processStrip",
-      "industryCrosslink",
-      "ctaEyebrow",
-      "ctaHeading",
-      "ctaDeck",
-      "ctaLabel",
-      "ctaHref",
-      "otherServicesHeading",
-      "otherServicesViewAllLabel",
-    ];
-    for (const field of fields) {
-      expect(servicesIndexPageQuery).toMatch(new RegExp(`\\b${field}\\b`));
-    }
-    // Pricing tier sub-objects
-    for (const tier of ["essentials", "standard", "premier"]) {
-      expect(servicesIndexPageQuery).toMatch(new RegExp(`\\b${tier}\\b`));
-    }
-    // Removed fields stay removed
-    expect(servicesIndexPageQuery).not.toMatch(/\blistEyebrow\b/);
-    expect(servicesIndexPageQuery).not.toMatch(/\blistHeading\b/);
-  });
 });
 
 describe("blog queries", () => {
@@ -438,22 +524,6 @@ describe("blog queries", () => {
     expect(relatedPostsQuery).toContain("[0...3]");
   });
 
-  it("blogIndexPageQuery selects the singleton with hero + CTA fields", () => {
-    expect(blogIndexPageQuery).toContain('*[_type == "blogIndexPage"][0]');
-    const fields = [
-      "heroEyebrow",
-      "heroHeading",
-      "heroDeck",
-      "ctaEyebrow",
-      "ctaHeading",
-      "ctaDeck",
-      "ctaLabel",
-      "ctaHref",
-    ];
-    for (const field of fields) {
-      expect(blogIndexPageQuery).toMatch(new RegExp(`\\b${field}\\b`));
-    }
-  });
 });
 
 describe("legal queries", () => {
@@ -492,24 +562,6 @@ describe("legal queries", () => {
     ];
     for (const field of fields) {
       expect(privacyPageQuery).toMatch(new RegExp(`\\b${field}\\b`));
-    }
-  });
-});
-
-describe("switchingPageQuery", () => {
-  it("selects the singleton with all section fields", () => {
-    expect(switchingPageQuery).toContain('*[_type == "switchingPage"][0]');
-    const fields = [
-      "hero", "reasons", "timeline", "handle", "compare",
-      "promises", "testimonial", "faq", "cta",
-      "ctaPrimaryLabel", "ctaSecondaryLabel", "dealCard",
-      "factSheetLabel", "liveDotLabel", "stats",
-      "deliverables", "ours",
-      "currentMsp", "pht",
-      "cardEyebrow", "metricK", "metricV", "locationLabel",
-    ];
-    for (const field of fields) {
-      expect(switchingPageQuery).toMatch(new RegExp(`\\b${field}\\b`));
     }
   });
 });

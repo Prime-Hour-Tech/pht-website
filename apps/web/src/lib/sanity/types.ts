@@ -113,16 +113,6 @@ export type PricingTier = {
   flagLabel?: string;
 };
 
-export type BundleRow = {
-  serviceLabel: string;
-  descriptor: string;
-};
-
-export type ProcessStep = {
-  title: string;
-  body: string;
-};
-
 export type IndustryCrosslinkTile = {
   iconName: IconName;
   label: string;
@@ -142,64 +132,6 @@ export type FeaturedService = {
   capabilities: ServiceCapability[];
 };
 
-export type ServicesIndexPage = {
-  heroEyebrow: string;
-  heroHeading: HeadlineRichText;
-  heroDeck: string;
-
-  featuredService: FeaturedService;
-
-  pricingHeading: { eyebrow: string; heading: HeadlineRichText; deck: string };
-  pricingTiers: {
-    essentials: PricingTier;
-    standard: PricingTier;
-    premier: PricingTier;
-  };
-  pricingFooterNote: string;
-  pricingFooterLinkLabel: string;
-  pricingFooterLinkHref: string;
-
-  gridHeading: {
-    eyebrow: string;
-    heading: HeadlineRichText;
-    secondaryLinkLabel?: string;
-    secondaryLinkHref?: string;
-  };
-  bundleTile: {
-    eyebrow: string;
-    heading: string;
-    body: string;
-    rows: BundleRow[];
-    footerHeadline: HeadlineRichText;
-    footerLinkLabel: string;
-    footerLinkHref: string;
-  };
-
-  processStrip: {
-    eyebrow: string;
-    heading: HeadlineRichText;
-    deck: string;
-    steps: ProcessStep[]; // length 4
-  };
-
-  industryCrosslink: {
-    eyebrow: string;
-    heading: HeadlineRichText;
-    deck: string;
-    ctaLinkLabel: string;
-    ctaLinkHref: string;
-    tiles: IndustryCrosslinkTile[]; // length 4
-  };
-
-  ctaEyebrow: string;
-  ctaHeading: HeadlineRichText;
-  ctaDeck: string;
-  ctaLabel: string;
-  ctaHref: string;
-
-  otherServicesHeading: string;
-  otherServicesViewAllLabel: string;
-};
 
 export type PostCategory =
   | "Security"
@@ -244,16 +176,6 @@ export type PostFull = Omit<PostCard, "author"> & {
   updatedAt?: string;
 };
 
-export type BlogIndexPage = {
-  heroEyebrow: string;
-  heroHeading: HeadlineRichText;
-  heroDeck: string;
-  ctaEyebrow: string;
-  ctaHeading: HeadlineRichText;
-  ctaDeck: string;
-  ctaLabel: string;
-  ctaHref: string;
-};
 
 export type LegalSection = {
   title: string;
@@ -276,105 +198,6 @@ type LegalPageBase = {
 export type TermsPage = LegalPageBase;
 export type PrivacyPage = LegalPageBase;
 
-export type DealCardRow = { label: string; value: string };
-
-export type SwitchingReason = {
-  head: string;
-  body: string;
-  flagLabel?: string;
-};
-
-export type SwitchingWeek = {
-  k: string;
-  sub: string;
-  head: string;
-  body: string;
-  deliverables: string[];
-  ours: string[];
-};
-
-export type SwitchingHandleItem = { head: string; body: string };
-
-export type SwitchingCompareRow = {
-  aspect: string;
-  currentMsp: string;
-  pht: string;
-};
-
-export type SwitchingPromise = {
-  iconName: IconName;
-  head: string;
-  body: string;
-};
-
-export type SwitchingFaqEntry = { question: string; answer: string };
-
-export type SwitchingPage = {
-  hero: {
-    eyebrow: string;
-    title: HeadlineRichText;
-    deck: string;
-    ctaPrimaryLabel: string;
-    ctaPrimaryHref: string;
-    ctaSecondaryLabel: string;
-    ctaSecondaryHref: string;
-    dealCard: { eyebrow: string; rows: DealCardRow[] };
-    factSheetLabel: string;
-    liveDotLabel: string;
-    stats: ServiceStat[];
-  };
-  reasons: {
-    eyebrow: string;
-    title: HeadlineRichText;
-    deck: string;
-    items: SwitchingReason[];
-  };
-  timeline: {
-    eyebrow: string;
-    title: HeadlineRichText;
-    deck: string;
-    weeks: SwitchingWeek[];
-  };
-  handle: {
-    eyebrow: string;
-    title: HeadlineRichText;
-    deck: string;
-    items: SwitchingHandleItem[];
-  };
-  compare: {
-    eyebrow: string;
-    title: HeadlineRichText;
-    rows: SwitchingCompareRow[];
-  };
-  promises: {
-    eyebrow: string;
-    title: HeadlineRichText;
-    items: SwitchingPromise[];
-  };
-  testimonial: {
-    eyebrow: string;
-    quote: string;
-    name: string;
-    role: string;
-    cardEyebrow: string;
-    metricK: string;
-    metricV: string;
-    locationLabel: string;
-  };
-  faq: {
-    eyebrow: string;
-    title: HeadlineRichText;
-    deck: string;
-    items: SwitchingFaqEntry[];
-  };
-  cta: {
-    eyebrow: string;
-    heading: HeadlineRichText;
-    deck: string;
-    label: string;
-    href: string;
-  };
-};
 
 export type LandingPainItem = { head: string; body: string };
 export type LandingIncludedBullet = { head: string; body: string };
@@ -747,6 +570,141 @@ export type ContactBodyBlock = {
   };
 };
 
+export type PostListBlock = {
+  _type: "postList";
+  _key: string;
+  eyebrow: string;
+  heading: HeadlineRichText;
+  emptyStateMessage: string;
+};
+
+export type ServicesIndexHeroBlock = {
+  _type: "servicesIndexHero";
+  _key: string;
+  eyebrow: string;
+  heading: HeadlineRichText;
+  deck: string;
+  featuredService: FeaturedService;
+};
+
+export type PricingTiersBlock = {
+  _type: "pricingTiers";
+  _key: string;
+  eyebrow: string;
+  heading: HeadlineRichText;
+  deck: string;
+  essentials: PricingTier;
+  standard: PricingTier;
+  premier: PricingTier;
+};
+
+export type BundleGridBlock = {
+  _type: "bundleGrid";
+  _key: string;
+  eyebrow: string;
+  heading: HeadlineRichText;
+  deck: string;
+  secondaryLinkLabel?: string;
+  secondaryLinkHref?: string;
+  tiles: { name: string; descriptor: string; includesLine: string }[];
+  footerLinkLabel: string;
+  footerLinkHref: string;
+};
+
+export type ProcessStripBlock = {
+  _type: "processStrip";
+  _key: string;
+  eyebrow: string;
+  heading: HeadlineRichText;
+  steps: { title: string; body: string }[];
+};
+
+export type IndustryCrosslinkBlock = {
+  _type: "industryCrosslink";
+  _key: string;
+  eyebrow: string;
+  heading: HeadlineRichText;
+  tiles: IndustryCrosslinkTile[];
+};
+
+export type SwitchingHeroBlock = {
+  _type: "switchingHero";
+  _key: string;
+  eyebrow: string;
+  title: HeadlineRichText;
+  deck: string;
+  ctaPrimaryLabel: string;
+  ctaPrimaryHref: string;
+  ctaSecondaryLabel: string;
+  ctaSecondaryHref: string;
+  dealCard: { eyebrow: string; rows: { label: string; value: string }[] };
+  factSheetLabel: string;
+  liveDotLabel: string;
+  stats: { k: string; v: string }[];
+};
+
+export type SwitchingReasonsBlock = {
+  _type: "switchingReasons";
+  _key: string;
+  eyebrow: string;
+  title: HeadlineRichText;
+  deck: string;
+  items: { head: string; body: string; flagLabel?: string }[];
+};
+
+export type SwitchingTimelineBlock = {
+  _type: "switchingTimeline";
+  _key: string;
+  eyebrow: string;
+  title: HeadlineRichText;
+  deck: string;
+  phases: { phaseLabel: string; title: string; body: string; durationLabel: string }[];
+};
+
+export type SwitchingHandleBlock = {
+  _type: "switchingHandle";
+  _key: string;
+  eyebrow: string;
+  title: HeadlineRichText;
+  deck: string;
+  items: { painLabel: string; painBody: string; weHandleLabel: string; weHandleBody: string }[];
+};
+
+export type SwitchingCompareBlock = {
+  _type: "switchingCompare";
+  _key: string;
+  eyebrow: string;
+  title: HeadlineRichText;
+  usHeader: string;
+  themHeader: string;
+  rows: { topic: string; us: string; them: string }[];
+};
+
+export type SwitchingPromisesBlock = {
+  _type: "switchingPromises";
+  _key: string;
+  eyebrow: string;
+  title: HeadlineRichText;
+  promises: { iconName: IconName; head: string; body: string }[];
+};
+
+export type SwitchingTestimonialBlock = {
+  _type: "switchingTestimonial";
+  _key: string;
+  eyebrow: string;
+  quote: string;
+  attributionRole: string;
+  attributionContext: string;
+};
+
+export type FaqListBlock = {
+  _type: "faqList";
+  _key: string;
+  eyebrow: string;
+  heading: HeadlineRichText;
+  items: { question: string; answer: string }[];
+};
+
 export type PageBlock =
   | DarkNumbersHeroBlock
   | TrustStripBlock
@@ -764,4 +722,18 @@ export type PageBlock =
   | OfficeCultureBlock
   | IndustriesContentBlock
   | IndustriesDontSeeYoursBlock
-  | ContactBodyBlock;
+  | ContactBodyBlock
+  | PostListBlock
+  | ServicesIndexHeroBlock
+  | PricingTiersBlock
+  | BundleGridBlock
+  | ProcessStripBlock
+  | IndustryCrosslinkBlock
+  | SwitchingHeroBlock
+  | SwitchingReasonsBlock
+  | SwitchingTimelineBlock
+  | SwitchingHandleBlock
+  | SwitchingCompareBlock
+  | SwitchingPromisesBlock
+  | SwitchingTestimonialBlock
+  | FaqListBlock;

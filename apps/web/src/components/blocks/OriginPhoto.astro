@@ -8,7 +8,9 @@ interface Props {
 
 const { block } = Astro.props;
 const aspectStyle = `aspect-ratio: ${block.aspectRatio};`;
-const imageUrl = urlFor(block.image).width(1920).fit("max").url();
+const imageUrl = block.image
+  ? urlFor(block.image).width(1920).fit("max").url()
+  : null;
 ---
 
 <section class="bg-bg px-10 pb-24">
@@ -17,11 +19,15 @@ const imageUrl = urlFor(block.image).width(1920).fit("max").url();
       class="bg-bg-alt rounded-xl overflow-hidden"
       style={aspectStyle}
     >
-      <img
-        src={imageUrl}
-        alt={block.image.alt}
-        class="w-full h-full object-cover"
-      />
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={block.image!.alt}
+          class="w-full h-full object-cover"
+        />
+      ) : (
+        <div class="w-full h-full" aria-hidden="true"></div>
+      )}
     </div>
     <div
       class="absolute left-6 bottom-6 max-w-[420px] rounded-xl p-6 text-dark-text border border-dark-line"
