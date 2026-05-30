@@ -30,7 +30,7 @@ const img = block.image
           decoding="async"
         />
       ) : (
-        <div class="w-full h-full" aria-hidden="true"></div>
+        <div class="w-full h-full bg-bg border border-line" aria-hidden="true"></div>
       )}
     </div>
     <div>
@@ -45,7 +45,7 @@ const img = block.image
       </h2>
       <p class="mt-4.5 text-muted text-[16.5px] leading-body max-w-[480px]">{block.body}</p>
       <ul class="mt-6 p-0 list-none flex flex-col gap-2.5">
-        {block.bullets.map((b) => (
+        {(block.bullets ?? []).filter(Boolean).map((b) => (
           <li class="flex gap-3 text-ink text-[15.5px]">
             <span class="text-accent mt-1"><Icon name="check" size={14} stroke={2} /></span>
             <span>{b}</span>

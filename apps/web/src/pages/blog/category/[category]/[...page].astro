@@ -1,0 +1,70 @@
+---
+import type { GetStaticPaths, Page as PaginatorPage } from "astro";
+import type { PostCard, PostCategory } from "../../../../lib/sanity/types";
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import BlockRenderer from "../../../../components/blocks/BlockRenderer.astro";
+import BlogFilterChips from "../../../../components/blog/BlogFilterChips.astro";
+import BlogPostGrid from "../../../../components/blog/BlogPostGrid.astro";
+import Pagination from "../../../../components/blog/Pagination.astro";
+import { getAllPosts, getPageBySlug, getContactInfo } from "../../../../lib/sanity/client";
+import { categoryToSlug, assertUniqueCategorySlugs } from "../../../../lib/sanity/categories";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getAllPosts();
+  // When there are no posts, return [] — no category pages emitted, build succeeds.
+  if (posts.length === 0) return [];
+
+  const cats = Array.from(new Set(posts.map((p) => p.category)));
+  assertUniqueCategorySlugs(cats);
+
+  return cats.flatMap((category) => {
+    const slug = categoryToSlug(category);
+    const inCat = posts.filter((p) => p.category === category);
+    return paginate(inCat, { params: { category: slug }, props: { category }, pageSize: 12 });
+  });
+}) satisfies GetStaticPaths;
+
+interface Props {
+  page: PaginatorPage<PostCard>;
+  category: PostCategory;
+}
+const { page, category } = Astro.props;
+const slug = categoryToSlug(category);
+
+const [pageDoc, contactInfo, allPosts] = await Promise.all([
+  getPageBySlug("blog"),
+  getContactInfo(),
+  getAllPosts(),
+]);
+if (!pageDoc) throw new Error("Page doc with slug 'blog' not found in Sanity.");
+if (!contactInfo) throw new Error("Contact Info singleton not found in Sanity.");
+
+const hero = pageDoc.blocks?.find((b) => b._type === "pageHero");
+const cta = pageDoc.blocks?.find((b) => b._type === "ctaCard");
+const liveCats = Array.from(new Set(allPosts.map((p) => p.category)));
+
+const base = new URL(`/blog/category/${slug}`, Astro.site ?? Astro.url.origin);
+const canonical = page.currentPage === 1 ? base.toString() : `${base.toString()}/${page.currentPage}`;
+---
+
+<BaseLayout
+  title={`${category} — ${pageDoc.seoTitle ?? pageDoc.title}`}
+  description={pageDoc.seoDescription}
+  canonical={canonical}
+  ogImage={pageDoc.ogImage}
+  prevUrl={page.url.prev ? new URL(page.url.prev, base).toString() : undefined}
+  nextUrl={page.url.next ? new URL(page.url.next, base).toString() : undefined}
+>
+  {page.currentPage === 1 && hero && <BlockRenderer block={hero} contactInfo={contactInfo} />}
+  <BlogFilterChips categories={liveCats} active={slug} />
+  <section class="bg-bg px-5 md:px-10 py-12">
+    <div class="max-w-content mx-auto">
+      <BlogPostGrid
+        posts={page.data}
+        emptyStateMessage={`No posts in ${category} yet.`}
+      />
+      <Pagination currentPage={page.currentPage} lastPage={page.lastPage} baseUrl={`/blog/category/${slug}`} />
+    </div>
+  </section>
+  {cta && <BlockRenderer block={cta} contactInfo={contactInfo} />}
+</BaseLayout>

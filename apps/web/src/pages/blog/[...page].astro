@@ -1,0 +1,63 @@
+---
+import type { GetStaticPaths, Page as PaginatorPage } from "astro";
+import type { PostCard, PostCategory, PostListBlock } from "../../lib/sanity/types";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlockRenderer from "../../components/blocks/BlockRenderer.astro";
+import BlogFilterChips from "../../components/blog/BlogFilterChips.astro";
+import BlogPostGrid from "../../components/blog/BlogPostGrid.astro";
+import Pagination from "../../components/blog/Pagination.astro";
+import { getAllPosts, getPageBySlug, getContactInfo } from "../../lib/sanity/client";
+import { assertUniqueCategorySlugs } from "../../lib/sanity/categories";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getAllPosts();
+  return paginate(posts, { pageSize: 12 });
+}) satisfies GetStaticPaths;
+
+interface Props {
+  page: PaginatorPage<PostCard>;
+}
+const { page } = Astro.props;
+
+const [pageDoc, contactInfo] = await Promise.all([getPageBySlug("blog"), getContactInfo()]);
+if (!pageDoc) throw new Error("Page doc with slug 'blog' not found in Sanity (pageHero -> postList -> ctaCard).");
+if (!contactInfo) throw new Error("Contact Info singleton not found in Sanity.");
+
+const hero = pageDoc.blocks?.find((b) => b._type === "pageHero");
+const cta = pageDoc.blocks?.find((b) => b._type === "ctaCard");
+const postListBlock = pageDoc.blocks?.find((b) => b._type === "postList") as PostListBlock | undefined;
+
+// Compute live categories from the full post list (same list used for pagination).
+// We call getAllPosts() again here — Sanity client uses the same CDN cache so this
+// is effectively free. Doing it separately keeps getStaticPaths lean.
+const allPosts = await getAllPosts();
+const liveCats = Array.from(new Set(allPosts.map((p) => p.category)));
+assertUniqueCategorySlugs(liveCats);
+
+const base = new URL("/blog", Astro.site ?? Astro.url.origin);
+const canonical = page.currentPage === 1 ? base.toString() : `${base.toString()}/${page.currentPage}`;
+const isFirst = page.currentPage === 1;
+---
+
+<BaseLayout
+  title={pageDoc.seoTitle ?? pageDoc.title}
+  description={pageDoc.seoDescription}
+  canonical={canonical}
+  ogImage={pageDoc.ogImage}
+  prevUrl={page.url.prev ? new URL(page.url.prev, base).toString() : undefined}
+  nextUrl={page.url.next ? new URL(page.url.next, base).toString() : undefined}
+>
+  {isFirst && hero && <BlockRenderer block={hero} contactInfo={contactInfo} />}
+  <BlogFilterChips categories={liveCats} active="all" />
+  <section class="bg-bg px-5 md:px-10 py-12">
+    <div class="max-w-content mx-auto">
+      <BlogPostGrid
+        posts={page.data}
+        withFeatured={isFirst}
+        emptyStateMessage={postListBlock?.emptyStateMessage ?? "No posts yet."}
+      />
+      <Pagination currentPage={page.currentPage} lastPage={page.lastPage} baseUrl="/blog" />
+    </div>
+  </section>
+  {cta && <BlockRenderer block={cta} contactInfo={contactInfo} />}
+</BaseLayout>

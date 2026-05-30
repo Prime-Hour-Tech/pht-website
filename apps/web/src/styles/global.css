@@ -26,9 +26,9 @@
   --color-accent: #dc2626;
 
   /* Type families */
-  --font-sans:  "Geist", system-ui, sans-serif;
-  --font-serif: "Newsreader", Georgia, serif;
-  --font-mono:  "Geist Mono", monospace;
+  --font-sans:  "Geist Variable", "Geist", system-ui, sans-serif;
+  --font-serif: "Newsreader Variable", "Newsreader", Georgia, serif;
+  --font-mono:  "Geist Mono Variable", "Geist Mono", monospace;
 
   /* Type scale */
   --text-display-xxxl: 104px;

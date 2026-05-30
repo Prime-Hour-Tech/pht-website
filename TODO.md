@@ -48,7 +48,7 @@ Once deployed, validate the shipped SEO/feed infrastructure works against the li
 - **Verify RSS feed.** Hit `https://primehourtech.com/blog/rss.xml` — expect valid RSS 2.0 XML with up to 20 latest posts. Confirm `<link rel="alternate" type="application/rss+xml">` discovery tag in page source.
 - **Verify sitemap exclusions.** Hit `/sitemap-index.xml` → references `/sitemap-0.xml`. Open `/sitemap-0.xml` → confirm `/landing/*` URLs are absent, all other routes present. Spot-check a landing page's view-source → confirm `<meta name="robots" content="noindex, nofollow">` in head.
 - **Verify OG image previews.** Test deployed URLs at [opengraph.xyz](https://www.opengraph.xyz/) or LinkedIn Post Inspector. Pages with their own `ogImage` use that; others fall back to `siteSettings.defaultOgImage`.
-- **Lighthouse pass.** Run on home + a service detail page + a blog post. Verify Core Web Vitals before launch. (Responsive images, WebP/AVIF, and lazy-loading already ship.) Likely remaining flags: font preload, JS bundle splitting.
+- **Lighthouse pass.** Run on home + a service detail page + a blog post. Verify Core Web Vitals before launch. (Responsive images, WebP/AVIF, lazy-loading, and self-hosted fonts already ship.) Likely remaining flags: JS bundle splitting.
 - **Cross-browser sweep.** Chrome / Safari / Firefox / Edge on desktop + mobile Safari + Chrome Android. Especially the switching page's dealCard sidebar and the comparison table's responsive behavior.
 
 ## D. Optional / future / YAGNI
@@ -57,15 +57,13 @@ Don't pick up until a real trigger fires.
 
 - **Per-category cookie consent modal.** Current banner is binary (accept/reject). Add a per-category settings modal only if legal requires GDPR-style granularity. If added, migrate GTM from hard-gate to Consent Mode v2.
 - **V2 StickyForm landing template + `LANDING_FORM_URL`.** Slice 9 ships V1 Editorial only. If a campaign wants the StickyForm layout, add a `layoutVariant` schema field + template-switching logic. Optional separate `LANDING_FORM_URL` env var if landings route to a different provider account.
-- **Blog pagination + newsletter signup.** Deferred in Slice 5. Add pagination at 20+ posts. Add a `newsletterSignup` block once a newsletter provider is picked.
+- **Newsletter signup block.** Add a `newsletterSignup` block once a newsletter provider is picked.
 - **Cloudflare Turnstile on the contact form.** Add only if post-launch form spam volume warrants it.
 - **`specSheetUrl` per service doc.** Optional field exists on the `service` schema. Set when real spec-sheet PDFs are uploaded; the "Read / Download spec sheet" buttons on `/services/{slug}` render only when set.
 - **`bundleGrid.secondaryLinkHref` PDF link.** The label "Download the services overview →" defaults to no href. Set when a real services-overview PDF is available, or clear the label to hide the link.
 - **`bundleGrid.footerLinkHref` anchor refinement.** Currently `/contact`. Could point to a "How pricing works" section anchor on the page or a future help article.
 - **Add `/switching` to the navigation singleton.** Today reachable only by direct URL or deep links from `/services`. Add to nav when ready.
 - **Draft preview in Studio's Presentation pane.** Slice 15 ships published-content visual editing only. If editors want pre-publish iframe preview, add SSR/draftMode plumbing.
-- **Self-hosted fonts.** Currently Google Fonts. Switch only if Lighthouse flags font perf.
-- **Webhook auth hardening.** HMAC sign the Vercel deploy hook URL if the threat model demands. Currently mitigated by private Sanity dataset.
 - **`headingAccent` pattern extraction.** Reused across a few blocks. Extract a shared field-set if a third+ block needs the italic-red trailing-fragment treatment.
 
 ## E. Code reminders
@@ -76,6 +74,7 @@ Don't pick up until a real trigger fires.
 
 ## Where to look
 
+- **Operator manual (handoff):** `HANDOFF.md` (committed) — how to edit content, deploy, env vars, anti-spam, and the catalogue of intentionally-deferred features.
 - **Page-template ↔ block-sequence reference:** `DESIGN_MAP.md` (committed).
 - **Seed file:** `apps/studio/seed/initial-content.ndjson` (25 docs from the design canvas) + `apps/studio/seed/README.md` (usage + caveats).
 - **Live site:** <https://pht-website.vercel.app/> (until domain swap)
