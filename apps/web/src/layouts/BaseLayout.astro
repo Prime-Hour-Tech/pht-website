@@ -26,7 +26,8 @@ interface Props {
   title: string;
   /** Per-page meta description. Falls back to siteSettings.siteDescription when omitted. */
   description?: string;
-  canonical: string;
+  /** Per-page canonical URL. Defaults to the page's own absolute URL when omitted. */
+  canonical?: string;
   ogImage?: ImageRef;
   /** Render <meta name="robots" content="noindex, nofollow">. Used by paid-ad landers. */
   noindex?: boolean;
@@ -35,6 +36,10 @@ interface Props {
 }
 
 const { title, description: descriptionProp, canonical, ogImage, noindex, prevUrl, nextUrl } = Astro.props;
+
+// Canonical defaults to the page's own absolute URL when a caller doesn't pass one.
+const resolvedCanonical =
+  canonical ?? new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).toString();
 
 // Chrome data — parallel fetch. Each is required; missing = misconfiguration,
 // surface as a build failure with a helpful message.
@@ -86,7 +91,7 @@ const enableVisualEditing = import.meta.env.PUBLIC_SANITY_VISUAL_EDITING === "tr
     <SEO
       title={title}
       description={descriptionProp ?? siteSettings.siteDescription}
-      canonical={canonical}
+      canonical={resolvedCanonical}
       siteName={siteSettings.siteName}
       ogImageUrl={resolvedOgImageUrl}
     />

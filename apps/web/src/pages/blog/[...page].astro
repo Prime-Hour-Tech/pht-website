@@ -1,6 +1,6 @@
 ---
-import type { GetStaticPaths, Page as PaginatorPage } from "astro";
-import type { PostCard, PostCategory, PostListBlock } from "../../lib/sanity/types";
+import type { GetStaticPaths } from "astro";
+import type { PostListBlock } from "../../lib/sanity/types";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BlockRenderer from "../../components/blocks/BlockRenderer.astro";
 import BlogFilterChips from "../../components/blog/BlogFilterChips.astro";
@@ -14,9 +14,6 @@ export const getStaticPaths = (async ({ paginate }) => {
   return paginate(posts, { pageSize: 12 });
 }) satisfies GetStaticPaths;
 
-interface Props {
-  page: PaginatorPage<PostCard>;
-}
 const { page } = Astro.props;
 
 const [pageDoc, contactInfo] = await Promise.all([getPageBySlug("blog"), getContactInfo()]);

@@ -616,6 +616,7 @@ export type ProcessStripBlock = {
   _key: string;
   eyebrow: string;
   heading: HeadlineRichText;
+  deck: string;
   steps: { title: string; body: string }[];
 };
 

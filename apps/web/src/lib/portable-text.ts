@@ -9,9 +9,11 @@ import type { PortableTextBlock } from "@portabletext/types";
 // Returns inline-only output (no outer <p>/<h*>) so consumers can wrap in
 // whatever heading tag they need.
 export function renderHeadlineRichText(
-  value: PortableTextBlock[] | null | undefined,
+  value: PortableTextBlock[] | string | null | undefined,
 ): string {
-  if (value == null || value.length === 0) return "";
+  if (value == null) return "";
+  if (typeof value === "string") return value;
+  if (value.length === 0) return "";
 
   return toHTML(value, {
     components: {
