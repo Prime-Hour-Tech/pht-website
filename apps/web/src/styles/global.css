@@ -15,6 +15,8 @@
   --color-line:      rgb(26 26 26 / 0.10);
   --color-line-soft: rgb(26 26 26 / 0.06);
   --color-success:   #1f7a3a;
+  /* Brighter "online / fast reply" status dot; intentionally distinct from success green. */
+  --color-online:    #22c55e;
 
   /* Dark band: footer + numbers-led hero */
   --color-dark:       #0f1115;

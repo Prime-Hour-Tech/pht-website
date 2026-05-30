@@ -49,8 +49,11 @@ function DeployCard(props: DeployCardProps) {
     if (!hookUrl) return;
     setStatus("deploying");
     setMessage("Sending deploy hook request to Vercel...");
+    // Abort a hung request so the button can't sit on "Deploying..." forever.
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
     try {
-      const res = await fetch(hookUrl, { method: "POST" });
+      const res = await fetch(hookUrl, { method: "POST", signal: controller.signal });
       if (!res.ok) {
         throw new Error(`HTTP ${res.status} ${res.statusText}`);
       }
@@ -60,10 +63,13 @@ function DeployCard(props: DeployCardProps) {
       );
     } catch (err) {
       setStatus("error");
-      setMessage(
-        `Deploy failed: ${err instanceof Error ? err.message : String(err)}`,
-      );
+      const failed =
+        err instanceof Error && err.name === "AbortError"
+          ? "Deploy request timed out after 15s. Check your connection and Vercel's status, then try again."
+          : `Deploy failed: ${err instanceof Error ? err.message : String(err)}`;
+      setMessage(failed);
     } finally {
+      clearTimeout(timeout);
       setConfirming(false);
     }
   }
