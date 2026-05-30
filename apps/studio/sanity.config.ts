@@ -23,7 +23,7 @@ const SINGLETONS = [
   PRIVACY_PAGE_ID,
 ];
 
-// Helper for the sidebar list — keeps each singleton entry compact.
+// Helper for the sidebar list; keeps each singleton entry compact.
 const singletonItem = (S: any, id: string, title: string) =>
   S.listItem()
     .title(title)
@@ -36,7 +36,7 @@ export default defineConfig({
   projectId,
   dataset,
   // Content Releases is an Enterprise-only surcharge feature beyond our
-  // Growth plan — disable it so it doesn't show as a locked upsell.
+  // Growth plan; disable it so it doesn't show as a locked upsell.
   // (Scheduled Drafts is left enabled; it's included in Growth.)
   releases: {
     enabled: false,

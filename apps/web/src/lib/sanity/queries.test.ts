@@ -377,7 +377,7 @@ describe("service queries", () => {
     expect(servicesSlugListQuery).toContain('_type == "service"');
     expect(servicesSlugListQuery).toContain("defined(headline)");
     expect(servicesSlugListQuery).toContain("defined(heroStat)");
-    // Slice-3 fix-up required fields — services missing these aren't
+    // Slice-3 fix-up required fields - services missing these aren't
     // route-eligible (would render `◆ undefined` etc.).
     expect(servicesSlugListQuery).toContain("defined(capabilitiesEyebrow)");
     expect(servicesSlugListQuery).toContain("defined(faqEyebrow)");

@@ -4,7 +4,7 @@ export const siteSettings = defineType({
   name: "siteSettings",
   title: "Site Settings",
   type: "document",
-  // Singletons: only one instance is allowed.
+  // Singleton; registered in apps/studio/sanity.config.ts SINGLETONS array.
   fields: [
     defineField({
       name: "siteName",

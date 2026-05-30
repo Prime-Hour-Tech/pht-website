@@ -1,6 +1,6 @@
 # TODO
 
-Remaining work for the PHT marketing site. **Codebase is launch-ready.** Build succeeds locally and on Vercel after Slice 17 (seed) imports. Remaining work is content polish, infra configuration, and post-deploy verification — no meaningful code changes left unless a new requirement surfaces.
+Remaining work for the PHT marketing site. **Codebase is launch-ready.** Build succeeds locally and on Vercel after Slice 17 (seed) imports. Remaining work is content polish, infra configuration, and post-deploy verification - no meaningful code changes left unless a new requirement surfaces.
 
 > **Before picking up any item below: verify it hasn't already shipped.** Check `git log --oneline -- <relevant files>` and glance at the target code. This list drifts; git doesn't.
 
@@ -8,10 +8,10 @@ Remaining work for the PHT marketing site. **Codebase is launch-ready.** Build s
 
 ## A. Content polish (right now)
 
-The seed populated every doc with design-source copy and placeholders. Replace section by section as real content becomes available — author in Studio (visual editing makes this easy: click any rendered element to jump to its field).
+The seed populated every doc with design-source copy and placeholders. Replace section by section as real content becomes available - author in Studio (visual editing makes this easy: click any rendered element to jump to its field).
 
-- **Upload images.** The seed left every image field empty. Upload full-resolution — images are automatically resized per breakpoint, served as WebP/AVIF, and lazy-loaded (via `urlForResponsive`). Upload in Studio:
-  - `siteSettings.logoDark` + `siteSettings.logoLight` (PHT logo variants — one is uploaded today)
+- **Upload images.** The seed left every image field empty. Upload full-resolution - images are automatically resized per breakpoint, served as WebP/AVIF, and lazy-loaded (via `urlForResponsive`). Upload in Studio:
+  - `siteSettings.logoDark` + `siteSettings.logoLight` (PHT logo variants - one is uploaded today)
   - `siteSettings.defaultOgImage` (1200×630 PHT-branded share card, neutral enough for any page)
   - `teamMember.photo` × 4 (4:5 portraits)
   - `post.coverImage` × 3
@@ -23,13 +23,13 @@ The seed populated every doc with design-source copy and placeholders. Replace s
 - **Real customer logos in the trust strip.** Currently text placeholders ("LAW FIRM 01" etc.) in the home page's `trustStrip` block. Edit `items[]` to real customer names or upload SVG logos.
 - **Real testimonial.** `/switching` testimonial uses design's placeholder quote ("Operations Director · Professional services firm · 42 seats"). Swap with a real customer migration story when available.
 - **Real `$5,200/mo saved` figure** in the home page `savings` block. Back with a representative engagement before launch.
-- **Final marketing copy polish.** Seed copy is lifted from the design canvas — solid starting point, but marketer should walk every page and edit for current brand voice / real-engagement specifics.
+- **Final marketing copy polish.** Seed copy is lifted from the design canvas - solid starting point, but marketer should walk every page and edit for current brand voice / real-engagement specifics.
 
 ## B. Pre-launch infrastructure
 
 Configuration and provider picks. Most are env-var pastes in Vercel; a few are sign-offs that gate something.
 
-- **Pick contact form provider + set `CONTACT_FORM_URL`.** Form is provider-agnostic — POSTs to whatever URL is set. Web3Forms free tier (250 submissions/mo) is the recommended start. Until set, form `action` falls back to `"#"` and submissions don't work. Build log warns when unset.
+- **Pick contact form provider + set `CONTACT_FORM_URL`.** Form is provider-agnostic - POSTs to whatever URL is set. Web3Forms free tier (250 submissions/mo) is the recommended start. Until set, form `action` falls back to `"#"` and submissions don't work. Build log warns when unset.
 - **Finalize cookie banner copy with legal.** Banner ships feature-flagged off (`PUBLIC_COOKIE_BANNER_ENABLED=false`). When legal returns approved copy: swap placeholders in `apps/web/src/components/CookieBanner.astro`, set `PUBLIC_COOKIE_BANNER_ENABLED=true` in Vercel env.
 - **Create GTM container + set `PUBLIC_GTM_CONTAINER_ID`.** In Google Tag Manager (tagmanager.google.com), create a container for `primehourtech.com`. Copy the `GTM-XXXXXXX` ID into Vercel env. Add GA4 config + conversion tags inside the GTM UI. GTM only fires when a visitor accepts on the cookie banner (consent-gated by design). Pre-req: cookie banner enabled.
 - **Wire Visual Editing on Vercel preview env.** Three env vars + one Sanity CORS entry:
@@ -45,7 +45,7 @@ Configuration and provider picks. Most are env-var pastes in Vercel; a few are s
 Once deployed, validate the shipped SEO/feed infrastructure works against the live URL.
 
 - **Verify JSON-LD** via [Google Rich Results Test](https://search.google.com/test/rich-results). Paste the home URL → expect `LocalBusiness` detected. Paste a `/blog/<slug>` URL → expect `BlogPosting` detected. No errors.
-- **Verify RSS feed.** Hit `https://primehourtech.com/blog/rss.xml` — expect valid RSS 2.0 XML with up to 20 latest posts. Confirm `<link rel="alternate" type="application/rss+xml">` discovery tag in page source.
+- **Verify RSS feed.** Hit `https://primehourtech.com/blog/rss.xml` - expect valid RSS 2.0 XML with up to 20 latest posts. Confirm `<link rel="alternate" type="application/rss+xml">` discovery tag in page source.
 - **Verify sitemap exclusions.** Hit `/sitemap-index.xml` → references `/sitemap-0.xml`. Open `/sitemap-0.xml` → confirm `/landing/*` URLs are absent, all other routes present. Spot-check a landing page's view-source → confirm `<meta name="robots" content="noindex, nofollow">` in head.
 - **Verify OG image previews.** Test deployed URLs at [opengraph.xyz](https://www.opengraph.xyz/) or LinkedIn Post Inspector. Pages with their own `ogImage` use that; others fall back to `siteSettings.defaultOgImage`.
 - **Lighthouse pass.** Run on home + a service detail page + a blog post. Verify Core Web Vitals before launch. (Responsive images, WebP/AVIF, lazy-loading, and self-hosted fonts already ship.) Likely remaining flags: JS bundle splitting.
@@ -68,21 +68,17 @@ Don't pick up until a real trigger fires.
 
 ## E. Code reminders
 
-- **`<CtaCard>` requires `contactInfo` as a prop.** Refactored in the deferred-nits sweep — CtaCard no longer fetches `contactInfo` internally. Any new route or wrapper block that renders `<CtaCard>` must pre-fetch `contactInfo` and pass it through. `BlockRenderer` already takes a `contactInfo` prop and forwards it.
+- **`<CtaCard>` requires `contactInfo` as a prop.** Refactored in the deferred-nits sweep - CtaCard no longer fetches `contactInfo` internally. Any new route or wrapper block that renders `<CtaCard>` must pre-fetch `contactInfo` and pass it through. `BlockRenderer` already takes a `contactInfo` prop and forwards it.
 
 ---
 
 ## Where to look
 
-- **Operator manual (handoff):** `HANDOFF.md` (committed) — how to edit content, deploy, env vars, anti-spam, and the catalogue of intentionally-deferred features.
+- **Operator manual (handoff):** `HANDOFF.md` (committed) - how to edit content, deploy, env vars, anti-spam, and the catalogue of intentionally-deferred features.
 - **Page-template ↔ block-sequence reference:** `DESIGN_MAP.md` (committed).
-- **Seed file:** `apps/studio/seed/initial-content.ndjson` (25 docs from the design canvas) + `apps/studio/seed/README.md` (usage + caveats).
+- **Seed file:** `apps/studio/seed/initial-content.ndjson` (28 docs from the design canvas) + `apps/studio/seed/README.md` (usage + caveats).
 - **Live site:** <https://pht-website.vercel.app/> (until domain swap)
 - **Studio:** <https://primehourtech.sanity.studio/>
 - **Sanity Manage** (project settings, CORS allowlist, API tokens): <https://www.sanity.io/manage>
 - **Vercel project env vars:** Vercel dashboard → Project → Settings → Environment Variables
-- **Working slice specs + plans:** `docs/superpowers/specs/` and `docs/superpowers/plans/`. **Note: `docs/` is gitignored** — these files are local-only and may not exist in a fresh checkout. They're working artifacts; reconstructable from this TODO + git history.
-
----
-
-Test Deployment
+- **Working slice specs + plans:** `docs/superpowers/specs/` and `docs/superpowers/plans/`. **Note: `docs/` is gitignored** - these files are local-only and may not exist in a fresh checkout. They're working artifacts; reconstructable from this TODO + git history.

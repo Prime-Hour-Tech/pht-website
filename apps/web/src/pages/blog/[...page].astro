@@ -25,7 +25,7 @@ const cta = pageDoc.blocks?.find((b) => b._type === "ctaCard");
 const postListBlock = pageDoc.blocks?.find((b) => b._type === "postList") as PostListBlock | undefined;
 
 // Compute live categories from the full post list (same list used for pagination).
-// We call getAllPosts() again here — Sanity client uses the same CDN cache so this
+// We call getAllPosts() again here; Sanity client uses the same CDN cache so this
 // is effectively free. Doing it separately keeps getStaticPaths lean.
 const allPosts = await getAllPosts();
 const liveCats = Array.from(new Set(allPosts.map((p) => p.category)));

@@ -4,7 +4,7 @@ export const contactInfo = defineType({
   name: "contactInfo",
   title: "Contact Info",
   type: "document",
-  // Singleton — registered in apps/studio/sanity.config.ts SINGLETONS array.
+  // Singleton; registered in apps/studio/sanity.config.ts SINGLETONS array.
   fields: [
     defineField({
       name: "cardTitle",

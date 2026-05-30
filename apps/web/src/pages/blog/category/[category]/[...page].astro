@@ -11,7 +11,7 @@ import { categoryToSlug, assertUniqueCategorySlugs } from "../../../../lib/sanit
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getAllPosts();
-  // When there are no posts, return [] — no category pages emitted, build succeeds.
+  // When there are no posts, return [] - no category pages emitted, build succeeds.
   if (posts.length === 0) return [];
 
   const cats = Array.from(new Set(posts.map((p) => p.category)));

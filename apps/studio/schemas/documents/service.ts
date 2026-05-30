@@ -13,7 +13,7 @@ export const service = defineType({
     { name: "cta", title: "CTA" },
   ],
   fields: [
-    // ── Default (uncategorized) fields — appear first in the editor ──
+    // ── Default (uncategorized) fields - appear first in the editor ──
     defineField({
       name: "name",
       title: "Name",

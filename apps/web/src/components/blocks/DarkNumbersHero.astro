@@ -18,9 +18,9 @@ const { block } = Astro.props;
   ></div>
 
   <div class="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-14 relative items-center">
-    <!-- Left column — padded so the inner content aligns with the
+    <!-- Left column: padded so the inner content aligns with the
          site's content well left edge. Must be 100vw (viewport),
-         not 100% (column width) — the grid is full-bleed and the
+         not 100% (column width) - the grid is full-bleed and the
          column gets a fractional share, so 100% would compute wrong. -->
     <div
       class="px-10"
@@ -74,7 +74,7 @@ const { block } = Astro.props;
       </div>
     </div>
 
-    <!-- Right column — flush to artboard right edge, no right radius -->
+    <!-- Right column: flush to artboard right edge, no right radius -->
     <div
       class="self-stretch bg-white/[0.04] border border-dark-line md:border-r-0 px-5 md:px-6 py-6 mt-16 mb-6"
       style="border-top-left-radius: var(--radius-xxl); border-bottom-left-radius: var(--radius-xxl);"

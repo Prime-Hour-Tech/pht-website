@@ -4,7 +4,7 @@ export const navigation = defineType({
   name: "navigation",
   title: "Navigation",
   type: "document",
-  // Singleton — registered in apps/studio/sanity.config.ts SINGLETONS array.
+  // Singleton; registered in apps/studio/sanity.config.ts SINGLETONS array.
   fields: [
     defineField({
       name: "title",

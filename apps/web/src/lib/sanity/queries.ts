@@ -428,7 +428,7 @@ export const otherServicesQuery = /* groq */ `
 `;
 
 
-// All four post queries share the same completeness filter — same pattern as
+// All four post queries share the same completeness filter, same pattern as
 // the SERVICE_COMPLETE_FILTER above. Posts missing any required structural
 // field are skipped at the query level (no /blog/<slug> route generated, no
 // card appears in lists). Drafts in progress don't break the build.

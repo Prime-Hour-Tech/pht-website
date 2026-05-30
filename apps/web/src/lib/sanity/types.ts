@@ -302,7 +302,7 @@ export type ServiceCard = {
   iconName: IconName;
 };
 
-// Used for the home-page ServicesList block — projection includes _id + order.
+// Used for the home-page ServicesList block; projection includes _id + order.
 export type ServiceResolved = ServiceCard & {
   _id: string;
   order: number;

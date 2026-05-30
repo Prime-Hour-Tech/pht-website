@@ -1,11 +1,11 @@
 ---
 // Feature-flagged cookie banner. When PUBLIC_COOKIE_BANNER_ENABLED is anything
-// other than the exact string "true", the component returns nothing — zero
+// other than the exact string "true", the component returns nothing - zero
 // markup ships to users until legal copy + tracking choices are finalized.
 //
 // When enabled, the banner shows once per browser. Choice is persisted in
 // localStorage under "pht-cookie-consent" with one of: "accepted", "rejected",
-// "settings". The banner DOES NOT load any tracking scripts — it only records
+// "settings". The banner DOES NOT load any tracking scripts - it only records
 // the preference for a follow-up integration.
 //
 // TODO: Replace placeholder copy below with legal-approved copy.
@@ -77,7 +77,7 @@ const enabled = import.meta.env.PUBLIC_COOKIE_BANNER_ENABLED === "true";
           hide();
           return;
         }
-      } catch (_) { /* localStorage blocked — show banner */ }
+      } catch (_) { /* localStorage blocked - show banner */ }
 
       show();
 

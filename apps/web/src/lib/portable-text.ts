@@ -3,7 +3,7 @@ import type { PortableTextBlock } from "@portabletext/types";
 
 // Render a Portable Text headline (single-block, accent-marked spans) to an
 // HTML string. Used by HeadlineRichText.astro and any other consumer that
-// needs the same italic-accent styling — e.g., service page hero/heading
+// needs the same italic-accent styling, e.g., service page hero/heading
 // fields and the migrated CtaCard.
 //
 // Returns inline-only output (no outer <p>/<h*>) so consumers can wrap in

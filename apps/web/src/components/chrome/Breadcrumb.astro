@@ -1,10 +1,10 @@
 ---
-// Breadcrumb — uppercase mono crumb row. Used above hero on service / blog
-// post / legal pages. No consumers yet in slice 1 — comes online in slice 3.
+// Breadcrumb: uppercase mono crumb row. Used above hero on service / blog
+// post / legal pages.
 //
 // Pass `trail` as an array of either:
-//   - { label, href }     — link
-//   - string              — current page (no link, ink color)
+//   - { label, href }     - link
+//   - string              - current page (no link, ink color)
 
 export interface Crumb { label: string; href: string }
 export type Trail = Array<Crumb | string>;

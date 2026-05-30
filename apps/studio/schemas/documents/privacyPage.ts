@@ -4,7 +4,7 @@ export const privacyPage = defineType({
   name: "privacyPage",
   title: "Privacy Page",
   type: "document",
-  // Singleton — registered in apps/studio/sanity.config.ts SINGLETONS array.
+  // Singleton; registered in apps/studio/sanity.config.ts SINGLETONS array.
   // Backs /privacy.
   groups: [
     { name: "header", title: "Header" },

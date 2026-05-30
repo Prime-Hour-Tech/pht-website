@@ -60,12 +60,10 @@ export async function getAllPageSlugs(): Promise<{ slug: string }[]> {
   return await sanityClient.fetch<{ slug: string }[]>(allPageSlugsQuery);
 }
 
-// All four service helpers share the same `defined(headline) && defined(heroStat)`
-// filter. Reason: a legacy "directions" doc predates the Slice 3 schema
-// expansion and is missing those fields. Filtering at query time keeps it
-// out of routes, listings, and the other-services row alike. The two
-// sentinels are sufficient — Studio validation enforces the rest of the
-// new fields, so a doc that passes the filter is structurally complete.
+// All four service helpers share the SERVICE_COMPLETE_FILTER defined in queries.ts.
+// Reason: a legacy "directions" doc predates the Slice 3 schema expansion and is
+// missing those fields. Filtering at query time keeps it out of routes, listings,
+// and the other-services row alike.
 // Remove the filter once the legacy doc is deleted or backfilled.
 export async function getAllServiceSlugs(): Promise<{ slug: string }[]> {
   return await sanityClient.fetch<{ slug: string }[]>(servicesSlugListQuery);

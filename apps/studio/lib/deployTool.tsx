@@ -7,10 +7,10 @@ import { useState } from "react";
 // production hook). Each card tracks status independently.
 //
 // Env vars (must be prefixed SANITY_STUDIO_ for Vite to expose them to the
-// browser bundle — same pattern as apps/studio/lib/env.ts):
-//   SANITY_STUDIO_VERCEL_PREVIEW_DEPLOY_HOOK — preview Vercel deploy hook URL
-//   SANITY_STUDIO_VERCEL_DEPLOY_HOOK         — production Vercel deploy hook URL (existing)
-//   SANITY_STUDIO_VERCEL_PREVIEW_URL         — optional; rendered as a "Visit preview" link on the preview card
+// browser bundle, same pattern as apps/studio/lib/env.ts):
+//   SANITY_STUDIO_VERCEL_PREVIEW_DEPLOY_HOOK: preview Vercel deploy hook URL
+//   SANITY_STUDIO_VERCEL_DEPLOY_HOOK:         production Vercel deploy hook URL (existing)
+//   SANITY_STUDIO_VERCEL_PREVIEW_URL:         optional; rendered as a "Visit preview" link on the preview card
 //
 // Threat model: hook URLs are embedded in the Studio JS bundle, visible to
 // anyone with Studio access. This matches the old plugin's posture (it stored

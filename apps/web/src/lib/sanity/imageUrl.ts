@@ -14,7 +14,7 @@ export function urlFor(source: SanityImageSource) {
 }
 
 export interface ResponsiveImage {
-  /** Largest variant — fallback `src` for browsers ignoring srcset. */
+  /** Largest variant; fallback `src` for browsers ignoring srcset. */
   src: string;
   /** `<url> <w>w` entries across the requested widths. */
   srcset: string;
@@ -28,7 +28,7 @@ export interface ResponsiveImage {
 // on the <img> describing the slot's rendered width per breakpoint.
 //
 // `aspect` (= width / height) pins each variant to a fixed ratio with fit:crop
-// — use for fixed-ratio slots (team 4:5 → 0.8, cards 4:3 → 1.333, avatar 1:1 → 1).
+// Use for fixed-ratio slots (team 4:5 -> 0.8, cards 4:3 -> 1.333, avatar 1:1 -> 1).
 // Omit it for full-bleed images that keep their own ratio (fit:max); pair those
 // with an object-cover container.
 export function urlForResponsive(
@@ -49,7 +49,7 @@ export function urlForResponsive(
 }
 
 // Resolve a 1200×630 OG-image URL with per-page → site-default fallback.
-// Returns undefined when neither a per-page nor a default image is set —
+// Returns undefined when neither a per-page nor a default image is set;
 // BaseLayout skips the og:image meta tag entirely in that case.
 export function ogImageUrl(
   specific: ImageRef | undefined,

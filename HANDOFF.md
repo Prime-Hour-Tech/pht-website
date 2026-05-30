@@ -1,13 +1,13 @@
-# HANDOFF — PHT Website Operator Manual
+# HANDOFF - PHT Website Operator Manual
 
 **Audience:** Whoever runs the live site day-to-day. No code knowledge required for normal operation.
 
-**Scope:** How to operate the live site — content editing, deploying, form providers, environment variables, and known gotchas.
+**Scope:** How to operate the live site - content editing, deploying, form providers, environment variables, and known gotchas.
 
 **Other docs to know about:**
-- [`README.md`](./README.md) — developer setup, local dev, seeding, testing. Read this if you're touching code.
-- [`TODO.md`](./TODO.md) — remaining pre-launch tasks (content polish, infra config, post-deploy verification, deferred features). Cross-referenced below.
-- [`DESIGN_MAP.md`](./DESIGN_MAP.md) — every route, its document type, and its intended block sequence. Use when authoring new pages.
+- [`README.md`](./README.md) - developer setup, local dev, seeding, testing. Read this if you're touching code.
+- [`TODO.md`](./TODO.md) - remaining pre-launch tasks (content polish, infra config, post-deploy verification, deferred features). Cross-referenced below.
+- [`DESIGN_MAP.md`](./DESIGN_MAP.md) - every route, its document type, and its intended block sequence. Use when authoring new pages.
 
 ---
 
@@ -20,7 +20,7 @@
 | Sanity Manage (project settings, CORS, API tokens) | <https://www.sanity.io/manage> |
 | Vercel dashboard (hosting, env vars, deploys) | <https://vercel.com/> → your team → `pht-website` project |
 
-The Studio and the web app are separate deployments sharing the same Sanity dataset. Editing in Studio does not automatically push anything live — you trigger a rebuild explicitly (see §5).
+The Studio and the web app are separate deployments sharing the same Sanity dataset. Editing in Studio does not automatically push anything live - you trigger a rebuild explicitly (see §5).
 
 ---
 
@@ -32,28 +32,28 @@ Log in at <https://primehourtech.sanity.studio/>. Request access from Sanity Man
 
 | Tab label | What it does |
 |---|---|
-| Content | Document list — edit fields directly here. |
+| Content | Document list - edit fields directly here. |
 | Preview (Presentation) | Renders the live site in an iframe with click-to-edit overlays on every Sanity-bound element. Click any heading, card, or button to jump straight to its field. Fastest way to locate fields you'd otherwise have to scroll to find. |
 | Query (Vision) | GROQ query runner for developers. Ignore unless debugging. |
 | Deploy | Triggers a Vercel rebuild (see §5). |
 
 **Typical edit workflow:**
 
-1. Open any document in Content — or click an element in the Preview iframe to jump straight to its field.
+1. Open any document in Content - or click an element in the Preview iframe to jump straight to its field.
 2. Edit the fields.
 3. Click **Publish** at the bottom of the document panel. This saves to Sanity but does NOT rebuild the site.
 4. Repeat for any other documents you want to update.
 5. When you're ready to push everything live, go to Deploy (see §5). Batching multiple publishes into one deploy is encouraged.
 
-**Important:** The Preview tab shows published content only — what's currently live. To preview unpublished drafts, a developer runs the local dev server.
+**Important:** The Preview tab shows published content only - what's currently live. To preview unpublished drafts, a developer runs the local dev server.
 
 ---
 
-## 3. Adding content — required fields and gotchas
+## 3. Adding content - required fields and gotchas
 
 ### Blog posts (`post` document)
 
-Required fields — a post missing any of these will NOT appear on `/blog`, will NOT get a `/blog/<slug>` detail page, and will NOT enter the RSS feed. The site silently skips incomplete posts at build time; no error is shown.
+Required fields - a post missing any of these will NOT appear on `/blog`, will NOT get a `/blog/<slug>` detail page, and will NOT enter the RSS feed. The site silently skips incomplete posts at build time; no error is shown.
 
 | Field | Notes |
 |---|---|
@@ -63,12 +63,12 @@ Required fields — a post missing any of these will NOT appear on `/blog`, will
 | Category | Pick one: Security, Cloud, Field notes, Compliance, Tooling, Practice |
 | Publish Date | Required |
 | Author | Reference to a `teamMember` document; that member must exist |
-| **Cover Image** | **REQUIRED — see callout below** |
+| **Cover Image** | **REQUIRED - see callout below** |
 | Body | At least one block of content |
 
-> **Cover Image is required — a post without one is invisible.**
+> **Cover Image is required - a post without one is invisible.**
 >
-> A `post` document that is saved and published but has no Cover Image **will not appear anywhere on the site** — not on `/blog`, not in category pages, not in the RSS feed. This is enforced by the `POST_COMPLETE_FILTER` gate in the site's GROQ queries (`defined(coverImage)` must be true). Upload a cover image (any reasonable aspect ratio; hotspot cropping is enabled) and fill in the alt text field before publishing a post you want to go live.
+> A `post` document that is saved and published but has no Cover Image **will not appear anywhere on the site** - not on `/blog`, not in category pages, not in the RSS feed. This is enforced by the `POST_COMPLETE_FILTER` gate in the site's GROQ queries (`defined(coverImage)` must be true). Upload a cover image (any reasonable aspect ratio; hotspot cropping is enabled) and fill in the alt text field before publishing a post you want to go live.
 
 Optional SEO fields (fall back to title/excerpt if unset): `seoTitle`, `seoDescription`, `ogImage`.
 
@@ -103,19 +103,19 @@ Optional: `heroPillLeft`, `heroPillRight`, `faqHelperText`, `specSheetUrl` (when
 | `name` | Required, max 64 characters |
 | `role` | Required, max 64 characters |
 | `bio` | Required, max 280 characters. Shown on Home and About. |
-| `order` | Required integer — lower numbers display first |
+| `order` | Required integer - lower numbers display first |
 | `photo` | Not required by the schema (falls back to a grey placeholder), but strongly recommended. 4:5 portrait aspect ratio. Fill in alt text when uploading. |
 
-Team members are referenced by blog posts as the `author` field — a post's Author must point to an existing `teamMember` document.
+Team members are referenced by blog posts as the `author` field - a post's Author must point to an existing `teamMember` document.
 
 ---
 
 ## 4. Blog structure
 
-- `/blog` — paginated list, 12 posts per page. Navigation between pages uses standard URL-based pagination (`/blog/2`, `/blog/3`, etc.), no JavaScript required.
-- `/blog/category/<slug>` — per-category filtered list, also paginated. Category slugs are derived from the category name (e.g. "Field notes" → `field-notes`). Filter chips on the blog page are plain links, not JS-driven.
-- `/blog/<slug>` — individual post detail page.
-- `/blog/rss.xml` — RSS feed of the latest 20 published posts (by publish date).
+- `/blog` - paginated list, 12 posts per page. Navigation between pages uses standard URL-based pagination (`/blog/2`, `/blog/3`, etc.), no JavaScript required.
+- `/blog/category/<slug>` - per-category filtered list, also paginated. Category slugs are derived from the category name (e.g. "Field notes" → `field-notes`). Filter chips on the blog page are plain links, not JS-driven.
+- `/blog/<slug>` - individual post detail page.
+- `/blog/rss.xml` - RSS feed of the latest 20 published posts (by publish date).
 
 A post must pass the completeness filter (§3) to appear on any of these routes. **Cover image is the most commonly missed requirement.**
 
@@ -129,16 +129,16 @@ The site does not auto-deploy when you publish content in Sanity. You trigger re
 
 1. Edit and publish content in Studio (as many documents as you want).
 2. In the Studio sidebar, click **Deploy**.
-3. Click **Deploy to Preview** — no confirmation required. Vercel rebuilds the preview URL with the published content. Wait 1–2 minutes.
+3. Click **Deploy to Preview** - no confirmation required. Vercel rebuilds the preview URL with the published content. Wait 1–2 minutes.
 4. Visit the preview URL to review the rendered result.
-5. If satisfied, click **Deploy to Production** — an inline confirmation prompt appears ("This will publish current Sanity content to the public site. Continue?"). Click **Yes, deploy to production**. Vercel rebuilds the production URL. Live within 1–2 minutes.
+5. If satisfied, click **Deploy to Production** - an inline confirmation prompt appears ("This will publish current Sanity content to the public site. Continue?"). Click **Yes, deploy to production**. Vercel rebuilds the production URL. Live within 1–2 minutes.
 
 ### What each button does
 
 | Button | Hook env var | Confirmation | Branch rebuilt |
 |---|---|---|---|
 | Deploy to Preview | `SANITY_STUDIO_VERCEL_PREVIEW_DEPLOY_HOOK` | None | `preview` |
-| Deploy to Production | `SANITY_STUDIO_VERCEL_DEPLOY_HOOK` | Yes — inline prompt | `main` |
+| Deploy to Production | `SANITY_STUDIO_VERCEL_DEPLOY_HOOK` | Yes - inline prompt | `main` |
 
 If a button is grayed out or shows a warning that the env var is not set, the corresponding deploy hook URL needs to be added to the Studio's environment variables (see §6).
 
@@ -149,7 +149,7 @@ If a button is grayed out or shows a warning that the env var is not set, the co
 
 ### Security note
 
-The Vercel deploy hook URLs (`SANITY_STUDIO_VERCEL_DEPLOY_HOOK` and `SANITY_STUDIO_VERCEL_PREVIEW_DEPLOY_HOOK`) are embedded in the Studio JavaScript bundle and are visible to anyone with Studio access. This is by design — it matches the same threat model as the prior plugin, which stored the same URL in a Sanity document any editor could read. Studio access should be limited to trusted team members.
+The Vercel deploy hook URLs (`SANITY_STUDIO_VERCEL_DEPLOY_HOOK` and `SANITY_STUDIO_VERCEL_PREVIEW_DEPLOY_HOOK`) are embedded in the Studio JavaScript bundle and are visible to anyone with Studio access. This is by design - it matches the same threat model as the prior plugin, which stored the same URL in a Sanity document any editor could read. Studio access should be limited to trusted team members.
 
 If a hook URL is ever leaked or needs to be rotated: Vercel dashboard → Project → Settings → Git → Deploy Hooks → delete the hook and create a new one → update `SANITY_STUDIO_VERCEL_DEPLOY_HOOK` (or `..._PREVIEW_DEPLOY_HOOK`) in the Studio host's environment variables → redeploy the Studio.
 
@@ -157,22 +157,22 @@ If a hook URL is ever leaked or needs to be rotated: Vercel dashboard → Projec
 
 ## 6. Environment variables
 
-### `apps/web` — set on the Vercel web project
+### `apps/web` - set on the Vercel web project
 
 | Variable | What it does | Required? |
 |---|---|---|
 | `SANITY_PROJECT_ID` | Sanity project identifier | Yes |
 | `SANITY_DATASET` | Dataset name (usually `production`) | Yes |
 | `SANITY_API_VERSION` | Pinned Sanity API version date (e.g. `2026-05-01`) | Yes |
-| `SANITY_READ_TOKEN` | Read-only API token (dataset is private — build fails without this) | Yes |
+| `SANITY_READ_TOKEN` | Read-only API token (dataset is private - build fails without this) | Yes |
 | `SITE_URL` | Public site URL, used for canonical tags, JSON-LD, sitemap, and RSS. Update when domain swaps from `.vercel.app` to `primehourtech.com`. | Yes |
 | `CONTACT_FORM_URL` | POST endpoint for the contact + discovery forms (Web3Forms / Formspree / Basin). If unset, both forms render with `action="#"` and submissions go nowhere; build log prints a warning. | Pre-launch |
-| `PUBLIC_COOKIE_BANNER_ENABLED` | Set to `"true"` only after legal approves banner copy. Default `false` — banner doesn't render at all. | After legal sign-off |
+| `PUBLIC_COOKIE_BANNER_ENABLED` | Set to `"true"` only after legal approves banner copy. Default `false` - banner doesn't render at all. | After legal sign-off |
 | `PUBLIC_GTM_CONTAINER_ID` | Google Tag Manager container ID (e.g. `GTM-XXXXXXX`). When set, GTM loads only after a visitor accepts the cookie banner. Pre-requires banner enabled. | When analytics ready |
 | `PUBLIC_SANITY_STUDIO_URL` | Studio URL for click-to-edit stega popups. Set to `https://primehourtech.sanity.studio` on the Vercel preview environment only. | Preview env only |
 | `PUBLIC_SANITY_VISUAL_EDITING` | Set to `"true"` only on the env that Studio's Presentation iframe loads (typically the Vercel preview deployment). Keeps the ~30 KB overlay script off production visitor traffic. | Preview env only |
 
-### `apps/studio` — set on the Studio host (Sanity-managed hosting)
+### `apps/studio` - set on the Studio host (Sanity-managed hosting)
 
 | Variable | What it does | Required? |
 |---|---|---|
@@ -191,10 +191,10 @@ Both forms already include two honeypot fields:
 
 | Field | Mechanism |
 |---|---|
-| `_gotcha` (hidden `input`, value always `""`) | Formspree / Basin pattern — bots that populate it are dropped by the provider |
-| `botcheck` (visible-to-CSS-but-off-screen `text` input, `tabindex="-1"`, `autocomplete="off"`, `display:none`) | Web3Forms pattern — same drop-on-fill logic |
+| `_gotcha` (hidden `input`, value always `""`) | Formspree / Basin pattern - bots that populate it are dropped by the provider |
+| `botcheck` (visible-to-CSS-but-off-screen `text` input, `tabindex="-1"`, `autocomplete="off"`, `display:none`) | Web3Forms pattern - same drop-on-fill logic |
 
-Both fields are present in the contact page form (`ContactBody.astro`) and the landing page discovery form (`DiscoveryForm.astro`). The form provider does the dropping server-side — nothing needs to be configured here.
+Both fields are present in the contact page form (`ContactBody.astro`) and the landing page discovery form (`DiscoveryForm.astro`). The form provider does the dropping server-side - nothing needs to be configured here.
 
 No CAPTCHA is installed. If post-launch spam volume becomes a problem, Cloudflare Turnstile is the planned addition (see §8).
 
