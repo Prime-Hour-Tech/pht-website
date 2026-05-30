@@ -38,6 +38,17 @@ describe("themeToCssVars", () => {
     const css = themeToCssVars(theme);
     expect(css).not.toContain(stegaPayload);
   });
+
+  it("drops a malformed color value (defense-in-depth)", () => {
+    const theme: Theme = {
+      accent: { hex: "#zzz; } body{display:none}", alpha: 1, rgb: { r: 0, g: 0, b: 0, a: 1 } },
+      ink: solid("#123456"),
+    };
+    const css = themeToCssVars(theme);
+    expect(css).not.toContain("--color-accent");
+    expect(css).not.toContain("display:none");
+    expect(css).toContain("--color-ink: #123456;");
+  });
 });
 
 const c = (hex: string) => ({ hex, alpha: 1, rgb: { r: 0, g: 0, b: 0, a: 1 } });

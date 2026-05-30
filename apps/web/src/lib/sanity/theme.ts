@@ -20,14 +20,19 @@ const TOKEN_MAP: Record<keyof Theme, string> = {
   online: "online",
 };
 
-// A color-input value -> CSS color string. rgba() when it carries alpha < 1
-// (the hairline tokens), hex otherwise.
-function colorToCss(c: SanityColor): string {
+// A color-input value -> CSS color string, or null when the value is malformed.
+// Defense-in-depth: a bad hex from a manual dataset edit can't break the injected
+// CSS. rgba() when it carries alpha < 1 (the hairline tokens), hex otherwise.
+const HEX_RE = /^#[0-9a-fA-F]{3,8}$/;
+function colorToCss(c: SanityColor): string | null {
   const a = c.rgb?.a ?? c.alpha ?? 1;
   if (a < 1 && c.rgb) {
-    return `rgba(${c.rgb.r}, ${c.rgb.g}, ${c.rgb.b}, ${a})`;
+    const { r, g, b } = c.rgb;
+    return [r, g, b, a].every((n) => Number.isFinite(n))
+      ? `rgba(${r}, ${g}, ${b}, ${a})`
+      : null;
   }
-  return c.hex;
+  return typeof c.hex === "string" && HEX_RE.test(c.hex) ? c.hex : null;
 }
 
 // Build the body of a :root{} override block from the set theme fields.
@@ -40,8 +45,9 @@ export function themeToCssVars(rawTheme: Theme | null): string {
   const lines: string[] = [];
   for (const key of Object.keys(TOKEN_MAP) as (keyof Theme)[]) {
     const value = theme[key];
-    if (value && value.hex) {
-      lines.push(`  --color-${TOKEN_MAP[key]}: ${colorToCss(value)};`);
+    const css = value ? colorToCss(value) : null;
+    if (css) {
+      lines.push(`  --color-${TOKEN_MAP[key]}: ${css};`);
     }
   }
   return lines.join("\n");
