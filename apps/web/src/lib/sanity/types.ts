@@ -20,6 +20,32 @@ export type SiteSettings = {
   defaultOgImage?: ImageRef;
 };
 
+// A @sanity/color-input value. rgb.a is 0-1 alpha.
+export type SanityColor = {
+  hex: string;
+  alpha?: number;
+  rgb?: { r: number; g: number; b: number; a: number };
+};
+
+// Editable theme overrides. Every field optional; unset = global.css default.
+export type Theme = {
+  accent?: SanityColor;
+  bg?: SanityColor;
+  bgAlt?: SanityColor;
+  surface?: SanityColor;
+  ink?: SanityColor;
+  inkBody?: SanityColor;
+  muted?: SanityColor;
+  line?: SanityColor;
+  lineSoft?: SanityColor;
+  dark?: SanityColor;
+  darkText?: SanityColor;
+  darkMuted?: SanityColor;
+  darkLine?: SanityColor;
+  success?: SanityColor;
+  online?: SanityColor;
+};
+
 export type Page = {
   _id: string;
   title: string;

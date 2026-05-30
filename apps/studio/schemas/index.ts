@@ -7,6 +7,7 @@ import { service } from "./documents/service";
 import { post } from "./documents/post";
 import { termsPage } from "./documents/termsPage";
 import { privacyPage } from "./documents/privacyPage";
+import { theme } from "./documents/theme";
 import { landingPage } from "./documents/landingPage";
 import { page } from "./documents/page";
 
@@ -53,6 +54,7 @@ export const schemaTypes = [
   post,
   termsPage,
   privacyPage,
+  theme,
   landingPage,
   page,
   darkNumbersHero,

@@ -357,6 +357,11 @@ export const contactInfoQuery = /* groq */ `
   }
 `;
 
+export const themeQuery = /* groq */ `*[_type == "theme"][0]{
+  accent, bg, bgAlt, surface, ink, inkBody, muted, line, lineSoft,
+  dark, darkText, darkMuted, darkLine, success, online
+}`;
+
 // All three service-list queries share the same completeness filter. A service
 // is "complete enough to display" only when every required field added through
 // the Slice-3 + Slice-3-fix-up schema expansions is defined on the doc.

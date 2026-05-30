@@ -17,7 +17,9 @@ import {
   getFooter,
   getNavigation,
   getSiteSettings,
+  getTheme,
 } from "../lib/sanity/client";
+import { themeToCssVars, warnThemeContrastOnce } from "../lib/sanity/theme";
 import { buildOrganizationJsonLd } from "../lib/structuredData";
 import { ogImageUrl } from "../lib/sanity/imageUrl";
 import type { ImageRef } from "../lib/sanity/types";
@@ -43,11 +45,12 @@ const resolvedCanonical =
 
 // Chrome data: parallel fetch. Each is required; missing = misconfiguration,
 // surface as a build failure with a helpful message.
-const [siteSettings, navigation, footer, contactInfo] = await Promise.all([
+const [siteSettings, navigation, footer, contactInfo, theme] = await Promise.all([
   getSiteSettings(),
   getNavigation(),
   getFooter(),
   getContactInfo(),
+  getTheme(),
 ]);
 
 if (!siteSettings) {
@@ -80,6 +83,8 @@ const organizationLd = buildOrganizationJsonLd({
 });
 const resolvedOgImageUrl = ogImageUrl(ogImage, siteSettings.defaultOgImage);
 const enableVisualEditing = import.meta.env.PUBLIC_SANITY_VISUAL_EDITING === "true";
+const themeVars = themeToCssVars(theme);
+warnThemeContrastOnce(theme);
 ---
 
 <!doctype html>
@@ -106,6 +111,7 @@ const enableVisualEditing = import.meta.env.PUBLIC_SANITY_VISUAL_EDITING === "tr
     {nextUrl && <link rel="next" href={nextUrl} />}
     <JsonLd data={organizationLd} />
     <Analytics />
+    {themeVars && <style is:inline set:html={`:root{\n${themeVars}\n}`}></style>}
   </head>
   <body class="bg-bg text-ink-body antialiased">
     <UtilityRow contactInfo={contactInfo} />

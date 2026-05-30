@@ -24,7 +24,7 @@
   --color-dark-muted: #9aa0a6;
   --color-dark-line:  rgb(255 255 255 / 0.10);
 
-  /* Brand accent (red), hardcoded in slice 1; not Studio-editable */
+  /* Brand accent (red). Default value; overridable per-site via the Sanity theme singleton. */
   --color-accent: #dc2626;
 
   /* Type families */

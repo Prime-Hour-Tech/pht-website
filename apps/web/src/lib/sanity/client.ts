@@ -13,6 +13,7 @@ import type {
   ServiceFull,
   SiteSettings,
   TermsPage,
+  Theme,
 } from "./types";
 import {
   allLandingSlugsQuery,
@@ -34,10 +35,15 @@ import {
   servicesSlugListQuery,
   siteSettingsQuery,
   termsPageQuery,
+  themeQuery,
 } from "./queries";
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   return await sanityClient.fetch<SiteSettings | null>(siteSettingsQuery);
+}
+
+export async function getTheme(): Promise<Theme | null> {
+  return await sanityClient.fetch<Theme | null>(themeQuery);
 }
 
 export async function getNavigation(): Promise<Navigation | null> {
