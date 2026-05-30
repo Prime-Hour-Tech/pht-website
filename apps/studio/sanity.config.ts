@@ -115,9 +115,11 @@ export default defineConfig({
             }),
           },
           termsPage: {
+            select: { title: "title" },
             resolve: () => ({ locations: [{ href: "/terms", title: "Terms" }] }),
           },
           privacyPage: {
+            select: { title: "title" },
             resolve: () => ({ locations: [{ href: "/privacy", title: "Privacy" }] }),
           },
         },
