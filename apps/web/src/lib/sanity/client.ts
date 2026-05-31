@@ -42,25 +42,34 @@ import {
 } from "./queries";
 
 // Build-scoped fetch cache. The site is a static build (output: "static"), so
-// Sanity content is an immutable snapshot for the build's lifetime — fetching
-// the same query+params more than once always yields the same result. Astro
-// renders pages concurrently and every page pulls the same chrome singletons
+// during `astro build` Sanity content is an immutable snapshot — fetching the
+// same query+params more than once always yields the same result. Astro renders
+// pages concurrently and every page pulls the same chrome singletons
 // (siteSettings, navigation, footer, contactInfo, theme), so without this each
 // is re-fetched once per page. Caching the *promise* (not the resolved value)
 // also collapses concurrent in-flight calls into one request.
 //
-// This is a build-time module (no runtime server in a static build), so the
-// cache lives only for the duration of `astro build` and never serves a stale
-// value to a live request.
+// Only active in production builds. In `astro dev` the module stays resident
+// across requests, so a cache there would serve stale content and defeat Sanity
+// visual-editing live preview — dev always fetches fresh.
 const fetchCache = new Map<string, Promise<unknown>>();
 
+function rawFetch<T>(query: string, params?: QueryParams): Promise<T> {
+  return params
+    ? sanityClient.fetch<T>(query, params)
+    : sanityClient.fetch<T>(query);
+}
+
 function cachedFetch<T>(query: string, params?: QueryParams): Promise<T> {
+  if (!import.meta.env.PROD) return rawFetch<T>(query, params);
   const key = params ? `${query}::${JSON.stringify(params)}` : query;
   const hit = fetchCache.get(key);
   if (hit) return hit as Promise<T>;
-  const pending = params
-    ? sanityClient.fetch<T>(query, params)
-    : sanityClient.fetch<T>(query);
+  const pending = rawFetch<T>(query, params);
+  // Evict on rejection so one transient failure doesn't poison the key for the
+  // rest of the build. Callers still await `pending` and see the rejection;
+  // this extra handler only deletes the cache entry, allowing a fresh retry.
+  pending.catch(() => fetchCache.delete(key));
   fetchCache.set(key, pending);
   return pending;
 }
