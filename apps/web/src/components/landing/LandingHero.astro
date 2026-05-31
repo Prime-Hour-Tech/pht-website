@@ -17,8 +17,8 @@ const { hero, form, slug, contactInfo } = Astro.props;
 <section class="bg-dark text-dark-text px-5 md:px-10 pt-18 pb-0 relative overflow-hidden">
   <!-- radial glow -->
   <div
-    class="absolute pointer-events-none"
-    style="top: -160px; right: -120px; width: 520px; height: 520px; background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 16%, transparent), transparent 70%);"
+    class="accent-glow"
+    style="top: -160px; right: -120px; width: 520px; height: 520px; --glow:16%;"
   ></div>
 
   <div class="max-w-content mx-auto relative">

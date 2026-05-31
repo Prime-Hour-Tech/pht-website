@@ -134,4 +134,17 @@
   .link-accent:hover {
     @apply underline;
   }
+
+  /* Soft radial brand-accent glow behind dark hero/pricing sections. Position
+     and size are set per-use (they vary); --glow sets the accent opacity
+     (default 18%). Tracks the theme accent via --color-accent. */
+  .accent-glow {
+    position: absolute;
+    pointer-events: none;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--color-accent) var(--glow, 18%), transparent),
+      transparent 70%
+    );
+  }
 }

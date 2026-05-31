@@ -13,8 +13,8 @@ const { block } = Astro.props;
   <!-- Accent corner glow -->
   <div
     aria-hidden="true"
-    class="absolute pointer-events-none"
-    style="top:-160px; right:-120px; width:480px; height:480px; background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 15%, transparent), transparent 70%);"
+    class="accent-glow"
+    style="top:-160px; right:-120px; width:480px; height:480px; --glow:15%;"
   ></div>
 
   <div class="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-14 relative items-center">

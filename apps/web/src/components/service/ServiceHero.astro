@@ -13,8 +13,8 @@ const { service } = Astro.props;
 <section class="bg-dark text-dark-text px-5 md:px-10 py-20 relative overflow-hidden" aria-label="Service hero">
   <div
     aria-hidden="true"
-    class="absolute -top-40 w-[480px] h-[480px] rounded-full pointer-events-none"
-    style="background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 15%, transparent), transparent 70%); right: -120px;"
+    class="accent-glow -top-40 w-[480px] h-[480px]"
+    style="right: -120px; --glow:15%;"
   ></div>
 
   <div class="max-w-content mx-auto grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-14 items-end relative">
