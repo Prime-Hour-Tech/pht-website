@@ -2,9 +2,7 @@
 import type { PostListBlock } from "../../lib/sanity/types";
 import BlogFeaturedPost from "../blog/BlogFeaturedPost.astro";
 import BlogPostCard from "../blog/BlogPostCard.astro";
-import BlogFilterChips from "../blog/BlogFilterChips.astro";
 import { getAllPosts } from "../../lib/sanity/client";
-import type { PostCategory } from "../../lib/sanity/types";
 
 interface Props {
   block: PostListBlock;
@@ -15,15 +13,10 @@ const posts = await getAllPosts();
 
 const [featured, ...rest] = posts;
 
-// Distinct categories present in posts (order: first-seen).
-const seen = new Set<PostCategory>();
-for (const p of posts) {
-  if (!seen.has(p.category)) seen.add(p.category);
-}
-const categories = Array.from(seen);
+// No category filter chips here: filtering is a /blog-only affordance backed by
+// route-based category pages (BlogFilterChips navigates to /blog/category/...).
+// As a generic block this can sit on any page, so it just renders the posts.
 ---
-
-{posts.length > 0 && <BlogFilterChips categories={categories} active="all" />}
 
 <section class="bg-bg px-5 md:px-10 py-12">
   <div class="max-w-content mx-auto">
