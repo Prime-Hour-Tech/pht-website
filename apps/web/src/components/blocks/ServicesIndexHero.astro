@@ -71,16 +71,14 @@ const topFour = featured.capabilities.slice(0, 4);
         <div class="mt-auto pt-8 flex gap-3 items-center flex-wrap">
           <a
             href={`/services/${featured.slug}`}
-            class="bg-accent text-white font-semibold rounded-md inline-flex items-center justify-center gap-2.5 no-underline shadow-button-accent"
-            style="padding: 14px 22px; font-size: 15px;"
+            class="btn btn-primary btn-md"
           >
             Read the {featured.name} spec
             <Icon name="arrow" size={16} />
           </a>
           <a
             href="/contact"
-            class="text-dark-text no-underline font-medium rounded-md border border-dark-line"
-            style="padding: 14px 20px; font-size: 15px;"
+            class="btn btn-secondary-dark btn-md"
           >
             Schedule a discovery call →
           </a>

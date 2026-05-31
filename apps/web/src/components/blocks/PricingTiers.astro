@@ -116,12 +116,7 @@ const tierEntries: Array<{ key: "essentials" | "standard" | "premier"; name: str
 
           <a
             href={tier.ctaHref}
-            class={`mt-6 w-full rounded-md font-semibold inline-flex items-center justify-center gap-2.5 no-underline relative ${
-              featured
-                ? "bg-accent text-white shadow-button-accent border border-accent"
-                : "bg-bg text-ink border border-line"
-            }`}
-            style="padding: 14px 20px; font-size: 14.5px;"
+            class={`mt-6 w-full relative btn btn-md ${featured ? "btn-primary" : "btn-secondary"}`}
           >
             {tier.ctaLabel}
             <Icon name="arrowSm" size={14} />

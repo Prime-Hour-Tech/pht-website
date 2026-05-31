@@ -56,8 +56,7 @@ const { block } = Astro.props;
       <div class="mt-7 flex gap-3 items-center flex-wrap">
         <a
           href={block.ctaPrimary.href}
-          class="bg-accent text-white font-semibold no-underline rounded-md inline-flex items-center gap-2.5 shadow-button-accent"
-          style="padding: 15px 24px; font-size: 15.5px;"
+          class="btn btn-primary btn-md"
         >
           {block.ctaPrimary.label}
           <Icon name="arrow" size={16} />
@@ -65,8 +64,7 @@ const { block } = Astro.props;
         {block.ctaSecondary?.href && (
           <a
             href={block.ctaSecondary.href}
-            class="border border-dark-line text-dark-text no-underline rounded-md inline-flex items-center font-medium"
-            style="padding: 15px 22px; font-size: 15.5px;"
+            class="btn btn-secondary-dark btn-md"
           >
             {block.ctaSecondary.label} →
           </a>

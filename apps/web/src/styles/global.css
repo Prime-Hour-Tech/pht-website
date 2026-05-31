@@ -98,3 +98,28 @@
     background: var(--color-bg);
   }
 }
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2.5 font-semibold no-underline
+           rounded-md cursor-pointer transition duration-150;
+  }
+  .btn:focus-visible {
+    @apply outline outline-2 outline-accent outline-offset-2;
+  }
+
+  /* Color variants */
+  .btn-primary { @apply bg-accent text-white; }
+  .btn-primary:hover { @apply shadow-button-accent -translate-y-px; }
+
+  .btn-secondary { @apply bg-bg text-ink border border-line; }
+  .btn-secondary:hover { @apply border-accent bg-bg-alt; }
+
+  .btn-secondary-dark { @apply text-dark-text border border-dark-line; }
+  .btn-secondary-dark:hover { @apply border-dark-text; }
+
+  /* Sizes */
+  .btn-sm { @apply text-[14px] px-5 py-2.5; }
+  .btn-md { @apply text-[15px] px-6 py-3.5; }
+  .btn-lg { @apply text-[16px] px-[26px] py-4; }
+}

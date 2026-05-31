@@ -42,16 +42,14 @@ const { service } = Astro.props;
       <div class="mt-7 flex gap-3 items-center flex-wrap">
         <a
           href="/contact"
-          class="bg-accent text-white font-semibold rounded-md inline-flex items-center gap-2.5 no-underline shadow-button-accent"
-          style="padding: 15px 24px; font-size: 15.5px;"
+          class="btn btn-primary btn-md"
         >
           Schedule a discovery call <Icon name="arrow" size={16} />
         </a>
         {service.specSheetUrl && (
           <a
             href={service.specSheetUrl}
-            class="text-dark-text font-medium no-underline rounded-md border border-dark-line"
-            style="padding: 15px 22px; font-size: 15.5px;"
+            class="btn btn-secondary-dark btn-md"
           >
             Read the spec sheet →
           </a>
