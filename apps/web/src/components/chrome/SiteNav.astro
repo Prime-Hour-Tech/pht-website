@@ -34,14 +34,12 @@ function isActive(href: string): boolean {
     class="max-w-content mx-auto px-4 md:px-10 py-4.5 flex items-center gap-10"
   >
     <!-- Brand -->
-    <a href="/" class="inline-flex items-center gap-3.5 no-underline text-ink">
+    <a href="/" class="inline-flex items-center gap-3.5 no-underline text-ink flex-1 md:flex-none min-w-0">
       {logoDarkUrl ? (
         <img
           src={logoDarkUrl}
           alt={siteSettings.logoDark!.alt}
-          width="36"
-          height="36"
-          class="size-9 object-contain"
+          class="h-9 w-auto"
         />
       ) : (
         <div class="size-9 rounded-md bg-accent" aria-hidden="true"></div>
@@ -51,7 +49,7 @@ function isActive(href: string): boolean {
         <span class="font-serif font-semibold text-[19px] tracking-h3">
           {siteSettings.siteName}
         </span>
-        <span class="font-mono text-micro text-muted tracking-mono-label uppercase">
+        <span class="hidden md:block font-mono text-micro text-muted tracking-mono-label uppercase">
           Reliability &amp; Integrity
         </span>
       </span>
@@ -92,7 +90,7 @@ function isActive(href: string): boolean {
       </a>
       <a
         href={navigation.ctaButton.href}
-        class="bg-accent text-white font-semibold text-body-sm no-underline rounded-md px-5 py-3 shadow-button-accent inline-flex items-center gap-2"
+        class="hidden md:inline-flex bg-accent text-white font-semibold text-body-sm no-underline rounded-md px-5 py-3 shadow-button-accent items-center gap-2"
       >
         {navigation.ctaButton.label}
       </a>
