@@ -92,6 +92,11 @@
 /* Default body styles: body uses Geist sans by default; pages override
    per element with font-serif / font-mono utilities. */
 @layer base {
+  :root {
+    /* Height of the sticky SiteNav. Sub-navs (industries jump-nav, blog filter
+       chips) stick directly below it via top-[var(--nav-height)] + a lower z-index. */
+    --nav-height: 73px;
+  }
   body {
     font-family: var(--font-sans);
     color: var(--color-ink-body);
