@@ -9,28 +9,27 @@ interface Props {
 const { currentPage, lastPage, baseUrl } = Astro.props;
 const href = (n: number) => (n === 1 ? baseUrl : `${baseUrl}/${n}`);
 const pages = Array.from({ length: lastPage }, (_, i) => i + 1);
+
+// Shared shape for every pagination link; per-state color/hover is layered on.
+const linkBase = "px-3.5 py-2 rounded-md border text-[14px] no-underline";
+const inactive = "border-line text-ink hover:border-accent";
 ---
 
 {lastPage > 1 && (
   <nav class="flex items-center justify-center gap-2 mt-12" aria-label="Blog pagination">
     {currentPage > 1 && (
-      <a href={href(currentPage - 1)} rel="prev"
-        class="px-3.5 py-2 rounded-md border border-line text-ink no-underline text-[14px] hover:border-accent">
+      <a href={href(currentPage - 1)} rel="prev" class:list={[linkBase, inactive]}>
         ← Prev
       </a>
     )}
     {pages.map((n) => (
       <a href={href(n)} aria-current={n === currentPage ? "page" : undefined}
-        class:list={[
-          "px-3.5 py-2 rounded-md border text-[14px] no-underline",
-          n === currentPage ? "border-accent text-accent" : "border-line text-ink hover:border-accent",
-        ]}>
+        class:list={[linkBase, n === currentPage ? "border-accent text-accent" : inactive]}>
         {n}
       </a>
     ))}
     {currentPage < lastPage && (
-      <a href={href(currentPage + 1)} rel="next"
-        class="px-3.5 py-2 rounded-md border border-line text-ink no-underline text-[14px] hover:border-accent">
+      <a href={href(currentPage + 1)} rel="next" class:list={[linkBase, inactive]}>
         Next →
       </a>
     )}

@@ -25,7 +25,9 @@ const TOKEN_MAP: Record<keyof Theme, string> = {
 // CSS. rgba() when it carries alpha < 1 (the hairline tokens), hex otherwise.
 const HEX_RE = /^#[0-9a-fA-F]{3,8}$/;
 function colorToCss(c: SanityColor): string | null {
-  const a = c.rgb?.a ?? c.alpha ?? 1;
+  // Alpha only matters on the rgba() path, which requires c.rgb — so read it
+  // from there. (A top-level c.alpha without c.rgb can't produce rgba anyway.)
+  const a = c.rgb?.a ?? 1;
   if (a < 1 && c.rgb) {
     const { r, g, b } = c.rgb;
     return [r, g, b, a].every((n) => Number.isFinite(n))
@@ -53,7 +55,9 @@ export function themeToCssVars(rawTheme: Theme | null): string {
   return lines.join("\n");
 }
 
-// global.css defaults for the foreground/background tokens we contrast-check.
+// Fallbacks for a contrast pair that is only partially overridden in the theme
+// singleton. These mirror the :root token defaults in global.css and must be
+// kept in sync with them.
 const CONTRAST_DEFAULTS = {
   bg: "#ffffff",
   ink: "#1A1A1A",
@@ -70,13 +74,17 @@ const CONTRAST_PAIRS: { fg: ContrastKey; bg: ContrastKey; label: string }[] = [
   { fg: "darkText", bg: "dark", label: "Dark-band text on dark background" },
 ];
 
+// Accepts #rgb, #rgba, #rrggbb, or #rrggbbaa (all HEX_RE-valid forms); a short
+// form is expanded by doubling each digit, and any alpha channel is dropped
+// since contrast is computed on the opaque color. Returning NaN channels here
+// would silently suppress the contrast warning, so normalize the length first.
 function hexToRgb(hex: string): { r: number; g: number; b: number } {
-  const h = hex.replace("#", "");
-  const full = h.length === 3 ? h.split("").map((x) => x + x).join("") : h;
+  let h = hex.replace("#", "");
+  if (h.length === 3 || h.length === 4) h = h.split("").map((x) => x + x).join("");
   return {
-    r: parseInt(full.slice(0, 2), 16),
-    g: parseInt(full.slice(2, 4), 16),
-    b: parseInt(full.slice(4, 6), 16),
+    r: parseInt(h.slice(0, 2), 16),
+    g: parseInt(h.slice(2, 4), 16),
+    b: parseInt(h.slice(4, 6), 16),
   };
 }
 

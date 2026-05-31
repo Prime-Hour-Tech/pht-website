@@ -32,10 +32,13 @@ const totalLabel = String(block.verticals.length).padStart(2, "0");
 </section>
 
 <!-- Vertical sections -->
+{/* scroll-mt clears the two stacked sticky bars when a jump-nav anchor lands:
+    the SiteNav (--nav-height) plus ~5.5rem for this block's sticky jump-nav
+    bar. Tied to --nav-height so it tracks a nav-height change automatically. */}
 {block.verticals.map((v, i) => (
   <section
     id={v.id}
-    class={`scroll-mt-40 py-24 px-5 md:px-10 border-b border-line ${i % 2 === 1 ? "bg-bg-alt" : "bg-bg"}`}
+    class={`scroll-mt-[calc(var(--nav-height)+5.5rem)] py-24 px-5 md:px-10 border-b border-line ${i % 2 === 1 ? "bg-bg-alt" : "bg-bg"}`}
   >
     <div class="max-w-content mx-auto">
       <div class="inline-flex items-center gap-3.5 mb-6">
