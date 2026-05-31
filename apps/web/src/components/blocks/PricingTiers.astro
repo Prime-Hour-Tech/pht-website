@@ -46,7 +46,7 @@ const tierEntries: Array<{ key: "essentials" | "standard" | "premier"; name: str
           {featured && (
             <div
               class="absolute pointer-events-none"
-              style="top: -120px; right: -80px; width: 320px; height: 320px; background: radial-gradient(circle, rgb(220 38 38 / 0.2), transparent 70%);"
+              style="top: -120px; right: -80px; width: 320px; height: 320px; background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 20%, transparent), transparent 70%);"
             ></div>
           )}
 
@@ -116,7 +116,7 @@ const tierEntries: Array<{ key: "essentials" | "standard" | "premier"; name: str
 
           <a
             href={tier.ctaHref}
-            class={`mt-6 w-full relative btn btn-md ${featured ? "btn-primary" : "btn-secondary"}`}
+            class={`mt-6 w-full relative btn btn-md ${featured ? "btn-primary shadow-button-accent" : "btn-secondary"}`}
           >
             {tier.ctaLabel}
             <Icon name="arrowSm" size={14} />

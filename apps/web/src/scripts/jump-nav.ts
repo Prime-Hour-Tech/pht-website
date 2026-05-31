@@ -105,5 +105,14 @@ if (linkEls.length > 0) {
   }
 
   build();
-  window.addEventListener("resize", build);
+
+  // Debounce the rebuild: a drag-resize fires `resize` dozens of times per
+  // second, and each build() disconnects/reconstructs the observer and forces
+  // layout (getComputedStyle + offsetHeight). Coalesce to one rebuild after
+  // the resize settles.
+  let resizeTimer: number | undefined;
+  window.addEventListener("resize", () => {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(build, 150);
+  });
 }

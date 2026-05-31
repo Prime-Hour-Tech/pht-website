@@ -310,25 +310,32 @@ export type NotFoundPage = {
 
 // ── Documents referenced from page blocks ────────────────────────────────
 
-export type IconName =
-  | "monitor"
-  | "shield"
-  | "cloud"
-  | "server"
-  | "compass"
-  | "globe"
-  | "arrow"
-  | "arrowSm"
-  | "check"
-  | "phone"
-  | "mail"
-  | "chevron"
-  | "file"
-  | "users"
-  | "spark"
-  | "lock"
-  | "linkedin"
-  | "x";
+// Single source of truth for icon names. The runtime array drives both the
+// IconName type (below) and the runtime validation set in notFound.ts, so
+// adding an icon here propagates to both — no parallel list to keep in sync.
+// Must match the names rendered by Icon.astro.
+export const ICON_NAMES = [
+  "monitor",
+  "shield",
+  "cloud",
+  "server",
+  "compass",
+  "globe",
+  "arrow",
+  "arrowSm",
+  "check",
+  "phone",
+  "mail",
+  "chevron",
+  "file",
+  "users",
+  "spark",
+  "lock",
+  "linkedin",
+  "x",
+] as const;
+
+export type IconName = (typeof ICON_NAMES)[number];
 
 export type TeamMemberResolved = {
   _id: string;

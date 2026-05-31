@@ -225,6 +225,7 @@ export const pageBySlugQuery = /* groq */ `
       _type == "processStrip" => {
         eyebrow,
         heading,
+        deck,
         steps
       },
       _type == "industryCrosslink" => {

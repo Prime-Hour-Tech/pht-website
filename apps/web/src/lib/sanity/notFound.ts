@@ -1,3 +1,4 @@
+import { ICON_NAMES } from "./types";
 import type { CtaLink, IconName, NotFoundDestination, NotFoundPage } from "./types";
 
 export type ResolvedNotFound = {
@@ -11,11 +12,9 @@ export type ResolvedNotFound = {
   seoTitle: string;
 };
 
-// Runtime list of valid icon names; must mirror the IconName union in types.ts.
-const VALID_ICONS: ReadonlySet<string> = new Set([
-  "monitor", "shield", "cloud", "server", "compass", "globe", "arrow", "arrowSm",
-  "check", "phone", "mail", "chevron", "file", "users", "spark", "lock", "linkedin", "x",
-]);
+// Runtime guard for an editor-supplied icon name, derived from the same array
+// that produces the IconName type — so the two can never drift.
+const VALID_ICONS: ReadonlySet<string> = new Set(ICON_NAMES);
 
 // The shipped copy. Single source of default truth; mirrors what the page
 // showed before it became CMS-editable.
