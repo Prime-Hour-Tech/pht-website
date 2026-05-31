@@ -20,28 +20,27 @@ export const getStaticPaths = (async ({ paginate }) => {
   return cats.flatMap((category) => {
     const slug = categoryToSlug(category);
     const inCat = posts.filter((p) => p.category === category);
-    return paginate(inCat, { params: { category: slug }, props: { category }, pageSize: 12 });
+    return paginate(inCat, { params: { category: slug }, props: { category, liveCats: cats }, pageSize: 12 });
   });
 }) satisfies GetStaticPaths;
 
 interface Props {
   page: PaginatorPage<PostCard>;
   category: PostCategory;
+  liveCats: PostCategory[];
 }
-const { page, category } = Astro.props;
+const { page, category, liveCats } = Astro.props;
 const slug = categoryToSlug(category);
 
-const [pageDoc, contactInfo, allPosts] = await Promise.all([
+const [pageDoc, contactInfo] = await Promise.all([
   getPageBySlug("blog"),
   getContactInfo(),
-  getAllPosts(),
 ]);
 if (!pageDoc) throw new Error("Page doc with slug 'blog' not found in Sanity.");
 if (!contactInfo) throw new Error("Contact Info singleton not found in Sanity.");
 
 const hero = pageDoc.blocks?.find((b) => b._type === "pageHero");
 const cta = pageDoc.blocks?.find((b) => b._type === "ctaCard");
-const liveCats = Array.from(new Set(allPosts.map((p) => p.category)));
 
 const base = new URL(`/blog/category/${slug}`, Astro.site ?? Astro.url.origin);
 const canonical = page.currentPage === 1 ? base.toString() : `${base.toString()}/${page.currentPage}`;
