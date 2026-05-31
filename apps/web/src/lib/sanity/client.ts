@@ -1,4 +1,5 @@
 import { sanityClient } from "sanity:client";
+import type { QueryParams } from "@sanity/client";
 import type {
   ContactInfo,
   Footer,
@@ -40,32 +41,56 @@ import {
   themeQuery,
 } from "./queries";
 
+// Build-scoped fetch cache. The site is a static build (output: "static"), so
+// Sanity content is an immutable snapshot for the build's lifetime — fetching
+// the same query+params more than once always yields the same result. Astro
+// renders pages concurrently and every page pulls the same chrome singletons
+// (siteSettings, navigation, footer, contactInfo, theme), so without this each
+// is re-fetched once per page. Caching the *promise* (not the resolved value)
+// also collapses concurrent in-flight calls into one request.
+//
+// This is a build-time module (no runtime server in a static build), so the
+// cache lives only for the duration of `astro build` and never serves a stale
+// value to a live request.
+const fetchCache = new Map<string, Promise<unknown>>();
+
+function cachedFetch<T>(query: string, params?: QueryParams): Promise<T> {
+  const key = params ? `${query}::${JSON.stringify(params)}` : query;
+  const hit = fetchCache.get(key);
+  if (hit) return hit as Promise<T>;
+  const pending = params
+    ? sanityClient.fetch<T>(query, params)
+    : sanityClient.fetch<T>(query);
+  fetchCache.set(key, pending);
+  return pending;
+}
+
 export async function getSiteSettings(): Promise<SiteSettings | null> {
-  return await sanityClient.fetch<SiteSettings | null>(siteSettingsQuery);
+  return await cachedFetch<SiteSettings | null>(siteSettingsQuery);
 }
 
 export async function getTheme(): Promise<Theme | null> {
-  return await sanityClient.fetch<Theme | null>(themeQuery);
+  return await cachedFetch<Theme | null>(themeQuery);
 }
 
 export async function getNavigation(): Promise<Navigation | null> {
-  return await sanityClient.fetch<Navigation | null>(navigationQuery);
+  return await cachedFetch<Navigation | null>(navigationQuery);
 }
 
 export async function getFooter(): Promise<Footer | null> {
-  return await sanityClient.fetch<Footer | null>(footerQuery);
+  return await cachedFetch<Footer | null>(footerQuery);
 }
 
 export async function getContactInfo(): Promise<ContactInfo | null> {
-  return await sanityClient.fetch<ContactInfo | null>(contactInfoQuery);
+  return await cachedFetch<ContactInfo | null>(contactInfoQuery);
 }
 
 export async function getPageBySlug(slug: string): Promise<Page | null> {
-  return await sanityClient.fetch<Page | null>(pageBySlugQuery, { slug });
+  return await cachedFetch<Page | null>(pageBySlugQuery, { slug });
 }
 
 export async function getAllPageSlugs(): Promise<{ slug: string }[]> {
-  return await sanityClient.fetch<{ slug: string }[]>(allPageSlugsQuery);
+  return await cachedFetch<{ slug: string }[]>(allPageSlugsQuery);
 }
 
 // All four service helpers share the SERVICE_COMPLETE_FILTER defined in queries.ts.
@@ -74,57 +99,57 @@ export async function getAllPageSlugs(): Promise<{ slug: string }[]> {
 // and the other-services row alike.
 // Remove the filter once the legacy doc is deleted or backfilled.
 export async function getAllServiceSlugs(): Promise<{ slug: string }[]> {
-  return await sanityClient.fetch<{ slug: string }[]>(servicesSlugListQuery);
+  return await cachedFetch<{ slug: string }[]>(servicesSlugListQuery);
 }
 
 export async function getServiceBySlug(slug: string): Promise<ServiceFull | null> {
-  return await sanityClient.fetch<ServiceFull | null>(serviceBySlugQuery, { slug });
+  return await cachedFetch<ServiceFull | null>(serviceBySlugQuery, { slug });
 }
 
 export async function getServicesList(): Promise<ServiceCard[]> {
-  return await sanityClient.fetch<ServiceCard[]>(servicesListQuery);
+  return await cachedFetch<ServiceCard[]>(servicesListQuery);
 }
 
 export async function getOtherServices(slug: string): Promise<ServiceCard[]> {
-  return await sanityClient.fetch<ServiceCard[]>(otherServicesQuery, { slug });
+  return await cachedFetch<ServiceCard[]>(otherServicesQuery, { slug });
 }
 
 export async function getAllPostSlugs(): Promise<{ slug: string }[]> {
-  return await sanityClient.fetch<{ slug: string }[]>(postSlugListQuery);
+  return await cachedFetch<{ slug: string }[]>(postSlugListQuery);
 }
 
 export async function getPostBySlug(slug: string): Promise<PostFull | null> {
-  return await sanityClient.fetch<PostFull | null>(postBySlugQuery, { slug });
+  return await cachedFetch<PostFull | null>(postBySlugQuery, { slug });
 }
 
 export async function getAllPosts(): Promise<PostCard[]> {
-  return await sanityClient.fetch<PostCard[]>(allPostsQuery);
+  return await cachedFetch<PostCard[]>(allPostsQuery);
 }
 
 export async function getAllPostsForRss(): Promise<PostRssItem[]> {
-  return await sanityClient.fetch<PostRssItem[]>(allPostsForRssQuery);
+  return await cachedFetch<PostRssItem[]>(allPostsForRssQuery);
 }
 
 export async function getRelatedPosts(category: string, slug: string): Promise<PostCard[]> {
-  return await sanityClient.fetch<PostCard[]>(relatedPostsQuery, { category, slug });
+  return await cachedFetch<PostCard[]>(relatedPostsQuery, { category, slug });
 }
 
 export async function getTermsPage(): Promise<TermsPage | null> {
-  return await sanityClient.fetch<TermsPage | null>(termsPageQuery);
+  return await cachedFetch<TermsPage | null>(termsPageQuery);
 }
 
 export async function getPrivacyPage(): Promise<PrivacyPage | null> {
-  return await sanityClient.fetch<PrivacyPage | null>(privacyPageQuery);
+  return await cachedFetch<PrivacyPage | null>(privacyPageQuery);
 }
 
 export async function getAllLandingSlugs(): Promise<{ slug: string }[]> {
-  return await sanityClient.fetch<{ slug: string }[]>(allLandingSlugsQuery);
+  return await cachedFetch<{ slug: string }[]>(allLandingSlugsQuery);
 }
 
 export async function getLandingBySlug(slug: string): Promise<LandingPage | null> {
-  return await sanityClient.fetch<LandingPage | null>(landingBySlugQuery, { slug });
+  return await cachedFetch<LandingPage | null>(landingBySlugQuery, { slug });
 }
 
 export async function getNotFoundPage(): Promise<NotFoundPage | null> {
-  return await sanityClient.fetch<NotFoundPage | null>(notFoundPageQuery);
+  return await cachedFetch<NotFoundPage | null>(notFoundPageQuery);
 }
