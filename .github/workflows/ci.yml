@@ -1,0 +1,50 @@
+name: CI
+
+# Runs the checks that need no secrets on every push and PR to the long-lived
+# branches. Deliberately scoped: web `astro check` and `astro build` are NOT
+# run here because astro.config.ts throws without SANITY_PROJECT_ID +
+# SANITY_READ_TOKEN (the dataset is private). Those two are covered by Vercel's
+# deploy build instead, so no read token has to live in GitHub secrets.
+#
+# What runs:
+#   - studio check  (tsc --noEmit)  — no env needed
+#   - web test      (vitest)        — sanity:client is mocked, no env needed
+
+on:
+  push:
+    branches: [main, development]
+  pull_request:
+    branches: [main, development]
+
+# One run per branch/PR ref; a newer push cancels the in-flight run so CI
+# minutes aren't spent on superseded commits.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # pnpm version is auto-detected from the root package.json
+      # "packageManager" field (pnpm@9.12.0), so it stays in lockstep with
+      # local dev without a second place to bump.
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Resolves to the repo's pinned major (.nvmrc = 22). Caches the pnpm
+          # store keyed on pnpm-lock.yaml for fast installs.
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Studio type check
+        run: pnpm --filter studio check
+
+      - name: Web tests
+        run: pnpm --filter web test
