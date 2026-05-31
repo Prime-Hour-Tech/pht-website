@@ -4,11 +4,20 @@ import BlockRenderer from "../components/blocks/BlockRenderer.astro";
 import { getAllPageSlugs, getPageBySlug, getContactInfo } from "../lib/sanity/client";
 
 export async function getStaticPaths() {
+  // These slugs are served by dedicated route files (services/index.astro,
+  // switching.astro, blog/[...page].astro) that take priority. Excluding them
+  // here stops this catch-all from also emitting /services, /switching, and
+  // /blog — which Astro otherwise drops with a "conflicts with higher priority
+  // route" build warning — and keeps it to genuinely generic pages (home,
+  // about, contact, industries). Add a slug here when a page gains its own route.
+  const dedicatedRouteSlugs = new Set(["blog", "services", "switching"]);
   const slugs = await getAllPageSlugs();
-  return slugs.map(({ slug }) => ({
-    params: { slug: slug === "home" ? undefined : slug },
-    props: { slug },
-  }));
+  return slugs
+    .filter(({ slug }) => !dedicatedRouteSlugs.has(slug))
+    .map(({ slug }) => ({
+      params: { slug: slug === "home" ? undefined : slug },
+      props: { slug },
+    }));
 }
 
 interface Props {
