@@ -45,7 +45,7 @@ Log in at <https://primehourtech.sanity.studio/>. Request access from Sanity Man
 4. Repeat for any other documents you want to update.
 5. When you're ready to push everything live, go to Deploy (see §5). Batching multiple publishes into one deploy is encouraged.
 
-**Important:** The Preview tab shows published content only - what's currently live. To preview unpublished drafts, a developer runs the local dev server.
+**Important:** The Preview tab shows published content only - what's currently live. To preview unpublished drafts, you must run the local dev server.
 
 ---
 
@@ -195,20 +195,3 @@ Both forms already include two honeypot fields:
 | `botcheck` (visible-to-CSS-but-off-screen `text` input, `tabindex="-1"`, `autocomplete="off"`, `display:none`) | Web3Forms pattern - same drop-on-fill logic |
 
 Both fields are present in the contact page form (`ContactBody.astro`) and the landing page discovery form (`DiscoveryForm.astro`). The form provider does the dropping server-side - nothing needs to be configured here.
-
-No CAPTCHA is installed. If post-launch spam volume becomes a problem, Cloudflare Turnstile is the planned addition (see §8).
-
----
-
-## 8. Intentionally deferred features
-
-These were considered and deliberately left out. Don't implement without a real trigger.
-
-| Feature | Why deferred | Trigger to revisit |
-|---|---|---|
-| Per-category cookie consent modal | Current banner is binary (accept/reject). GDPR-style per-category controls require legal to specify which categories are needed. If added, GTM must migrate to Consent Mode v2. | Legal requires granular GDPR controls |
-| V2 StickyForm landing template | Current landing pages use the Editorial layout. A StickyForm variant (floating form sidebar) requires a `layoutVariant` schema field + template-switching logic, plus possibly a separate `LANDING_FORM_URL` env var. | A real paid-ad campaign needs the sticky layout |
-| Newsletter signup block | No newsletter provider is chosen. A `newsletterSignup` block can be added once a provider is selected. | Provider selected |
-| Cloudflare Turnstile (CAPTCHA) | Honeypots cover realistic bot volume. Turnstile adds friction for real users. | Measurable spam volume post-launch |
-
-See [`TODO.md`](./TODO.md) section D for the full deferred list with additional items (spec-sheet / services-overview PDF links, adding `/switching` to the nav, draft preview in the Presentation pane, etc.). Note: deploy-hook secret rotation is covered in §5 above, not deferred.
