@@ -3,8 +3,10 @@ import type {
   ContactInfo,
   Footer as FooterData,
   SiteSettings,
+  SocialPlatform,
 } from "../../lib/sanity/types";
 import { urlFor } from "../../lib/sanity/imageUrl";
+import SocialGlyph from "../SocialGlyph.astro";
 
 interface Props {
   footer: FooterData;
@@ -18,6 +20,20 @@ const copyright = footer.copyright.replace("{{year}}", String(year));
 const logoLightUrl = siteSettings.logoLight
   ? urlFor(siteSettings.logoLight).width(72).height(72).fit("max").url()
   : null;
+
+// Accessible labels per platform; also the allow-list — a social whose
+// platform has no label (and no glyph) is dropped rather than rendered as an
+// empty bordered button.
+const SOCIAL_LABELS: Record<SocialPlatform, string> = {
+  linkedin: "LinkedIn",
+  github: "GitHub",
+  x: "X (Twitter)",
+  youtube: "YouTube",
+};
+const socials = (footer.socials ?? []).filter(
+  (s) => s.platform in SOCIAL_LABELS,
+);
+const bottomLinks = footer.bottomLinks ?? [];
 
 // Design's FooterB uses a 5-column grid: 1.5fr brand block + 4×1fr link
 // columns. Tailwind doesn't have an arbitrary-fraction syntax that works
@@ -56,6 +72,22 @@ const logoLightUrl = siteSettings.logoLight
         <p class="m-0 leading-body-lg max-w-[280px] text-dark-muted text-body-sm">
           {siteSettings.siteDescription}
         </p>
+
+        {socials.length > 0 && (
+          <div class="flex items-center gap-1.5 mt-[22px]">
+            {socials.map((s) => (
+              <a
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={SOCIAL_LABELS[s.platform]}
+                class="inline-flex items-center justify-center size-[38px] rounded-[9px] border border-dark-line text-dark-muted transition-colors duration-150 hover:border-accent hover:text-accent"
+              >
+                <SocialGlyph platform={s.platform} size={17} />
+              </a>
+            ))}
+          </div>
+        )}
       </div>
 
       <!-- Link columns -->
@@ -86,7 +118,20 @@ const logoLightUrl = siteSettings.logoLight
     <div
       class="border-t border-dark-line pt-6 flex justify-between items-center flex-wrap gap-4 font-mono text-meta uppercase tracking-mono-meta text-dark-muted"
     >
-      <span>{copyright}</span>
+      <span class="inline-flex items-center flex-wrap gap-2.5">
+        <span>{copyright}</span>
+        {bottomLinks.map((link) => (
+          <Fragment>
+            <span aria-hidden="true" class="text-dark-line">·</span>
+            <a
+              href={link.href}
+              class="text-dark-muted no-underline underline-offset-[3px] hover:text-dark-text hover:underline"
+            >
+              {link.label}
+            </a>
+          </Fragment>
+        ))}
+      </span>
       <span>{contactInfo.address.city}, {contactInfo.address.state}</span>
     </div>
   </div>
