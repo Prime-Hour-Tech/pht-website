@@ -357,6 +357,11 @@ export const contactInfoQuery = /* groq */ `
   }
 `;
 
+export const themeQuery = /* groq */ `*[_type == "theme"][0]{
+  accent, bg, bgAlt, surface, ink, inkBody, muted, line, lineSoft,
+  dark, darkText, darkMuted, darkLine, success, online
+}`;
+
 // All three service-list queries share the same completeness filter. A service
 // is "complete enough to display" only when every required field added through
 // the Slice-3 + Slice-3-fix-up schema expansions is defined on the doc.
@@ -428,7 +433,7 @@ export const otherServicesQuery = /* groq */ `
 `;
 
 
-// All four post queries share the same completeness filter — same pattern as
+// All four post queries share the same completeness filter, same pattern as
 // the SERVICE_COMPLETE_FILTER above. Posts missing any required structural
 // field are skipped at the query level (no /blog/<slug> route generated, no
 // card appears in lists). Drafts in progress don't break the build.
@@ -562,6 +567,14 @@ export const privacyPageQuery = /* groq */ `
     contactCardCtaHref
   }
 `;
+
+export const notFoundPageQuery = /* groq */ `*[_type == "notFoundPage"][0]{
+  headline, deck,
+  primaryCta, secondaryCta,
+  destinationsHeading, browseAllLink,
+  destinations[]{ name, icon, description, href },
+  seoTitle
+}`;
 
 // Landing pages: dynamic /landing/{slug} routes from a multi-instance doc type.
 // Filter on minimum-required structural fields so half-authored drafts don't

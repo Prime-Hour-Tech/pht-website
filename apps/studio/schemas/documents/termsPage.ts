@@ -4,7 +4,7 @@ export const termsPage = defineType({
   name: "termsPage",
   title: "Terms Page",
   type: "document",
-  // Singleton — registered in apps/studio/sanity.config.ts SINGLETONS array.
+  // Singleton; registered in apps/studio/sanity.config.ts SINGLETONS array.
   // Backs /terms.
   groups: [
     { name: "header", title: "Header" },

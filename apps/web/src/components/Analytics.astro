@@ -9,7 +9,7 @@
 //          "accepted", injects the GTM <script> tag (gtm.js).
 //       2. Subscribes to the "pht-cookie-consent-changed" event from the
 //          cookie banner. When the user accepts mid-session, injects GTM live.
-//       3. Idempotent — GTM is injected at most once per page.
+//       3. Idempotent - GTM is injected at most once per page.
 //       4. After live (post-consent) injection, pushes a synthetic page_view
 //          to dataLayer so GTM's GA4 config can capture the current page.
 //          (gtm.js's auto-pageview only fires on initial script load, so a
@@ -17,7 +17,7 @@
 //          the current page from the session record.)
 //
 // Reject / settings / no-choice all result in no GTM. The banner alone is the
-// consent surface — this component never auto-accepts.
+// consent surface - this component never auto-accepts.
 
 const gtmContainerId = import.meta.env.PUBLIC_GTM_CONTAINER_ID;
 ---
@@ -59,7 +59,7 @@ const gtmContainerId = import.meta.env.PUBLIC_GTM_CONTAINER_ID;
         if (localStorage.getItem(STORAGE_KEY) === "accepted") {
           injectGtm();
         }
-      } catch (_) { /* localStorage blocked — skip */ }
+      } catch (_) { /* localStorage blocked - skip */ }
 
       document.addEventListener("pht-cookie-consent-changed", function (e) {
         var choice = e && e.detail && e.detail.choice;

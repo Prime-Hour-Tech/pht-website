@@ -1,6 +1,5 @@
 ---
 import type { PostListBlock } from "../../lib/sanity/types";
-import HeadlineRichText from "../HeadlineRichText.astro";
 import BlogFeaturedPost from "../blog/BlogFeaturedPost.astro";
 import BlogPostCard from "../blog/BlogPostCard.astro";
 import BlogFilterChips from "../blog/BlogFilterChips.astro";
@@ -24,9 +23,9 @@ for (const p of posts) {
 const categories = Array.from(seen);
 ---
 
-{posts.length > 0 && <BlogFilterChips categories={categories} />}
+{posts.length > 0 && <BlogFilterChips categories={categories} active="all" />}
 
-<section class="bg-bg px-10 py-12">
+<section class="bg-bg px-5 md:px-10 py-12">
   <div class="max-w-content mx-auto">
     {featured && <BlogFeaturedPost post={featured} />}
 

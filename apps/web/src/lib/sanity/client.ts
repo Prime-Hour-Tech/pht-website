@@ -4,6 +4,7 @@ import type {
   Footer,
   LandingPage,
   Navigation,
+  NotFoundPage,
   Page,
   PostCard,
   PostFull,
@@ -13,6 +14,7 @@ import type {
   ServiceFull,
   SiteSettings,
   TermsPage,
+  Theme,
 } from "./types";
 import {
   allLandingSlugsQuery,
@@ -23,6 +25,7 @@ import {
   footerQuery,
   landingBySlugQuery,
   navigationQuery,
+  notFoundPageQuery,
   otherServicesQuery,
   pageBySlugQuery,
   postBySlugQuery,
@@ -34,10 +37,15 @@ import {
   servicesSlugListQuery,
   siteSettingsQuery,
   termsPageQuery,
+  themeQuery,
 } from "./queries";
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   return await sanityClient.fetch<SiteSettings | null>(siteSettingsQuery);
+}
+
+export async function getTheme(): Promise<Theme | null> {
+  return await sanityClient.fetch<Theme | null>(themeQuery);
 }
 
 export async function getNavigation(): Promise<Navigation | null> {
@@ -60,12 +68,10 @@ export async function getAllPageSlugs(): Promise<{ slug: string }[]> {
   return await sanityClient.fetch<{ slug: string }[]>(allPageSlugsQuery);
 }
 
-// All four service helpers share the same `defined(headline) && defined(heroStat)`
-// filter. Reason: a legacy "directions" doc predates the Slice 3 schema
-// expansion and is missing those fields. Filtering at query time keeps it
-// out of routes, listings, and the other-services row alike. The two
-// sentinels are sufficient — Studio validation enforces the rest of the
-// new fields, so a doc that passes the filter is structurally complete.
+// All four service helpers share the SERVICE_COMPLETE_FILTER defined in queries.ts.
+// Reason: a legacy "directions" doc predates the Slice 3 schema expansion and is
+// missing those fields. Filtering at query time keeps it out of routes, listings,
+// and the other-services row alike.
 // Remove the filter once the legacy doc is deleted or backfilled.
 export async function getAllServiceSlugs(): Promise<{ slug: string }[]> {
   return await sanityClient.fetch<{ slug: string }[]>(servicesSlugListQuery);
@@ -117,4 +123,8 @@ export async function getAllLandingSlugs(): Promise<{ slug: string }[]> {
 
 export async function getLandingBySlug(slug: string): Promise<LandingPage | null> {
   return await sanityClient.fetch<LandingPage | null>(landingBySlugQuery, { slug });
+}
+
+export async function getNotFoundPage(): Promise<NotFoundPage | null> {
+  return await sanityClient.fetch<NotFoundPage | null>(notFoundPageQuery);
 }

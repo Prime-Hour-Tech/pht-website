@@ -1,0 +1,29 @@
+---
+import type { PostCard } from "../../lib/sanity/types";
+import BlogFeaturedPost from "./BlogFeaturedPost.astro";
+import BlogPostCard from "./BlogPostCard.astro";
+
+interface Props {
+  posts: PostCard[];
+  /** Render the first post as a large featured card (all-posts page 1 only). */
+  withFeatured?: boolean;
+  /** Shown when posts is empty. */
+  emptyStateMessage?: string;
+}
+
+const { posts, withFeatured = false, emptyStateMessage } = Astro.props;
+const featured = withFeatured ? posts[0] : undefined;
+const rest = withFeatured ? posts.slice(1) : posts;
+---
+
+{posts.length === 0 && emptyStateMessage && (
+  <div class="text-center py-12 text-muted">{emptyStateMessage}</div>
+)}
+
+{featured && <BlogFeaturedPost post={featured} />}
+
+{rest.length > 0 && (
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    {rest.map((p) => <BlogPostCard post={p} />)}
+  </div>
+)}

@@ -1,8 +1,8 @@
-// Mobile drawer — toggles a full-screen slide-down nav panel.
+// Mobile drawer: toggles a full-screen slide-down nav panel.
 //
 // Reads:
-//   [data-mobile-toggle]   button — toggles drawer open/closed
-//   [data-mobile-drawer]   panel — full-screen, slides via translate-y
+//   [data-mobile-toggle]   button - toggles drawer open/closed
+//   [data-mobile-drawer]   panel - full-screen, slides via translate-y
 //   [data-mobile-close]    optional close button inside drawer
 //
 // Behavior:
@@ -25,7 +25,7 @@ function setupMobileDrawer() {
   const drawer = document.querySelector<HTMLElement>("[data-mobile-drawer]");
   if (!toggle || !drawer) return;
 
-  // Backgrounds the rest of the page when drawer is open — screen readers
+  // Backgrounds the rest of the page when drawer is open; screen readers
   // should not see nav/main/footer content while the modal is up.
   const backgroundEls = Array.from(
     document.querySelectorAll<HTMLElement>("nav[aria-label='Main navigation'], main, footer"),

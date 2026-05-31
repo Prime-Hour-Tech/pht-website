@@ -1,15 +1,15 @@
-// Open-now indicator — toggles the dot + label between "Open now · …"
-// (success color) and "Closed · …" (muted color) based on the current
+// Open-now indicator: toggles the dot + label between "Open now · ..."
+// (success color) and "Closed · ..." (muted color) based on the current
 // minute-of-day in the configured IANA timezone.
 //
 // Reads from a single [data-open-now] element in the rendered HTML:
-//   data-open-minute   number   0–1439, minute-of-day open
-//   data-close-minute  number   0–1439, minute-of-day close
+//   data-open-minute   number   0-1439, minute-of-day open
+//   data-close-minute  number   0-1439, minute-of-day close
 //   data-timezone      string   IANA tz (e.g. America/Denver)
 //
 // Updates:
-//   [data-open-now-dot]   class — bg-success when open, bg-muted when closed
-//   [data-open-now-label] text — leading "Open now" / "Closed" + the
+//   [data-open-now-dot]   class - bg-success when open, bg-muted when closed
+//   [data-open-now-label] text - leading "Open now" / "Closed" + the
 //                                existing weekday-label trailing string
 
 function currentMinuteInTimezone(tz: string): number {

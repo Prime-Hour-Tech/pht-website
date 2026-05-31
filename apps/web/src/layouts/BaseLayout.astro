@@ -1,5 +1,9 @@
 ---
 import "../styles/global.css";
+import "@fontsource-variable/geist";
+import "@fontsource-variable/geist-mono";
+import "@fontsource-variable/newsreader";
+import "@fontsource-variable/newsreader/wght-italic.css";
 import SEO from "../components/SEO.astro";
 import JsonLd from "../components/JsonLd.astro";
 import Analytics from "../components/Analytics.astro";
@@ -13,7 +17,9 @@ import {
   getFooter,
   getNavigation,
   getSiteSettings,
+  getTheme,
 } from "../lib/sanity/client";
+import { themeToCssVars, warnThemeContrastOnce } from "../lib/sanity/theme";
 import { buildOrganizationJsonLd } from "../lib/structuredData";
 import { ogImageUrl } from "../lib/sanity/imageUrl";
 import type { ImageRef } from "../lib/sanity/types";
@@ -22,21 +28,29 @@ interface Props {
   title: string;
   /** Per-page meta description. Falls back to siteSettings.siteDescription when omitted. */
   description?: string;
-  canonical: string;
+  /** Per-page canonical URL. Defaults to the page's own absolute URL when omitted. */
+  canonical?: string;
   ogImage?: ImageRef;
   /** Render <meta name="robots" content="noindex, nofollow">. Used by paid-ad landers. */
   noindex?: boolean;
+  prevUrl?: string;
+  nextUrl?: string;
 }
 
-const { title, description: descriptionProp, canonical, ogImage, noindex } = Astro.props;
+const { title, description: descriptionProp, canonical, ogImage, noindex, prevUrl, nextUrl } = Astro.props;
 
-// Chrome data — parallel fetch. Each is required; missing = misconfiguration,
+// Canonical defaults to the page's own absolute URL when a caller doesn't pass one.
+const resolvedCanonical =
+  canonical ?? new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).toString();
+
+// Chrome data: parallel fetch. Each is required; missing = misconfiguration,
 // surface as a build failure with a helpful message.
-const [siteSettings, navigation, footer, contactInfo] = await Promise.all([
+const [siteSettings, navigation, footer, contactInfo, theme] = await Promise.all([
   getSiteSettings(),
   getNavigation(),
   getFooter(),
   getContactInfo(),
+  getTheme(),
 ]);
 
 if (!siteSettings) {
@@ -69,6 +83,8 @@ const organizationLd = buildOrganizationJsonLd({
 });
 const resolvedOgImageUrl = ogImageUrl(ogImage, siteSettings.defaultOgImage);
 const enableVisualEditing = import.meta.env.PUBLIC_SANITY_VISUAL_EDITING === "true";
+const themeVars = themeToCssVars(theme);
+warnThemeContrastOnce(theme);
 ---
 
 <!doctype html>
@@ -76,17 +92,11 @@ const enableVisualEditing = import.meta.env.PUBLIC_SANITY_VISUAL_EDITING === "tr
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Newsreader:ital,wght@0,400;0,500;0,600;1,500&display=swap"
-    />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <SEO
       title={title}
       description={descriptionProp ?? siteSettings.siteDescription}
-      canonical={canonical}
+      canonical={resolvedCanonical}
       siteName={siteSettings.siteName}
       ogImageUrl={resolvedOgImageUrl}
     />
@@ -97,8 +107,11 @@ const enableVisualEditing = import.meta.env.PUBLIC_SANITY_VISUAL_EDITING === "tr
       title={`${siteSettings.siteName} Blog`}
       href="/blog/rss.xml"
     />
+    {prevUrl && <link rel="prev" href={prevUrl} />}
+    {nextUrl && <link rel="next" href={nextUrl} />}
     <JsonLd data={organizationLd} />
     <Analytics />
+    {themeVars && <style is:inline set:html={`:root{\n${themeVars}\n}`}></style>}
   </head>
   <body class="bg-bg text-ink-body antialiased">
     <UtilityRow contactInfo={contactInfo} />

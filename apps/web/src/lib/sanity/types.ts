@@ -20,6 +20,32 @@ export type SiteSettings = {
   defaultOgImage?: ImageRef;
 };
 
+// A @sanity/color-input value. rgb.a is 0-1 alpha.
+export type SanityColor = {
+  hex: string;
+  alpha?: number;
+  rgb?: { r: number; g: number; b: number; a: number };
+};
+
+// Editable theme overrides. Every field optional; unset = global.css default.
+export type Theme = {
+  accent?: SanityColor;
+  bg?: SanityColor;
+  bgAlt?: SanityColor;
+  surface?: SanityColor;
+  ink?: SanityColor;
+  inkBody?: SanityColor;
+  muted?: SanityColor;
+  line?: SanityColor;
+  lineSoft?: SanityColor;
+  dark?: SanityColor;
+  darkText?: SanityColor;
+  darkMuted?: SanityColor;
+  darkLine?: SanityColor;
+  success?: SanityColor;
+  online?: SanityColor;
+};
+
 export type Page = {
   _id: string;
   title: string;
@@ -264,6 +290,24 @@ export type LandingPage = {
   };
 };
 
+// ── 404 singleton ────────────────────────────────────────────────────────
+
+// Resolved/runtime destination (icon already coerced to a valid IconName).
+export type NotFoundDestination = { name: string; icon: IconName; description: string; href: string };
+
+// Raw notFoundPage singleton. Every field optional; unset = code default.
+// destinations[].icon is a raw string from Sanity (coerced at resolve time).
+export type NotFoundPage = {
+  headline?: string;
+  deck?: string;
+  primaryCta?: CtaLink;
+  secondaryCta?: CtaLink;
+  destinationsHeading?: string;
+  browseAllLink?: CtaLink;
+  destinations?: { name: string; icon: string; description: string; href: string }[];
+  seoTitle?: string;
+};
+
 // ── Documents referenced from page blocks ────────────────────────────────
 
 export type IconName =
@@ -302,7 +346,7 @@ export type ServiceCard = {
   iconName: IconName;
 };
 
-// Used for the home-page ServicesList block — projection includes _id + order.
+// Used for the home-page ServicesList block; projection includes _id + order.
 export type ServiceResolved = ServiceCard & {
   _id: string;
   order: number;
@@ -616,6 +660,7 @@ export type ProcessStripBlock = {
   _key: string;
   eyebrow: string;
   heading: HeadlineRichText;
+  deck: string;
   steps: { title: string; body: string }[];
 };
 

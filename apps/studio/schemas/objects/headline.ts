@@ -2,7 +2,7 @@ import { defineType } from "sanity";
 
 // Reusable Portable Text headline used for all italic-accent headlines across
 // service pages and the existing CtaCard block. Constrained to a single block
-// (one line), no styles, no decorators, no lists — editors get a "fancy plain
+// (one line), no styles, no decorators, no lists; editors get a "fancy plain
 // text input with an accent button" UX. The `accent` annotation carries no
 // data; its presence on a span is what the renderer styles as italic + accent.
 export const headline = defineType({

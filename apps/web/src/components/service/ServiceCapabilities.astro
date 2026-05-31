@@ -14,7 +14,7 @@ interface Props {
 const { eyebrow, heading, iconName, capabilities, specSheetUrl } = Astro.props;
 ---
 
-<section class="bg-bg-alt py-24 px-10 border-b border-line">
+<section class="bg-bg-alt py-24 px-5 md:px-10 border-b border-line">
   <div class="max-w-content mx-auto">
     <div class="flex items-baseline justify-between mb-8 flex-wrap gap-4">
       <div>
@@ -23,7 +23,7 @@ const { eyebrow, heading, iconName, capabilities, specSheetUrl } = Astro.props;
         </div>
         <h2
           class="font-serif font-medium text-ink m-0"
-          style="font-size: 44px; letter-spacing: -0.025em; line-height: 1.05; text-wrap: balance;"
+          style="font-size: clamp(30px, 6vw, 44px); letter-spacing: -0.025em; line-height: 1.05; text-wrap: balance;"
         >
           <HeadlineRichText value={heading} />
         </h2>

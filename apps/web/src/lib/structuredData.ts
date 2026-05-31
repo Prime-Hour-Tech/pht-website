@@ -9,7 +9,7 @@ import { urlFor } from "./sanity/imageUrl";
 export type OrganizationJsonLd = Record<string, unknown>;
 export type ArticleJsonLd = Record<string, unknown>;
 
-// Convert minute-of-day (0–1439) to HH:MM. Used for OpeningHoursSpecification.
+// Convert minute-of-day (0-1439) to HH:MM. Used for OpeningHoursSpecification.
 export function minuteToTime(minute: number): string {
   const h = Math.floor(minute / 60).toString().padStart(2, "0");
   const m = (minute % 60).toString().padStart(2, "0");

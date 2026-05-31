@@ -17,7 +17,7 @@ const savingsPct = beforeTotal > 0 ? Math.round((savings / beforeTotal) * 100) :
 const fmt = (n: number) => `$${n.toLocaleString()}`;
 ---
 
-<div class="bg-surface border border-line rounded-xxl p-9">
+<div class="bg-surface border border-line rounded-xxl p-5 md:p-9">
   <!-- Caption + legend -->
   <div class="flex items-baseline justify-between flex-wrap gap-3 mb-7">
     <div>
@@ -68,7 +68,7 @@ const fmt = (n: number) => `$${n.toLocaleString()}`;
   </div>
 
   <!-- Totals -->
-  <div class="mt-7 pt-5 border-t border-line grid grid-cols-3 gap-6">
+  <div class="mt-7 pt-5 border-t border-line grid grid-cols-1 sm:grid-cols-3 gap-6">
     <div>
       <div class="font-mono text-[10.5px] text-muted tracking-mono-label uppercase">
         Before total
@@ -85,7 +85,7 @@ const fmt = (n: number) => `$${n.toLocaleString()}`;
         {fmt(afterTotal)}<span class="text-[14px] text-muted font-normal">/mo</span>
       </div>
     </div>
-    <div class="pl-5 border-l border-line">
+    <div class="sm:pl-5 sm:border-l sm:border-line">
       <div class="font-mono text-[10.5px] text-accent tracking-mono-label uppercase">
         You save
       </div>

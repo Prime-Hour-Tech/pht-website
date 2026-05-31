@@ -1,6 +1,6 @@
 ---
 import type { OriginPhotoBlock } from "../../lib/sanity/types";
-import { urlFor } from "../../lib/sanity/imageUrl";
+import { urlForResponsive } from "../../lib/sanity/imageUrl";
 
 interface Props {
   block: OriginPhotoBlock;
@@ -8,29 +8,34 @@ interface Props {
 
 const { block } = Astro.props;
 const aspectStyle = `aspect-ratio: ${block.aspectRatio};`;
-const imageUrl = block.image
-  ? urlFor(block.image).width(1920).fit("max").url()
+const img = block.image
+  ? urlForResponsive(block.image, { widths: [640, 960, 1280, 1920] })
   : null;
 ---
 
-<section class="bg-bg px-10 pb-24">
+<section class="bg-bg px-5 md:px-10 pb-24">
   <div class="max-w-content mx-auto relative">
     <div
       class="bg-bg-alt rounded-xl overflow-hidden"
       style={aspectStyle}
     >
-      {imageUrl ? (
+      {img ? (
         <img
-          src={imageUrl}
+          src={img.src}
+          srcset={img.srcset}
+          sizes="(min-width: 1280px) 1240px, 100vw"
+          width={img.width}
           alt={block.image!.alt}
           class="w-full h-full object-cover"
+          loading="lazy"
+          decoding="async"
         />
       ) : (
-        <div class="w-full h-full" aria-hidden="true"></div>
+        <div class="w-full h-full bg-bg border border-line" aria-hidden="true"></div>
       )}
     </div>
     <div
-      class="absolute left-6 bottom-6 max-w-[420px] rounded-xl p-6 text-dark-text border border-dark-line"
+      class="absolute left-6 bottom-6 max-w-[420px] rounded-xl p-6 text-dark-text border border-dark-line max-md:relative max-md:left-auto max-md:bottom-auto max-md:max-w-none max-md:mt-4"
       style="background: rgba(15,17,21,0.92); backdrop-filter: blur(10px);"
     >
       <div class="font-mono text-[10.5px] text-dark-muted tracking-mono-eyebrow uppercase mb-2">

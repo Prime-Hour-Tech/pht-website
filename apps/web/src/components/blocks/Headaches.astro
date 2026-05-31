@@ -8,14 +8,14 @@ interface Props {
 const { block } = Astro.props;
 ---
 
-<section class="bg-bg py-24 px-10 border-b border-line">
+<section class="bg-bg py-24 px-5 md:px-10 border-b border-line">
   <div class="max-w-content mx-auto">
     <div class="grid grid-cols-1 md:grid-cols-[1fr_1.6fr] gap-16 items-start">
       <div class="md:sticky md:top-24">
         <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
           {block.eyebrow}
         </div>
-        <h2 class="font-serif font-medium tracking-display leading-display text-ink m-0" style="font-size: 56px;">
+        <h2 class="font-serif font-medium tracking-display leading-display text-ink m-0" style="font-size: clamp(34px, 7vw, 56px);">
           {block.heading}
         </h2>
         <p class="mt-4.5 text-muted text-body-md leading-body-lg max-w-[380px]">
@@ -25,7 +25,7 @@ const { block } = Astro.props;
 
       <div class="border-t border-line">
         {block.items.map((h, i) => (
-          <div class="grid grid-cols-[40px_1fr_1fr] gap-7 py-6 border-b border-line items-start">
+          <div class="grid grid-cols-1 md:grid-cols-[40px_1fr_1fr] gap-7 py-6 border-b border-line items-start">
             <span class="font-mono text-[12px] text-muted tracking-mono-meta pt-1.5">
               {String(i + 1).padStart(2, "0")}
             </span>
@@ -37,7 +37,7 @@ const { block } = Astro.props;
                 {h.pain}
               </div>
             </div>
-            <div class="border-l border-line pl-6">
+            <div class="md:border-l md:border-line md:pl-6">
               <div class="font-mono text-[10.5px] text-accent tracking-mono-label uppercase mb-1.5">
                 What we do
               </div>

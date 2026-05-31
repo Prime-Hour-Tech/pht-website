@@ -10,7 +10,7 @@ interface Props {
 const { block } = Astro.props;
 ---
 
-<section class="bg-bg px-10 py-22 border-b border-line">
+<section class="bg-bg px-5 md:px-10 py-22 border-b border-line">
   <div class="max-w-content mx-auto">
     <div class="grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-16 items-end mb-12">
       <div>
@@ -19,7 +19,7 @@ const { block } = Astro.props;
         </div>
         <h2
           class="font-serif font-medium text-ink m-0 tracking-display-tight"
-          style="font-size: 52px; line-height: 1.02; text-wrap: balance;"
+          style="font-size: clamp(32px, 7vw, 52px); line-height: 1.02; text-wrap: balance;"
         >
           <HeadlineRichText value={block.title} />
         </h2>
@@ -35,7 +35,7 @@ const { block } = Astro.props;
           }`}
         >
           <!-- Pain column -->
-          <div class="py-6 pr-8 md:border-r md:border-line flex flex-col gap-2.5">
+          <div class="py-6 pr-0 md:pr-8 md:border-r md:border-line flex flex-col gap-2.5">
             <div class="font-mono text-[10.5px] text-muted tracking-mono-eyebrow uppercase">
               ◇ The friction
             </div>

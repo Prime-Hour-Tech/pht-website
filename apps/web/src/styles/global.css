@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* PHT design tokens — sourced from design_handoff_docs/tokens.jsx.
+/* PHT design tokens, sourced from design_handoff_docs/tokens.jsx.
    Tailwind 4 reads --color-*, --font-*, --text-*, --leading-*, --tracking-*,
    --radius-*, --shadow-*, --container-* from @theme and emits matching
    utilities (e.g. bg-ink, text-display-xxxl, rounded-md, max-w-content). */
@@ -15,20 +15,22 @@
   --color-line:      rgb(26 26 26 / 0.10);
   --color-line-soft: rgb(26 26 26 / 0.06);
   --color-success:   #1f7a3a;
+  /* Brighter "online / fast reply" status dot; intentionally distinct from success green. */
+  --color-online:    #22c55e;
 
-  /* Dark band — footer + numbers-led hero */
+  /* Dark band: footer + numbers-led hero */
   --color-dark:       #0f1115;
   --color-dark-text:  #f2f3f5;
   --color-dark-muted: #9aa0a6;
   --color-dark-line:  rgb(255 255 255 / 0.10);
 
-  /* Brand accent (red) — hardcoded in slice 1; not Studio-editable */
+  /* Brand accent (red). Default value; overridable per-site via the Sanity theme singleton. */
   --color-accent: #dc2626;
 
   /* Type families */
-  --font-sans:  "Geist", system-ui, sans-serif;
-  --font-serif: "Newsreader", Georgia, serif;
-  --font-mono:  "Geist Mono", monospace;
+  --font-sans:  "Geist Variable", "Geist", system-ui, sans-serif;
+  --font-serif: "Newsreader Variable", "Newsreader", Georgia, serif;
+  --font-mono:  "Geist Mono Variable", "Geist Mono", monospace;
 
   /* Type scale */
   --text-display-xxxl: 104px;
@@ -77,7 +79,7 @@
   --radius-xxl:  14px;
   --radius-pill: 9999px;
 
-  /* Shadows — accent-toned button shadow is the only signature shadow */
+  /* Shadows: accent-toned button shadow is the only signature shadow */
   --shadow-card:         0 1px 3px rgb(0 0 0 / 0.08), 0 4px 16px rgb(0 0 0 / 0.06);
   --shadow-button-accent: 0 14px 32px -12px var(--color-accent);
 
@@ -87,7 +89,7 @@
   --container-prose:   720px;
 }
 
-/* Default body styles — body uses Geist sans by default; pages override
+/* Default body styles: body uses Geist sans by default; pages override
    per element with font-serif / font-mono utilities. */
 @layer base {
   body {

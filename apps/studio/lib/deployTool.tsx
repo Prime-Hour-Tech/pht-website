@@ -7,10 +7,10 @@ import { useState } from "react";
 // production hook). Each card tracks status independently.
 //
 // Env vars (must be prefixed SANITY_STUDIO_ for Vite to expose them to the
-// browser bundle — same pattern as apps/studio/lib/env.ts):
-//   SANITY_STUDIO_VERCEL_PREVIEW_DEPLOY_HOOK — preview Vercel deploy hook URL
-//   SANITY_STUDIO_VERCEL_DEPLOY_HOOK         — production Vercel deploy hook URL (existing)
-//   SANITY_STUDIO_VERCEL_PREVIEW_URL         — optional; rendered as a "Visit preview" link on the preview card
+// browser bundle, same pattern as apps/studio/lib/env.ts):
+//   SANITY_STUDIO_VERCEL_PREVIEW_DEPLOY_HOOK: preview Vercel deploy hook URL
+//   SANITY_STUDIO_VERCEL_DEPLOY_HOOK:         production Vercel deploy hook URL (existing)
+//   SANITY_STUDIO_VERCEL_PREVIEW_URL:         optional; rendered as a "Visit preview" link on the preview card
 //
 // Threat model: hook URLs are embedded in the Studio JS bundle, visible to
 // anyone with Studio access. This matches the old plugin's posture (it stored
@@ -49,8 +49,11 @@ function DeployCard(props: DeployCardProps) {
     if (!hookUrl) return;
     setStatus("deploying");
     setMessage("Sending deploy hook request to Vercel...");
+    // Abort a hung request so the button can't sit on "Deploying..." forever.
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
     try {
-      const res = await fetch(hookUrl, { method: "POST" });
+      const res = await fetch(hookUrl, { method: "POST", signal: controller.signal });
       if (!res.ok) {
         throw new Error(`HTTP ${res.status} ${res.statusText}`);
       }
@@ -60,10 +63,13 @@ function DeployCard(props: DeployCardProps) {
       );
     } catch (err) {
       setStatus("error");
-      setMessage(
-        `Deploy failed: ${err instanceof Error ? err.message : String(err)}`,
-      );
+      const failed =
+        err instanceof Error && err.name === "AbortError"
+          ? "Deploy request timed out after 15s. Check your connection and Vercel's status, then try again."
+          : `Deploy failed: ${err instanceof Error ? err.message : String(err)}`;
+      setMessage(failed);
     } finally {
+      clearTimeout(timeout);
       setConfirming(false);
     }
   }

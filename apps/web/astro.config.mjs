@@ -34,7 +34,7 @@ if (!token) {
 // feature gracefully degrades when unset — but the build log should announce
 // what's missing so pre-launch checklist items don't slip through.
 // All warnings are prefixed [env] for greppability in Vercel logs.
-const warn = (msg) => console.warn(`[env] ${msg}`);
+const warn = (/** @type {string} */ msg) => console.warn(`[env] ${msg}`);
 
 const siteUrl = process.env.SITE_URL;
 const vercelEnv = process.env.VERCEL_ENV;

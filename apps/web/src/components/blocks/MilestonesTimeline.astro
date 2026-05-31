@@ -9,7 +9,7 @@ interface Props {
 const { block } = Astro.props;
 ---
 
-<section class="bg-bg py-24 px-10">
+<section class="bg-bg py-24 px-5 md:px-10">
   <div class="max-w-content mx-auto grid grid-cols-1 md:grid-cols-[0.7fr_1.3fr] gap-16 items-start">
     <div class="md:sticky md:top-22">
       <div class="font-mono text-meta text-accent tracking-mono-eyebrow uppercase mb-3.5">
@@ -17,7 +17,7 @@ const { block } = Astro.props;
       </div>
       <h2
         class="font-serif font-medium text-ink m-0 tracking-display-tight"
-        style="font-size: 52px; line-height: 1; text-wrap: balance;"
+        style="font-size: clamp(32px, 7vw, 52px); line-height: 1; text-wrap: balance;"
       >
         <HeadlineRichText value={block.heading} />
       </h2>

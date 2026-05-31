@@ -11,7 +11,7 @@ const totalLabel = String(block.verticals.length).padStart(2, "0");
 ---
 
 <!-- Sticky jump nav -->
-<section class="bg-bg-alt border-y border-line sticky top-0 z-10 py-6 px-10">
+<section class="bg-bg-alt border-y border-line sticky top-0 z-10 py-6 px-5 md:px-10">
   <div class="max-w-content mx-auto flex items-center gap-3 flex-wrap">
     <span class="font-mono text-[11px] text-muted tracking-mono-eyebrow uppercase">
       {block.jumpLabel}
@@ -32,7 +32,7 @@ const totalLabel = String(block.verticals.length).padStart(2, "0");
 {block.verticals.map((v, i) => (
   <section
     id={v.id}
-    class={`scroll-mt-24 py-24 px-10 border-b border-line ${i % 2 === 1 ? "bg-bg-alt" : "bg-bg"}`}
+    class={`scroll-mt-24 py-24 px-5 md:px-10 border-b border-line ${i % 2 === 1 ? "bg-bg-alt" : "bg-bg"}`}
   >
     <div class="max-w-content mx-auto">
       <div class="inline-flex items-center gap-3.5 mb-6">
@@ -47,7 +47,7 @@ const totalLabel = String(block.verticals.length).padStart(2, "0");
           </div>
           <h2
             class="font-serif font-medium text-ink m-0 mt-1.5"
-            style="font-size: 52px; line-height: 1.02; letter-spacing: -0.025em; text-wrap: balance;"
+            style="font-size: clamp(32px, 7vw, 52px); line-height: 1.02; letter-spacing: -0.025em; text-wrap: balance;"
           >
             {v.name}
           </h2>

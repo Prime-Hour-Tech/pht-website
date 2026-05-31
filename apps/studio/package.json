@@ -5,11 +5,13 @@
   "scripts": {
     "dev": "sanity dev",
     "build": "sanity build",
+    "check": "tsc --noEmit",
     "deploy": "sanity deploy",
     "seed": "sanity dataset import seed/initial-content.ndjson --dataset production --missing",
     "seed:replace": "sanity dataset import seed/initial-content.ndjson --dataset production --replace"
   },
   "dependencies": {
+    "@sanity/color-input": "^6.0.6",
     "@sanity/icons": "^3.7.4",
     "@sanity/ui": "^3.2.0",
     "@sanity/vision": "^5.27.0",

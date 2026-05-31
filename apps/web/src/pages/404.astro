@@ -1,0 +1,95 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+import { getNotFoundPage } from "../lib/sanity/client";
+import { resolveNotFoundContent } from "../lib/sanity/notFound";
+
+// 404 page. Static (Astro emits dist/404.html, which Vercel serves for any
+// unmatched route). Copy + links come from the Sanity notFoundPage singleton,
+// with a per-field fallback to code defaults (resolveNotFoundContent) so the
+// page is never blank. The numeral, layout, and icons are code-owned.
+const c = resolveNotFoundContent(await getNotFoundPage());
+---
+
+<BaseLayout title={c.seoTitle} noindex>
+  <!-- Hero -->
+  <section class="px-5 md:px-10 pt-22 pb-24">
+    <div class="max-w-content mx-auto text-center">
+      <div
+        class="font-serif font-medium tabular-nums text-ink"
+        style="font-size: clamp(112px, 22vw, 180px); line-height: 0.86; letter-spacing: -0.035em;"
+      >
+        4<span class="text-accent">0</span>4
+      </div>
+
+      <h1
+        class="mt-5 mb-0 font-serif font-medium text-ink"
+        style="font-size: clamp(30px, 6vw, 44px); line-height: 1.05; letter-spacing: -0.03em; text-wrap: balance;"
+      >
+        {c.headline}
+      </h1>
+
+      <p class="mt-4.5 mx-auto max-w-[520px] text-body-lg leading-body text-muted">
+        {c.deck}
+      </p>
+
+      <div class="mt-8 flex items-center justify-center gap-3 flex-wrap">
+        <a
+          href={c.primaryCta.href}
+          class="inline-flex items-center gap-2.5 bg-accent text-white font-semibold rounded-md shadow-button-accent no-underline"
+          style="padding: 15px 24px; font-size: 15.5px;"
+        >
+          <Icon name="arrow" size={16} class="rotate-180" /> {c.primaryCta.label}
+        </a>
+        <a
+          href={c.secondaryCta.href}
+          class="inline-flex items-center gap-2 rounded-md text-ink font-medium border border-line no-underline"
+          style="padding: 15px 22px; font-size: 15.5px;"
+        >
+          <Icon name="mail" size={16} stroke={1.7} /> {c.secondaryCta.label}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Where to next -->
+  <section class="px-5 md:px-10 pb-26">
+    <div class="max-w-content mx-auto">
+      <div class="flex items-baseline justify-between gap-6 flex-wrap border-t border-line pt-10 mb-7">
+        <h2
+          class="m-0 font-serif font-medium text-ink"
+          style="font-size: clamp(28px, 5vw, 36px); line-height: 1.05; letter-spacing: -0.025em;"
+        >
+          {c.destinationsHeading}
+        </h2>
+        <a
+          href={c.browseAllLink.href}
+          class="text-accent no-underline font-semibold inline-flex items-center gap-2 text-body-sm whitespace-nowrap"
+        >
+          {c.browseAllLink.label} <Icon name="arrowSm" size={14} />
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {c.destinations.map((d) => (
+          <a
+            href={d.href}
+            class="group flex items-start gap-4 no-underline bg-bg border border-line rounded-lg transition-[border-color,box-shadow] duration-150 hover:border-accent hover:shadow-card"
+            style="padding: 22px;"
+          >
+            <span class="shrink-0 w-11 h-11 rounded-md bg-bg-alt text-accent inline-flex items-center justify-center border border-line">
+              <Icon name={d.icon} size={21} stroke={1.7} />
+            </span>
+            <span class="flex-1">
+              <span class="flex items-center justify-between gap-2.5">
+                <span class="font-semibold text-body-md text-ink">{d.name}</span>
+                <Icon name="arrowSm" size={15} class="shrink-0 text-muted group-hover:text-accent" />
+              </span>
+              <span class="block mt-1.5 text-body-sm leading-body text-muted">{d.description}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

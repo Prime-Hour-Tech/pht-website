@@ -1,21 +1,27 @@
 ---
 import type { PostFull } from "../../lib/sanity/types";
-import { urlFor } from "../../lib/sanity/imageUrl";
+import { urlForResponsive } from "../../lib/sanity/imageUrl";
 
 interface Props {
   post: PostFull;
 }
 
 const { post } = Astro.props;
-const coverUrl = urlFor(post.coverImage).width(2000).fit("max").url();
+const img = urlForResponsive(post.coverImage, { widths: [640, 1024, 1440, 2000] });
 ---
 
 <section class="bg-bg px-10 pb-10">
   <div class="max-w-content mx-auto">
     <img
-      src={coverUrl}
+      src={img.src}
+      srcset={img.srcset}
+      sizes="(min-width: 1280px) 1240px, 100vw"
+      width={img.width}
       alt={post.coverImage.alt}
       class="w-full h-auto rounded-xl"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
     />
   </div>
 </section>

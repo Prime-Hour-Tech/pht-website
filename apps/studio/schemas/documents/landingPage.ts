@@ -5,7 +5,7 @@ export const landingPage = defineType({
   title: "Landing Page",
   type: "document",
   // Multi-instance doc type. Each instance generates one route at
-  // /landing/{slug}. NOT a singleton — sidebar auto-lists via the
+  // /landing/{slug}. NOT a singleton; sidebar auto-lists via the
   // existing documentTypeListItems() fallback in sanity.config.ts.
   groups: [
     { name: "seo", title: "SEO + Slug" },

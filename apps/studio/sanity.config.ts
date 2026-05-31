@@ -1,4 +1,5 @@
 import { defineConfig } from "sanity";
+import { colorInput } from "@sanity/color-input";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
 import { presentationTool } from "sanity/presentation";
@@ -14,6 +15,8 @@ const FOOTER_ID = "footer";
 const CONTACT_INFO_ID = "contactInfo";
 const TERMS_PAGE_ID = "termsPage";
 const PRIVACY_PAGE_ID = "privacyPage";
+const THEME_ID = "theme";
+const NOT_FOUND_ID = "notFoundPage";
 const SINGLETONS = [
   SITE_SETTINGS_ID,
   NAVIGATION_ID,
@@ -21,9 +24,11 @@ const SINGLETONS = [
   CONTACT_INFO_ID,
   TERMS_PAGE_ID,
   PRIVACY_PAGE_ID,
+  THEME_ID,
+  NOT_FOUND_ID,
 ];
 
-// Helper for the sidebar list — keeps each singleton entry compact.
+// Helper for the sidebar list; keeps each singleton entry compact.
 const singletonItem = (S: any, id: string, title: string) =>
   S.listItem()
     .title(title)
@@ -36,7 +41,7 @@ export default defineConfig({
   projectId,
   dataset,
   // Content Releases is an Enterprise-only surcharge feature beyond our
-  // Growth plan — disable it so it doesn't show as a locked upsell.
+  // Growth plan; disable it so it doesn't show as a locked upsell.
   // (Scheduled Drafts is left enabled; it's included in Growth.)
   releases: {
     enabled: false,
@@ -54,6 +59,8 @@ export default defineConfig({
             singletonItem(S, CONTACT_INFO_ID, "Contact Info"),
             singletonItem(S, TERMS_PAGE_ID, "Terms Page"),
             singletonItem(S, PRIVACY_PAGE_ID, "Privacy Page"),
+            singletonItem(S, THEME_ID, "Theme"),
+            singletonItem(S, NOT_FOUND_ID, "404 Page"),
             S.divider(),
             S.listItem()
               .title("Team Members")
@@ -74,6 +81,7 @@ export default defineConfig({
             }),
           ]),
     }),
+    colorInput(),
     visionTool({ title: "Query" }),
     presentationTool({
       title: "Preview",
@@ -110,9 +118,11 @@ export default defineConfig({
             }),
           },
           termsPage: {
+            select: { title: "title" },
             resolve: () => ({ locations: [{ href: "/terms", title: "Terms" }] }),
           },
           privacyPage: {
+            select: { title: "title" },
             resolve: () => ({ locations: [{ href: "/privacy", title: "Privacy" }] }),
           },
         },
