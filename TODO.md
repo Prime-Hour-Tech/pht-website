@@ -76,7 +76,7 @@ Don't pick up until a real trigger fires.
 
 - **Operator manual (handoff):** `HANDOFF.md` (committed) - how to edit content, deploy, env vars, anti-spam, and the catalogue of intentionally-deferred features.
 - **Page-template ↔ block-sequence reference:** `DESIGN_MAP.md` (committed).
-- **Seed file:** `apps/studio/seed/initial-content.ndjson` (29 docs from the design canvas) + `apps/studio/seed/README.md` (usage + caveats).
+- **Seed file:** `apps/studio/seed/initial-content.ndjson` (30 docs from the design canvas) + `apps/studio/seed/README.md` (usage + caveats).
 - **Live site:** <https://pht-website.vercel.app/> (until domain swap)
 - **Studio:** <https://primehourtech.sanity.studio/>
 - **Sanity Manage** (project settings, CORS allowlist, API tokens): <https://www.sanity.io/manage>

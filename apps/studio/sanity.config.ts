@@ -16,6 +16,7 @@ const CONTACT_INFO_ID = "contactInfo";
 const TERMS_PAGE_ID = "termsPage";
 const PRIVACY_PAGE_ID = "privacyPage";
 const THEME_ID = "theme";
+const NOT_FOUND_ID = "notFoundPage";
 const SINGLETONS = [
   SITE_SETTINGS_ID,
   NAVIGATION_ID,
@@ -24,6 +25,7 @@ const SINGLETONS = [
   TERMS_PAGE_ID,
   PRIVACY_PAGE_ID,
   THEME_ID,
+  NOT_FOUND_ID,
 ];
 
 // Helper for the sidebar list; keeps each singleton entry compact.
@@ -58,6 +60,7 @@ export default defineConfig({
             singletonItem(S, TERMS_PAGE_ID, "Terms Page"),
             singletonItem(S, PRIVACY_PAGE_ID, "Privacy Page"),
             singletonItem(S, THEME_ID, "Theme"),
+            singletonItem(S, NOT_FOUND_ID, "404 Page"),
             S.divider(),
             S.listItem()
               .title("Team Members")

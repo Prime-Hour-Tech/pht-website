@@ -568,6 +568,14 @@ export const privacyPageQuery = /* groq */ `
   }
 `;
 
+export const notFoundPageQuery = /* groq */ `*[_type == "notFoundPage"][0]{
+  headline, deck,
+  primaryCta, secondaryCta,
+  destinationsHeading, browseAllLink,
+  destinations[]{ name, icon, description, href },
+  seoTitle
+}`;
+
 // Landing pages: dynamic /landing/{slug} routes from a multi-instance doc type.
 // Filter on minimum-required structural fields so half-authored drafts don't
 // generate broken routes. Same pattern as the services queries.

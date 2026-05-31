@@ -290,6 +290,24 @@ export type LandingPage = {
   };
 };
 
+// ── 404 singleton ────────────────────────────────────────────────────────
+
+// Resolved/runtime destination (icon already coerced to a valid IconName).
+export type NotFoundDestination = { name: string; icon: IconName; description: string; href: string };
+
+// Raw notFoundPage singleton. Every field optional; unset = code default.
+// destinations[].icon is a raw string from Sanity (coerced at resolve time).
+export type NotFoundPage = {
+  headline?: string;
+  deck?: string;
+  primaryCta?: CtaLink;
+  secondaryCta?: CtaLink;
+  destinationsHeading?: string;
+  browseAllLink?: CtaLink;
+  destinations?: { name: string; icon: string; description: string; href: string }[];
+  seoTitle?: string;
+};
+
 // ── Documents referenced from page blocks ────────────────────────────────
 
 export type IconName =

@@ -4,6 +4,7 @@ import type {
   Footer,
   LandingPage,
   Navigation,
+  NotFoundPage,
   Page,
   PostCard,
   PostFull,
@@ -24,6 +25,7 @@ import {
   footerQuery,
   landingBySlugQuery,
   navigationQuery,
+  notFoundPageQuery,
   otherServicesQuery,
   pageBySlugQuery,
   postBySlugQuery,
@@ -121,4 +123,8 @@ export async function getAllLandingSlugs(): Promise<{ slug: string }[]> {
 
 export async function getLandingBySlug(slug: string): Promise<LandingPage | null> {
   return await sanityClient.fetch<LandingPage | null>(landingBySlugQuery, { slug });
+}
+
+export async function getNotFoundPage(): Promise<NotFoundPage | null> {
+  return await sanityClient.fetch<NotFoundPage | null>(notFoundPageQuery);
 }
