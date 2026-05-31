@@ -31,9 +31,9 @@ const { eyebrow, heading, iconName, capabilities, specSheetUrl } = Astro.props;
       {specSheetUrl && (
         <a
           href={specSheetUrl}
-          class="text-accent font-semibold no-underline text-body-sm"
+          class="link-accent text-body-sm group"
         >
-          Download spec sheet →
+          Download spec sheet <span class="inline-block transition-transform group-hover:translate-x-0.5">→</span>
         </a>
       )}
     </div>

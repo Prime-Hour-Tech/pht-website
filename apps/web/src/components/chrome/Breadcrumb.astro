@@ -32,7 +32,7 @@ const { trail } = Astro.props;
             {isCurrent ? (
               <span class="text-ink">{label}</span>
             ) : (
-              <a href={href} class="text-muted no-underline hover:text-ink">
+              <a href={href} class="text-muted no-underline hover:text-ink hover:underline">
                 {label}
               </a>
             )}

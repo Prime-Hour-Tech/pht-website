@@ -29,9 +29,9 @@ const members = block.members?.filter(Boolean) ?? [];
       {block.sideLink?.href && (
         <a
           href={block.sideLink.href}
-          class="text-accent no-underline font-semibold text-[15px]"
+          class="link-accent text-[15px] group"
         >
-          {block.sideLink.label} →
+          {block.sideLink.label} <span class="inline-block transition-transform group-hover:translate-x-0.5">→</span>
         </a>
       )}
     </div>

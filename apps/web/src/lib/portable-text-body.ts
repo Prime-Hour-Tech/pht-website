@@ -36,7 +36,7 @@ export function renderPortableTextBody(value: PortableTextBlock[] | null | undef
         const attrs = v.openInNewTab
           ? ` target="_blank" rel="noopener"`
           : "";
-        return `<a class="text-accent underline break-words" href="${escapeAttr(href)}"${attrs}>${children}</a>`;
+        return `<a class="text-accent underline decoration-1 hover:decoration-2 break-words" href="${escapeAttr(href)}"${attrs}>${children}</a>`;
       },
     },
     types: {

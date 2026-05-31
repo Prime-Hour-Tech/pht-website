@@ -127,4 +127,11 @@
   .btn-sm { @apply text-[14px] px-5 py-2.5; }
   .btn-md { @apply text-[15px] px-6 py-3.5; }
   .btn-lg { @apply text-[16px] px-[26px] py-4; }
+
+  .link-accent {
+    @apply text-accent font-semibold no-underline;
+  }
+  .link-accent:hover {
+    @apply underline;
+  }
 }

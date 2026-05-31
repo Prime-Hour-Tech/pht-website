@@ -62,9 +62,9 @@ const c = resolveNotFoundContent(await getNotFoundPage());
         </h2>
         <a
           href={c.browseAllLink.href}
-          class="text-accent no-underline font-semibold inline-flex items-center gap-2 text-body-sm whitespace-nowrap"
+          class="link-accent inline-flex items-center gap-2 text-body-sm whitespace-nowrap group"
         >
-          {c.browseAllLink.label} <Icon name="arrowSm" size={14} />
+          {c.browseAllLink.label} <Icon name="arrowSm" size={14} class="transition-transform group-hover:translate-x-0.5" />
         </a>
       </div>
 

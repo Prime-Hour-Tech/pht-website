@@ -27,7 +27,7 @@ const { block } = Astro.props;
       {block.secondaryLinkLabel && block.secondaryLinkHref && (
         <a
           href={block.secondaryLinkHref}
-          class="text-accent no-underline font-semibold text-[14px]"
+          class="link-accent text-[14px]"
         >
           {block.secondaryLinkLabel}
         </a>
@@ -56,10 +56,10 @@ const { block } = Astro.props;
     <div class="mt-8 flex justify-end">
       <a
         href={block.footerLinkHref}
-        class="text-accent no-underline font-semibold text-[14px] inline-flex items-center gap-1.5"
+        class="link-accent text-[14px] inline-flex items-center gap-1.5 group"
       >
         {block.footerLinkLabel}
-        <Icon name="arrowSm" size={13} />
+        <Icon name="arrowSm" size={13} class="transition-transform group-hover:translate-x-0.5" />
       </a>
     </div>
   </div>
