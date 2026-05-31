@@ -41,16 +41,14 @@ const { hero, form, slug, contactInfo } = Astro.props;
         <div class="mt-7 flex gap-3 items-center flex-wrap">
           <a
             href={hero.ctaPrimaryHref}
-            class="bg-accent text-white font-semibold rounded-md inline-flex items-center justify-center gap-2.5 no-underline shadow-button-accent"
-            style="padding: 16px 26px; font-size: 16px;"
+            class="btn btn-primary btn-lg"
           >
             {hero.ctaPrimaryLabel}
             <Icon name="arrow" size={16} />
           </a>
           <a
             href={`tel:${contactInfo.phone.dial}`}
-            class="text-dark-text no-underline font-medium rounded-md border border-dark-line inline-flex items-center gap-2"
-            style="padding: 16px 22px; font-size: 15.5px;"
+            class="btn btn-secondary-dark btn-lg"
           >
             <Icon name="phone" size={15} stroke={1.8} />
             Call {contactInfo.phone.display}

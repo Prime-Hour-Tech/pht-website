@@ -36,15 +36,13 @@ const c = resolveNotFoundContent(await getNotFoundPage());
       <div class="mt-8 flex items-center justify-center gap-3 flex-wrap">
         <a
           href={c.primaryCta.href}
-          class="inline-flex items-center gap-2.5 bg-accent text-white font-semibold rounded-md shadow-button-accent no-underline"
-          style="padding: 15px 24px; font-size: 15.5px;"
+          class="btn btn-primary btn-md"
         >
           <Icon name="arrow" size={16} class="rotate-180" /> {c.primaryCta.label}
         </a>
         <a
           href={c.secondaryCta.href}
-          class="inline-flex items-center gap-2 rounded-md text-ink font-medium border border-line no-underline"
-          style="padding: 15px 22px; font-size: 15.5px;"
+          class="btn btn-secondary btn-md"
         >
           <Icon name="mail" size={16} stroke={1.7} /> {c.secondaryCta.label}
         </a>

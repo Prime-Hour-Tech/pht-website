@@ -36,16 +36,14 @@ const { block } = Astro.props;
         <div class="mt-7 flex gap-3 items-center flex-wrap">
           <a
             href={block.ctaPrimaryHref}
-            class="bg-accent text-white font-semibold rounded-md inline-flex items-center justify-center gap-2.5 no-underline shadow-button-accent"
-            style="padding: 16px 26px; font-size: 16px;"
+            class="btn btn-primary btn-lg"
           >
             {block.ctaPrimaryLabel}
             <Icon name="arrow" size={16} />
           </a>
           <a
             href={block.ctaSecondaryHref}
-            class="text-dark-text no-underline font-medium rounded-md border border-dark-line"
-            style="padding: 16px 22px; font-size: 15.5px;"
+            class="btn btn-secondary-dark btn-lg"
           >
             {block.ctaSecondaryLabel}
           </a>

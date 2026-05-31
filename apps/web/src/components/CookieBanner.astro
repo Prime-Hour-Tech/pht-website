@@ -37,24 +37,21 @@ const enabled = import.meta.env.PUBLIC_COOKIE_BANNER_ENABLED === "true";
         <button
           type="button"
           data-cookie-action="accepted"
-          class="bg-accent text-white font-semibold rounded-md inline-flex items-center justify-center no-underline cursor-pointer"
-          style="padding: 10px 16px; font-size: 13.5px;"
+          class="btn btn-primary btn-sm"
         >
           Accept all
         </button>
         <button
           type="button"
           data-cookie-action="rejected"
-          class="bg-bg text-ink font-medium rounded-md border border-line inline-flex items-center justify-center cursor-pointer"
-          style="padding: 10px 16px; font-size: 13.5px;"
+          class="btn btn-secondary btn-sm"
         >
           Reject
         </button>
         <a
           href="/privacy"
           data-cookie-action="settings"
-          class="bg-bg text-ink font-medium rounded-md border border-line inline-flex items-center justify-center no-underline"
-          style="padding: 10px 16px; font-size: 13.5px;"
+          class="btn btn-secondary btn-sm"
         >
           Settings
         </a>
